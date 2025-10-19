@@ -1,152 +1,154 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الصفحة الرئيسية | نظام إدارة الحلقات</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <script>
-        // Customizing Tailwind
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'sans': ['Cairo', 'sans-serif'],
-                    },
-                }
-            }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الصفحة الرئيسية | نظام إدارة الحلقات</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#16a34a',
+            secondary: '#0f172a',
+            card: '#1f2937',
+          },
+          fontFamily: {
+            'sans': ['Cairo', 'sans-serif'],
+          },
         }
-    </script>
-    <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            scroll-behavior: smooth;
-        }
-    </style>
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Cairo', sans-serif; }
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up { animation: fade-in-up 0.8s ease-out; }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-300">
+<body class="bg-secondary text-gray-100">
 
-    <nav class="bg-slate-800/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex-shrink-0">
-                    <h1 class="text-2xl font-bold text-green-400">نظام إدارة الحلقات</h1>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4 space-x-reverse">
-                        <a href="#features" class="text-slate-300 hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">الميزات</a>
-                        <a href="#quick-access" class="text-slate-300 hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">الوصول السريع</a>
-                        <a href="#" class="bg-green-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-green-500 transition duration-300 shadow-sm">تسجيل الدخول</a>
-                    </div>
-                </div>
-                <div class="md:hidden">
-                    <button class="text-slate-400 hover:text-white focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+  <!-- ✅ الشريط العلوي -->
+  <nav class="bg-card shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <h1 class="text-xl sm:text-2xl font-bold text-primary">نظام إدارة الحلقات</h1>
+        <div class="hidden md:block">
+          <a href="#" class="px-4 py-2 bg-primary text-white font-medium rounded-md shadow hover:bg-green-700 transition duration-300">
+            تسجيل الدخول
+          </a>
         </div>
-    </nav>
-
-    <main>
-        <div class="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
-            <div class="max-w-7xl mx-auto py-20 px-4 sm:py-28 sm:px-6 lg:px-8 text-center">
-                <h3 class="text-4xl font-black text-white sm:text-5xl md:text-3xl">
-                    <span class="block">أهلاً بكم في نظام إدارة الحلقات</span>
-                </h3>
-                <p class="mt-6 max-w-lg mx-auto text-sm text-slate-400 sm:max-w-3xl">
-                    حل رقمي حديث ومبتكر لتسهيل متابعة الحلقات التعليمية وجعلها أكثر فعالية.
-                </p>
-                <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
-                    <a href="#" class="w-full sm:w-auto flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-green-600 hover:bg-green-500 md:py-4 md:text-lg md:px-10 shadow-lg transform hover:scale-105 transition duration-300">
-                        ابدأ الآن
-                    </a>
-                </div>
-            </div>
+        <div class="md:hidden">
+          <button id="menu-btn" class="text-gray-300 hover:text-primary">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
         </div>
+      </div>
 
-        
-        
-        <div id="features" class="py-24 bg-slate-900">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center">
-                    <h2 class="text-base text-green-400 font-semibold tracking-wide uppercase">الميزات الرئيسية</h2>
-                    <p class="mt-2 text-3xl font-extrabold text-white sm:text-4xl">
-                        كل ما تحتاجه لإدارة الحلقات بكفاءة
-                    </p>
-                </div>
-                <div class="mt-16 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-                    <div class="text-center p-8 bg-slate-800 rounded-xl border border-slate-700 shadow-lg transition duration-300 hover:shadow-green-500/10 hover:-translate-y-2">
-                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-slate-700 text-green-400 mx-auto mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">متابعة الحضور والغياب</h3>
-                        <p class="text-slate-400">تسجيل حضور وغياب الطلاب والمعلمات بنقرات بسيطة مع حفظ السجلات بشكل فوري.</p>
-                    </div>
-                    <div class="text-center p-8 bg-slate-800 rounded-xl border border-slate-700 shadow-lg transition duration-300 hover:shadow-green-500/10 hover:-translate-y-2">
-                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-slate-700 text-green-400 mx-auto mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">مراقبة التقدم</h3>
-                        <p class="text-slate-400">تتبع تقدم كل طالب بسهولة ومقارنته بالخطة الدراسية لتحديد نقاط القوة والضعف.</p>
-                    </div>
-                    <div class="text-center p-8 bg-slate-800 rounded-xl border border-slate-700 shadow-lg transition duration-300 hover:shadow-green-500/10 hover:-translate-y-2">
-                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-slate-700 text-green-400 mx-auto mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">تقارير آلية</h3>
-                        <p class="text-slate-400">إنشاء تقارير شهرية ونهائية مفصلة بشكل تلقائي لتوفير الوقت والجهد.</p>
-                    </div>
-                    <div class="text-center p-8 bg-slate-800 rounded-xl border border-slate-700 shadow-lg transition duration-300 hover:shadow-green-500/10 hover:-translate-y-2">
-                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-slate-700 text-green-400 mx-auto mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7l8 4 8-4M12 15v4" /></svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">بيانات مركزية</h3>
-                        <p class="text-slate-400">حفظ جميع المعلومات في مكان واحد آمن، مع سهولة الوصول إليها في أي وقت ومن أي مكان.</p>
-                    </div>
-                </div>
-            </div>
+      <div id="mobile-menu" class="hidden md:hidden mt-2 pb-4 border-t border-gray-700">
+        <a href="#" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md">تسجيل الدخول</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ✅ المقدمة -->
+  <main>
+    <div class="bg-card animate-fade-in-up">
+      <div class="max-w-7xl mx-auto py-12 px-4 sm:py-20 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white">
+          أهلاً بكم في نظام إدارة الحلقات
+        </h1>
+        <p class="mt-4 sm:mt-6 max-w-lg mx-auto text-base sm:text-lg md:text-xl text-gray-300">
+          حل رقمي حديث ومبتكر لتسهيل متابعة الحلقات التعليمية وجعلها أكثر فعالية.
+        </p>
+        <div class="mt-8 sm:mt-10">
+          <a href="#" class="px-6 sm:px-8 py-2 sm:py-3 bg-primary text-white text-base rounded-md hover:bg-green-700 shadow-lg transition">
+            ابدأ الآن
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ الميزات -->
+    <div class="py-16 bg-secondary animate-fade-in-up">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+          <h2 class="text-sm sm:text-base text-primary font-semibold uppercase">الميزات الرئيسية</h2>
+          <p class="mt-2 text-2xl sm:text-3xl font-bold text-white">كل ما تحتاجه لإدارة الحلقات بكفاءة</p>
         </div>
 
-        <div id="quick-access" class="bg-slate-800 py-24">
-            <div class="max-w-4xl mx-auto px-4 text-center">
-                <h2 class="text-3xl font-extrabold text-white">الوصول السريع</h2>
-                <p class="mt-4 text-lg text-slate-400">اختر دورك للوصول مباشرة إلى المهام اليومية الخاصة بك.</p>
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-slate-700/50 p-8 rounded-xl border border-slate-600">
-                        <h3 class="text-2xl font-bold text-white mb-6">للمعلمات</h3>
-                        <ul class="space-y-4">
-                            <li><a href="#" class="block w-full text-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-green-200 bg-green-900/50 hover:bg-green-800/50 transition duration-300">أخذ الحضور اليومي</a></li>
-                            <li><a href="#" class="block w-full text-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-green-200 bg-green-900/50 hover:bg-green-800/50 transition duration-300">رفع التقرير الأسبوعي</a></li>
-                            <li><a href="#" class="block w-full text-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-green-200 bg-green-900/50 hover:bg-green-800/50 transition duration-300">عرض سجلات الطلاب</a></li>
-                        </ul>
-                    </div>
-                    <div class="bg-slate-700/50 p-8 rounded-xl border border-slate-600">
-                        <h3 class="text-2xl font-bold text-white mb-6">للمشرفات</h3>
-                        <ul class="space-y-4">
-                            <li><a href="#" class="block w-full text-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-slate-200 bg-slate-600 hover:bg-slate-500 transition duration-300">لوحة التحكم الشاملة</a></li>
-                            <li><a href="#" class="block w-full text-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-slate-200 bg-slate-600 hover:bg-slate-500 transition duration-300">إدارة بيانات النظام</a></li>
-                            <li><a href="#" class="block w-full text-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-slate-200 bg-slate-600 hover:bg-slate-500 transition duration-300">مراجعة التقارير</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <div class="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="p-5 bg-card rounded-lg shadow-lg hover:shadow-xl transition">
+            <div class="text-4xl text-primary mb-3">📝</div>
+            <h3 class="text-lg sm:text-xl font-bold mb-2 text-white">متابعة الحضور والغياب</h3>
+            <p class="text-sm sm:text-base text-gray-300">تسجيل حضور وغياب الطلاب والمعلمات بسهولة.</p>
+          </div>
+          <div class="p-5 bg-card rounded-lg shadow-lg hover:shadow-xl transition">
+            <div class="text-4xl text-primary mb-3">📈</div>
+            <h3 class="text-lg sm:text-xl font-bold mb-2 text-white">مراقبة التقدم</h3>
+            <p class="text-sm sm:text-base text-gray-300">تتبع تقدم كل طالب ومقارنته بالخطة الدراسية.</p>
+          </div>
+          <div class="p-5 bg-card rounded-lg shadow-lg hover:shadow-xl transition">
+            <div class="text-4xl text-primary mb-3">📄</div>
+            <h3 class="text-lg sm:text-xl font-bold mb-2 text-white">تقارير آلية</h3>
+            <p class="text-sm sm:text-base text-gray-300">إنشاء تقارير تفصيلية بشكل تلقائي لتوفير الوقت.</p>
+          </div>
+          <div class="p-5 bg-card rounded-lg shadow-lg hover:shadow-xl transition">
+            <div class="text-4xl text-primary mb-3">💾</div>
+            <h3 class="text-lg sm:text-xl font-bold mb-2 text-white">بيانات مركزية</h3>
+            <p class="text-sm sm:text-base text-gray-300">حفظ جميع المعلومات في مكان واحد آمن وسهل الوصول.</p>
+          </div>
         </div>
-    </main>
+      </div>
+    </div>
 
-    <footer class="bg-slate-800 border-t border-slate-700">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
-             <h2 class="text-lg font-semibold text-white mb-2">نظام إدارة الحلقات</h2>
-            <p class="text-slate-400">&copy; 2025 جميع الحقوق محفوظة.</p>
+    <!-- ✅ الوصول السريع -->
+    <div class="bg-card py-16 animate-fade-in-up">
+      <div class="max-w-4xl mx-auto px-4 text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-white">الوصول السريع</h2>
+        <p class="mt-3 text-base sm:text-lg text-gray-300">اختر دورك للوصول مباشرة إلى المهام اليومية.</p>
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold mb-4 text-primary">للمعلمات</h3>
+            <ul class="space-y-3 text-sm sm:text-base">
+              <li><a href="#" class="block w-full text-center px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-primary transition">أخذ الحضور اليومي</a></li>
+              <li><a href="#" class="block w-full text-center px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-primary transition">رفع التقرير الأسبوعي</a></li>
+              <li><a href="#" class="block w-full text-center px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-primary transition">عرض سجلات الطلاب</a></li>
+            </ul>
+          </div>
+          <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold mb-4 text-primary">للمشرفات</h3>
+            <ul class="space-y-3 text-sm sm:text-base">
+              <li><a href="#" class="block w-full text-center px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-white transition">لوحة التحكم الشاملة</a></li>
+              <li><a href="#" class="block w-full text-center px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-white transition">إدارة بيانات النظام</a></li>
+              <li><a href="#" class="block w-full text-center px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-white transition">مراجعة التقارير</a></li>
+            </ul>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </main>
 
+  <!-- ✅ التذييل -->
+  <footer class="bg-gray-900 text-gray-400 py-6 text-center text-sm sm:text-base">
+    <p>&copy; 2025 نظام إدارة الحلقات. جميع الحقوق محفوظة.</p>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  </script>
 </body>
 </html>
-```

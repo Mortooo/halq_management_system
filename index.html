@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الحضور والغياب | نظام إدارة الحلقات</title>
+    <title>التقرير الأسبوعي | نظام إدارة الحلقات</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,7 @@
                     <span class="ml-4">🏠</span> الرئيسية
                 </a>
                 <a href="#"
-                    class="bg-blue-600/50 text-white flex items-center p-3 rounded-lg font-bold transition-colors">
+                    class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
                     <span class="ml-4">✔️</span> الحضور والغياب
                 </a>
                 <a href="#"
@@ -46,7 +46,7 @@
                     <span class="ml-4">📖</span> متابعة المقرر
                 </a>
                 <a href="#"
-                    class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    class="bg-blue-600/50 text-white flex items-center p-3 rounded-lg font-bold transition-colors">
                     <span class="ml-4">📅</span> التقارير الأسبوعية
                 </a>
                 <a href="#"
@@ -62,7 +62,7 @@
 
         <div class="flex flex-col flex-1">
             <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg">
-                <h1 class="text-xl font-bold text-blue-400">الحضور والغياب</h1>
+                <h1 class="text-xl font-bold text-blue-400">التقرير الأسبوعي</h1>
                 <button class="text-slate-300 hover:text-white">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -72,71 +72,81 @@
             </header>
 
             <main class="flex-1 p-6 md:p-10">
-                <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-10">
-                    <div>
-                        <h1 class="text-3xl md:text-4xl font-black text-white">تسجيل الحضور والغياب</h1>
-                        <p class="text-slate-400 mt-2">الإثنين، 20 أكتوبر 2025</p>
-                    </div>
-                    <button
-                        class="w-full sm:w-auto mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md">
-                        حفظ سجل الحضور
-                    </button>
+                <header class="mb-10">
+                    <h1 class="text-3xl md:text-4xl font-black text-white">التقرير الأسبوعي</h1>
+                    <p class="text-slate-400 mt-2">للأسبوع المنتهي في 24 أكتوبر 2025</p>
                 </header>
 
-                <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
-                    <div class="p-4 sm:p-6 border-b border-slate-700">
-                        <h2 class="text-xl font-bold text-white">قائمة تلاميذ الحلقة</h2>
-                    </div>
-
-                    <div class="divide-y divide-slate-700">
-                        <div
-                            class="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center hover:bg-slate-700/40">
-                            <span class="text-lg font-semibold text-white mb-4 sm:mb-0">نورة عبدالله</span>
-                            <div class="flex items-center space-x-3 space-x-reverse">
-                                <button
-                                    class="px-6 py-2 rounded-md bg-blue-600 text-white font-bold w-24 text-center">حاضر</button>
-                                <button
-                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">غائب</button>
+                <div class="max-w-2xl">
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 md:p-8">
+                        <form class="space-y-8">
+                            <div>
+                                <label for="progress" class="block text-lg font-semibold text-blue-400 mb-3">
+                                    مقدار المقرر الذي تم تدريسه هذا الأسبوع
+                                </label>
+                                <textarea id="progress" name="progress" rows="4"
+                                    class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                    placeholder="مثال: مراجعة سورة البقرة من آية 50 إلى 100، وشرح أحكام المد..."></textarea>
                             </div>
-                        </div>
 
-                        <div
-                            class="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center hover:bg-slate-700/40">
-                            <span class="text-lg font-semibold text-white mb-4 sm:mb-0">سارة محمد</span>
-                            <div class="flex items-center space-x-3 space-x-reverse">
-                                <button
-                                    class="px-6 py-2 rounded-md bg-blue-600 text-white font-bold w-24 text-center">حاضر</button>
-                                <button
-                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">غائب</button>
+                            <div>
+                                <label class="block text-lg font-semibold text-blue-400 mb-3">
+                                    مقارنة بالخطة الأسبوعية
+                                </label>
+                                <div class="flex items-center space-x-6 space-x-reverse">
+                                    <div class="flex items-center">
+                                        <input id="on-track" name="plan_status" type="radio"
+                                            class="h-4 w-4 text-blue-600 bg-slate-700 border-slate-500 focus:ring-blue-500">
+                                        <label for="on-track" class="mr-3 block text-md font-medium text-slate-200">
+                                            ضمن الخطة
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="delayed" name="plan_status" type="radio"
+                                            class="h-4 w-4 text-blue-600 bg-slate-700 border-slate-500 focus:ring-blue-500">
+                                        <label for="delayed" class="mr-3 block text-md font-medium text-slate-200">
+                                            متأخر عن الخطة
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
 
-                        <div
-                            class="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center hover:bg-slate-700/40">
-                            <span class="text-lg font-semibold text-white mb-4 sm:mb-0">أحمد خالد</span>
-                            <div class="flex items-center space-x-3 space-x-reverse">
-                                <button
-                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">حاضر</button>
-                                <button
-                                    class="px-6 py-2 rounded-md bg-red-600 text-white font-bold w-24 text-center">غائب</button>
+                            <div id="delay-reason-container" class="hidden">
+                                <label for="delay-reason" class="block text-lg font-semibold text-blue-400 mb-3">
+                                    سبب التأخير
+                                </label>
+                                <textarea id="delay-reason" name="delay-reason" rows="3"
+                                    class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                    placeholder="يرجى توضيح أسباب التأخير عن الخطة..."></textarea>
                             </div>
-                        </div>
 
-                        <div
-                            class="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center hover:bg-slate-700/40">
-                            <span class="text-lg font-semibold text-white mb-4 sm:mb-0">فهد العتيبي</span>
-                            <div class="flex items-center space-x-3 space-x-reverse">
-                                <button
-                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">حاضر</button>
-                                <button
-                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">غائب</button>
+                            <div class="pt-4">
+                                <button type="submit"
+                                    class="w-full sm:w-auto bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md">
+                                    إرسال التقرير
+                                </button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </main>
         </div>
     </div>
+
+    <script>
+        const planStatusRadios = document.querySelectorAll('input[name="plan_status"]');
+        const delayReasonContainer = document.getElementById('delay-reason-container');
+
+        planStatusRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                if (event.target.id === 'delayed' && event.target.checked) {
+                    delayReasonContainer.classList.remove('hidden');
+                } else {
+                    delayReasonContainer.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

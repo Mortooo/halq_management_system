@@ -4,18 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم | نظام إدارة الحلقات</title>
-
-    <!-- Tailwind CSS -->
+    <title>الحضور والغياب | نظام إدارة الحلقات</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- خطوط Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-
-    <!-- إعداد خط Cairo -->
     <script>
+        // Tailwind Config
         tailwind.config = {
             theme: {
                 extend: {
@@ -26,44 +21,24 @@
             }
         }
     </script>
-
     <style>
         body {
             font-family: 'Cairo', sans-serif;
         }
-
-        /* تصغير النص في الشاشات الصغيرة */
-        @media (max-width: 640px) {
-            body {
-                font-size: 14px;
-            }
-        }
-
-        /* مظهر شريط التمرير */
-        ::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background-color: #475569;
-            border-radius: 9999px;
-        }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-300">
+<body class="bg-slate-900 text-slate-300">
     <div class="flex min-h-screen">
-
-        <!-- القائمة الجانبية -->
-        <aside id="sidebar" class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden md:block fixed md:relative h-full z-40">
+        <aside class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden md:block">
             <h2 class="text-2xl font-bold text-blue-400 mb-8">لوحة التحكم</h2>
             <nav class="space-y-2">
                 <a href="#"
-                    class="bg-blue-600/50 text-white flex items-center p-3 rounded-lg font-bold transition-colors">
+                    class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
                     <span class="ml-4">🏠</span> الرئيسية
                 </a>
                 <a href="#"
-                    class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    class="bg-blue-600/50 text-white flex items-center p-3 rounded-lg font-bold transition-colors">
                     <span class="ml-4">✔️</span> الحضور والغياب
                 </a>
                 <a href="#"
@@ -85,13 +60,10 @@
             </nav>
         </aside>
 
-        <!-- المحتوى الرئيسي -->
-        <div class="flex flex-col flex-1 md:ml-64">
-
-            <!-- ترويسة الجوال -->
-            <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg fixed w-full z-50">
-                <h1 class="text-xl font-bold text-blue-400">نظام إدارة الحلقات</h1>
-                <button id="menu-btn" class="text-slate-300 hover:text-white">
+        <div class="flex flex-col flex-1">
+            <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg">
+                <h1 class="text-xl font-bold text-blue-400">الحضور والغياب</h1>
+                <button class="text-slate-300 hover:text-white">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16" />
@@ -99,76 +71,72 @@
                 </button>
             </header>
 
-            <!-- مساحة المحتوى -->
-            <main class="flex-1 p-6 md:p-10 mt-14 md:mt-0">
-                <header class="mb-10">
-                    <h1 class="text-3xl md:text-4xl font-black text-white">أهلاً بكِ، معلمة فاطمة</h1>
-                    <p class="text-slate-400 mt-2">ملخص سريع لنشاط حلقتك لليوم، الإثنين 20 أكتوبر 2025.</p>
+            <main class="flex-1 p-6 md:p-10">
+                <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-10">
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-black text-white">تسجيل الحضور والغياب</h1>
+                        <p class="text-slate-400 mt-2">الإثنين، 20 أكتوبر 2025</p>
+                    </div>
+                    <button
+                        class="w-full sm:w-auto mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md">
+                        حفظ سجل الحضور
+                    </button>
                 </header>
 
-                <!-- بطاقات الإحصائيات -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">إجمالي التلاميذ</h3>
-                        <p class="text-4xl sm:text-5xl font-extrabold text-white mt-4">15</p>
+                <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                    <div class="p-4 sm:p-6 border-b border-slate-700">
+                        <h2 class="text-xl font-bold text-white">قائمة تلاميذ الحلقة</h2>
                     </div>
-                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">الحضور</h3>
-                        <p class="text-4xl sm:text-5xl font-extrabold text-white mt-4">10</p>
-                    </div>
-                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">الغياب</h3>
-                        <p class="text-4xl sm:text-5xl font-extrabold text-white mt-4">5</p>
-                    </div>
-                </div>
 
-                <!-- جدول التلاميذ -->
-                <div class="mt-12 bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto">
-                    <div class="p-6">
-                        <h2 class="text-2xl font-bold text-white">تلاميذ الحلقة</h2>
+                    <div class="divide-y divide-slate-700">
+                        <div
+                            class="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center hover:bg-slate-700/40">
+                            <span class="text-lg font-semibold text-white mb-4 sm:mb-0">نورة عبدالله</span>
+                            <div class="flex items-center space-x-3 space-x-reverse">
+                                <button
+                                    class="px-6 py-2 rounded-md bg-blue-600 text-white font-bold w-24 text-center">حاضر</button>
+                                <button
+                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">غائب</button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center hover:bg-slate-700/40">
+                            <span class="text-lg font-semibold text-white mb-4 sm:mb-0">سارة محمد</span>
+                            <div class="flex items-center space-x-3 space-x-reverse">
+                                <button
+                                    class="px-6 py-2 rounded-md bg-blue-600 text-white font-bold w-24 text-center">حاضر</button>
+                                <button
+                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">غائب</button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center hover:bg-slate-700/40">
+                            <span class="text-lg font-semibold text-white mb-4 sm:mb-0">أحمد خالد</span>
+                            <div class="flex items-center space-x-3 space-x-reverse">
+                                <button
+                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">حاضر</button>
+                                <button
+                                    class="px-6 py-2 rounded-md bg-red-600 text-white font-bold w-24 text-center">غائب</button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center hover:bg-slate-700/40">
+                            <span class="text-lg font-semibold text-white mb-4 sm:mb-0">فهد العتيبي</span>
+                            <div class="flex items-center space-x-3 space-x-reverse">
+                                <button
+                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">حاضر</button>
+                                <button
+                                    class="px-6 py-2 rounded-md bg-slate-600 hover:bg-slate-500 text-slate-300 font-bold w-24 text-center transition-colors">غائب</button>
+                            </div>
+                        </div>
                     </div>
-                    <table class="w-full text-right">
-                        <thead class="border-b border-slate-700">
-                            <tr>
-                                <th class="p-4 text-blue-400 font-semibold">اسم التلميذ</th>
-                                <th class="p-4 text-blue-400 font-semibold">المقرر</th>
-                                <th class="p-4 text-blue-400 font-semibold">الحالة</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-slate-700 hover:bg-slate-700/60">
-                                <td class="p-4 text-white">نورة عبدالله</td>
-                                <td class="p-4">5 أجزاء</td>
-                                <td class="p-4">حضور</td>
-                            </tr>
-                            <tr class="border-b border-slate-700 hover:bg-slate-700/60">
-                                <td class="p-4 text-white">سارة محمد</td>
-                                <td class="p-4">7 أجزاء</td>
-                                <td class="p-4">حضور</td>
-                            </tr>
-                            <tr class="hover:bg-slate-700/60">
-                                <td class="p-4 text-white">أحمد خالد</td>
-                                <td class="p-4">5 أجزاء</td>
-                                <td class="p-4 text-yellow-400">غياب</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </main>
         </div>
     </div>
-
-    <!-- سكربت تشغيل القائمة في الجوال -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuBtn = document.getElementById('menu-btn');
-            const sidebar = document.getElementById('sidebar');
-
-            menuBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('hidden');
-            });
-        });
-    </script>
 </body>
 
 </html>

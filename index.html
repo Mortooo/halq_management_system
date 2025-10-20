@@ -1,119 +1,164 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>نظام إدارة الحلقات</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم | نظام إدارة الحلقات</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- خطوط Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- إعداد خط Cairo -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Cairo', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
     <style>
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #1f2937;
-            color: #e5e7eb;
         }
 
-        /* خلفية غامقة */
-        @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
+        /* تصغير النص في الشاشات الصغيرة */
+        @media (max-width: 640px) {
+            body {
+                font-size: 14px;
             }
         }
 
-        .animate-fade-in-up {
-            animation: fade-in-up 0.8s ease-out;
+        /* مظهر شريط التمرير */
+        ::-webkit-scrollbar {
+            height: 6px;
         }
-
-        /* حجم الخطوط في الهواتف */
-        @media (max-width: 768px) {
-
-            h1,
-            h2,
-            h3 {
-                font-size: 1.2rem !important;
-            }
-
-            p,
-            a,
-            li,
-            button {
-                font-size: 0.9rem !important;
-            }
+        ::-webkit-scrollbar-thumb {
+            background-color: #475569;
+            border-radius: 9999px;
         }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col">
-    <!-- رأس الصفحة -->
-    <nav class="bg-green-700 text-white p-4 shadow-md">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">نظام إدارة الحلقات</h1>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-300">
+    <div class="flex min-h-screen">
+
+        <!-- القائمة الجانبية -->
+        <aside id="sidebar" class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden md:block fixed md:relative h-full z-40">
+            <h2 class="text-2xl font-bold text-blue-400 mb-8">لوحة التحكم</h2>
+            <nav class="space-y-2">
+                <a href="#" class="bg-blue-600/50 text-white flex items-center p-3 rounded-lg font-bold transition-colors">
+                    <span class="ml-4">🏠</span> الرئيسية
+                </a>
+                <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">✔️</span> الحضور والغياب
+                </a>
+                <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">📖</span> متابعة المقرر
+                </a>
+                <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">📅</span> التقارير الأسبوعية
+                </a>
+                <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">⭐</span> إدخال الدرجات
+                </a>
+                <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">👤</span> ملفات التلاميذ
+                </a>
+            </nav>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <div class="flex flex-col flex-1 md:ml-64">
+
+            <!-- ترويسة الجوال -->
+            <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg fixed w-full z-50">
+                <h1 class="text-xl font-bold text-blue-400">نظام إدارة الحلقات</h1>
+                <button id="menu-btn" class="text-slate-300 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </header>
+
+            <!-- مساحة المحتوى -->
+            <main class="flex-1 p-6 md:p-10 mt-14 md:mt-0">
+                <header class="mb-10">
+                    <h1 class="text-3xl md:text-4xl font-black text-white">أهلاً بكِ، معلمة فاطمة</h1>
+                    <p class="text-slate-400 mt-2">ملخص سريع لنشاط حلقتك لليوم، الإثنين 20 أكتوبر 2025.</p>
+                </header>
+
+                <!-- بطاقات الإحصائيات -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-lg font-bold text-blue-400">إجمالي التلاميذ</h3>
+                        <p class="text-4xl sm:text-5xl font-extrabold text-white mt-4">15</p>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-lg font-bold text-blue-400">نسبة حضور اليوم</h3>
+                        <p class="text-4xl sm:text-5xl font-extrabold text-white mt-4">93%</p>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-lg font-bold text-blue-400">التقدم الأسبوعي</h3>
+                        <p class="text-4xl sm:text-5xl font-extrabold text-white mt-4">100%</p>
+                    </div>
+                </div>
+
+                <!-- جدول التلاميذ -->
+                <div class="mt-12 bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold text-white">تلاميذ الحلقة</h2>
+                    </div>
+                    <table class="w-full text-right">
+                        <thead class="border-b border-slate-700">
+                            <tr>
+                                <th class="p-4 text-blue-400 font-semibold">اسم التلميذ</th>
+                                <th class="p-4 text-blue-400 font-semibold">المقرر</th>
+                                <th class="p-4 text-blue-400 font-semibold">آخر حضور</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/60">
+                                <td class="p-4 text-white">نورة عبدالله</td>
+                                <td class="p-4">5 أجزاء</td>
+                                <td class="p-4">اليوم</td>
+                            </tr>
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/60">
+                                <td class="p-4 text-white">سارة محمد</td>
+                                <td class="p-4">7 أجزاء</td>
+                                <td class="p-4">اليوم</td>
+                            </tr>
+                            <tr class="hover:bg-slate-700/60">
+                                <td class="p-4 text-white">أحمد خالد</td>
+                                <td class="p-4">5 أجزاء</td>
+                                <td class="p-4 text-yellow-400">أمس</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
         </div>
-    </nav>
+    </div>
 
-    <!-- المقدمة -->
-    <section class="text-center py-16 px-6 animate-fade-in-up bg-gray-800">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">منصة إدارة الحلقات التعليمية</h2>
-        <p class="text-gray-300 max-w-2xl mx-auto mb-8">
-            نظام شامل لإدارة الطلاب، الحلقات، الحضور، والمواد الدراسية بشكل رقمي متكامل وسهل الاستخدام.
-        </p>
-        <a href="#" class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md 
-          hover:bg-green-700 hover:shadow-lg hover:-translate-y-1 transition duration-300">
-            تسجيل الدخول
-        </a>
-    </section>
-
-    <!-- حول النظام -->
-    <section id="about" class="max-w-6xl mx-auto py-20 px-6 animate-fade-in-up">
-        <h2 class="text-2xl md:text-3xl font-bold text-green-400 mb-6 text-center">حول النظام</h2>
-        <p class="text-gray-300 text-lg leading-relaxed text-center mb-12">
-            نظام إدارة الحلقات هو منصة متطورة تساعد المؤسسات التعليمية في تنظيم سير العملية التعليمية من خلال أدوات
-            رقمية متكاملة
-            تسهل التواصل بين الطلاب والمعلمين والإدارة.
-            يهدف النظام إلى تحويل إدارة الحلقات من الطريقة الورقية التقليدية إلى إدارة رقمية فعّالة ودقيقة.
-        </p>
-
-        <!-- الميزات داخل "حول النظام" -->
-        <div class="grid md:grid-cols-3 gap-8 mt-10">
-            <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition">
-                <h3 class="text-green-400 text-xl font-semibold mb-3">إدارة الطلاب</h3>
-                <p class="text-gray-400">إضافة وتحديث معلومات الطلاب بسهولة مع متابعة مستوياتهم وتقدمهم الأكاديمي.</p>
-            </div>
-            <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition">
-                <h3 class="text-green-400 text-xl font-semibold mb-3">متابعة الحضور</h3>
-                <p class="text-gray-400">تسجيل الحضور اليومي وإصدار تقارير دقيقة عن انتظام الطلاب في الحلقات.</p>
-            </div>
-            <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition">
-                <h3 class="text-green-400 text-xl font-semibold mb-3">تقارير الأداء</h3>
-                <p class="text-gray-400">عرض إحصائيات وتقارير شاملة لمستوى الحلقات والأداء العام للمؤسسة.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- التذييل -->
-    <footer class="bg-gray-900 text-gray-400 py-8 mt-auto">
-        <div class="max-w-6xl mx-auto text-center space-y-4">
-            <p> نظام إدارة الحلقات.</p>
-            <p> تصميم :مرتضى محمد الخير 2025 &copy;</p>
-
-        </div>
-    </footer>
-
-    <!-- JavaScript للقائمة في الهاتف -->
+    <!-- سكربت تشغيل القائمة في الجوال -->
     <script>
-        const menuBtn = document.getElementById("menu-btn");
-        const navLinks = document.getElementById("nav-links");
-        menuBtn.addEventListener("click", () => {
-            navLinks.classList.toggle("hidden");
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuBtn = document.getElementById('menu-btn');
+            const sidebar = document.getElementById('sidebar');
+
+            menuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+            });
         });
     </script>
 </body>
-
 </html>

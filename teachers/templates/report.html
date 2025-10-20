@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقرير الأسبوعي | نظام إدارة الحلقات</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind Config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Cairo', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-900 text-slate-300">
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden md:block">
+            <h2 class="text-2xl font-bold text-blue-400 mb-8">لوحة التحكم</h2>
+            <nav class="space-y-2">
+                <a href="#"
+                    class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">🏠</span> الرئيسية
+                </a>
+                <a href="#"
+                    class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">✔️</span> الحضور والغياب
+                </a>
+                <a href="#"
+                    class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">📖</span> متابعة المقرر
+                </a>
+                <a href="#"
+                    class="bg-blue-600/50 text-white flex items-center p-3 rounded-lg font-bold transition-colors">
+                    <span class="ml-4">📅</span> التقارير الأسبوعية
+                </a>
+                <a href="#"
+                    class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">⭐</span> إدخال الدرجات
+                </a>
+                <a href="#"
+                    class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                    <span class="ml-4">👤</span> ملفات التلاميذ
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex flex-col flex-1">
+            <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg">
+                <h1 class="text-xl font-bold text-blue-400">التقرير الأسبوعي</h1>
+                <button class="text-slate-300 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </header>
+
+            <main class="flex-1 p-6 md:p-10">
+                <header class="mb-10">
+                    <h1 class="text-3xl md:text-4xl font-black text-white">التقرير الأسبوعي</h1>
+                    <p class="text-slate-400 mt-2">للأسبوع المنتهي في 24 أكتوبر 2025</p>
+                </header>
+
+                <div class="max-w-2xl">
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 md:p-8">
+                        <form class="space-y-8">
+                            <div>
+                                <label for="progress" class="block text-lg font-semibold text-blue-400 mb-3">
+                                    مقدار المقرر الذي تم تدريسه هذا الأسبوع
+                                </label>
+                                <textarea id="progress" name="progress" rows="4"
+                                    class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                    placeholder="مثال: مراجعة سورة البقرة من آية 50 إلى 100، وشرح أحكام المد..."></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-lg font-semibold text-blue-400 mb-3">
+                                    مقارنة بالخطة الأسبوعية
+                                </label>
+                                <div
+                                    class="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-6 sm:space-x-reverse space-y-3 sm:space-y-0">
+                                    <div class="flex items-center">
+                                        <input id="on-track" name="plan_status" type="radio"
+                                            class="h-4 w-4 text-blue-600 bg-slate-700 border-slate-500 focus:ring-blue-500">
+                                        <label for="on-track" class="mr-3 block text-md font-medium text-slate-200">
+                                            ضمن الخطة
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="advanced" name="plan_status" type="radio"
+                                            class="h-4 w-4 text-blue-600 bg-slate-700 border-slate-500 focus:ring-blue-500">
+                                        <label for="advanced" class="mr-3 block text-md font-medium text-slate-200">
+                                            متقدم
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="delayed" name="plan_status" type="radio"
+                                            class="h-4 w-4 text-blue-600 bg-slate-700 border-slate-500 focus:ring-blue-500">
+                                        <label for="delayed" class="mr-3 block text-md font-medium text-slate-200">
+                                            متأخر
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="delay-reason-container" class="hidden">
+                                <label for="delay-reason" class="block text-lg font-semibold text-blue-400 mb-3">
+                                    سبب التأخير
+                                </label>
+                                <textarea id="delay-reason" name="delay-reason" rows="3"
+                                    class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                    placeholder="يرجى توضيح أسباب التأخير عن الخطة..."></textarea>
+                            </div>
+
+                            <div id="advanced-reason-container" class="hidden">
+                                <label for="advanced-reason" class="block text-lg font-semibold text-blue-400 mb-3">
+                                    مقدار التقدم عن الخطة
+                                </label>
+                                <textarea id="advanced-reason" name="advanced-reason" rows="3"
+                                    class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                    placeholder="يرجى توضيح الزيادة التي تم إنجازها..."></textarea>
+                            </div>
+
+                            <div class="pt-4">
+                                <button type="submit"
+                                    class="w-full sm:w-auto bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md">
+                                    إرسال التقرير
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const planStatusRadios = document.querySelectorAll('input[name="plan_status"]');
+        const delayReasonContainer = document.getElementById('delay-reason-container');
+        const advancedReasonContainer = document.getElementById('advanced-reason-container');
+
+        planStatusRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                const selectedId = event.target.id;
+
+                if (selectedId === 'delayed' && event.target.checked) {
+                    delayReasonContainer.classList.remove('hidden');
+                } else {
+                    delayReasonContainer.classList.add('hidden');
+                }
+
+                if (selectedId === 'advanced' && event.target.checked) {
+                    advancedReasonContainer.classList.remove('hidden');
+                } else {
+                    advancedReasonContainer.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

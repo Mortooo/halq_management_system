@@ -1,0 +1,39 @@
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: #1f2937;
+    color: #e5e7eb;
+}
+
+/* خلفية غامقة */
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out;
+}
+
+/* حجم الخطوط في الهواتف */
+@media (max-width: 768px) {
+
+    h1,
+    h2,
+    h3 {
+        font-size: 1.2rem !important;
+    }
+
+    p,
+    a,
+    li,
+    button {
+        font-size: 0.9rem !important;
+    }
+}

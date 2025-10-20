@@ -22,5 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('halaq', include('halaqs.urls')),
     path('',home,name='home'),
+    path('accounts/', include('allauth.urls')),  # add this
+
 
 ]

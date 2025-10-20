@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  </head>
+
+    <!-- رأس الصفحة -->
+    <nav class="bg-green-700 text-white p-4 shadow-md">
+      <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold">نظام إدارة الحلقات</h1>
+      </div>
+    </nav>
+    
+  {% block content %}
+  {% endblock %}
+
+   <!-- التذييل -->
+    <footer class="bg-gray-900 text-gray-400 py-8 mt-auto">
+      <div class="max-w-6xl mx-auto text-center space-y-4">
+        <p>  نظام إدارة الحلقات.</p>
+        <p>  تصميم :مرتضى محمد الخير 2025 &copy;</p>
+       
+      </div>
+    </footer>
+  </html>

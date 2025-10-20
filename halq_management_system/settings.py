@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'teachers',
     'students',
     'attendances',
-    'reports'
+    'reports',
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+
 ]
 
 ROOT_URLCONF = 'halq_management_system.urls'
@@ -116,12 +120,40 @@ USE_I18N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# URL to use when referring to static files (use a leading slash)
+STATIC_URL = '/static/'
+
+# Additional locations the staticfiles app will search for static files
+# Add a top-level `static/` directory in the project (BASE_DIR/static)
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# Directory where `collectstatic` will collect static files for production
+# (not used by runserver, but helpful to have configured)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SITE_ID = 1
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',   # keep default
+    'allauth.account.auth_backends.AuthenticationBackend',  # add allauth
+]
+
+
+LOGIN_REDIRECT_URL = '/'       # where to go after login
+LOGOUT_REDIRECT_URL = '/'      # where to go after logout
+
+ACCOUNT_EMAIL_VERIFICATION = "none"  # can be "mandatory"
+ACCOUNT_AUTHENTICATION_METHOD = "username"  # or "email" / "username_email"
+ACCOUNT_EMAIL_REQUIRED = True
+

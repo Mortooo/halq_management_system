@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}إنشاء حساب جديد{% endblock %}
+
+{% block content %}
+<div dir="rtl" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-10 px-6">
+
+  <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 border border-gray-200">
+    <h1 class="text-2xl font-bold text-center text-indigo-800 mb-6">📝 إنشاء حساب جديد</h1>
+
+    {% if form.errors %}
+      <div class="bg-red-50 border border-red-300 text-red-700 p-3 rounded-lg mb-4 text-sm text-right">
+        يُرجى تصحيح الأخطاء في الحقول أدناه
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'account_signup' %}" class="space-y-5 text-right">
+      {% csrf_token %}
+
+      <!-- اسم المستخدم -->
+      <div>
+        <label class="block text-gray-700 mb-1" for="id_username">اسم المستخدم</label>
+        <input type="text" name="username" id="id_username"
+               value="{{ form.username.value|default_if_none:'' }}"
+               class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-indigo-200">
+        {% if form.username.errors %}
+          <p class="text-red-600 text-sm mt-1">{{ form.username.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- البريد الإلكتروني -->
+      <div>
+        <label class="block text-gray-700 mb-1" for="id_email">البريد الإلكتروني</label>
+        <input type="email" name="email" id="id_email"
+               value="{{ form.email.value|default_if_none:'' }}"
+               class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-indigo-200">
+        {% if form.email.errors %}
+          <p class="text-red-600 text-sm mt-1">{{ form.email.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- كلمة المرور -->
+      <div>
+        <label class="block text-gray-700 mb-1" for="id_password1">كلمة المرور</label>
+        <input type="password" name="password1" id="id_password1"
+               class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-indigo-200">
+        {% if form.password1.errors %}
+          <p class="text-red-600 text-sm mt-1">{{ form.password1.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- تأكيد كلمة المرور -->
+      <div>
+        <label class="block text-gray-700 mb-1" for="id_password2">تأكيد كلمة المرور</label>
+        <input type="password" name="password2" id="id_password2"
+               class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-indigo-200">
+        {% if form.password2.errors %}
+          <p class="text-red-600 text-sm mt-1">{{ form.password2.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- زر التسجيل -->
+      <button type="submit"
+              class="w-full bg-indigo-800 hover:bg-indigo-700 text-white py-2 rounded-lg shadow-lg transition duration-200">
+        إنشاء الحساب
+      </button>
+    </form>
+
+    <!-- روابط إضافية -->
+    <div class="mt-6 text-center text-sm text-gray-600">
+      <p>لديك حساب بالفعل؟
+        <a href="{% url 'account_login' %}" class="text-indigo-700 hover:underline">تسجيل الدخول</a>
+      </p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

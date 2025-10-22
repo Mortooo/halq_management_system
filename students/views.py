@@ -48,6 +48,8 @@ class StudentCreate(CreateView):
        
         return reverse_lazy('students_list', kwargs={'pk': self.request.user.id})
     
+    
+    
 class StudentUpdate(UpdateView):
     template_name='student_add.html'
     model=Student
@@ -61,6 +63,30 @@ class StudentUpdate(UpdateView):
 class StudentDetails(DetailView):
     template_name='student_detail.html'
     model=Student
+    
+    
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        student_id=self.kwargs.get('pk')
+        
+        attenedance_list=StudAttendance.objects.filter(student__id=student_id)
+        
+        #calculate the attendance percantege 
+        total_days=len(attenedance_list)
+        attend_days=len(attenedance_list.filter(status=True))
+        
+        attend_percantage=0
+        if not attend_days==0:
+            attend_percantage=attend_days/total_days*100
+   
+        
+        
+        context['attenedance_list']=attenedance_list
+        context['attend_percantage']=attend_percantage
+        
+        
+        
+        return context
     
 class StudentDelete(DeleteView):
     template_name='student_delete.html'

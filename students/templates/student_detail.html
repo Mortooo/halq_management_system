@@ -3,28 +3,18 @@
 {% block title %} لوحة التحكم | نظام إدارة الحلقات {% endblock %}
 {% block content %}
            
-         <!-- المحتوى الرئيسي -->
-        <div class="flex flex-col flex-1 md:ml-64">
+
         
-             <!-- ترويسة الجوال -->
-             <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg fixed w-full z-50">
-                <h1 class="text-xl font-bold text-blue-400">نظام إدارة الحلقات</h1>
-                <button id="menu-btn" class="text-slate-300 hover:text-white">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </header>
-            <main class="flex-1 p-6 md:p-10">
-           <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-10">
+            
+        <main class="flex-1 p-6 md:p-10">
+           <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-10 mt-14 md:mt-0">
                 <div>
                     <h1 class="text-3xl md:text-4xl font-black text-white">ملف التلميذ</h1>
                     <p class="text-slate-400 mt-2">عرض السجل الكامل للتلميذ.</p>
                 </div>
                 <div class="flex space-x-2 space-x-reverse mt-4 sm:mt-0">
                     <a href="{% url 'student_update' student.id %}" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-700 transition">تعديل البيانات</a>
-                    <button class="bg-slate-700 text-slate-300 px-5 py-2 rounded-lg font-bold hover:bg-slate-600 transition">طباعة</button>
+                    <button onclick="window.print()" class="bg-slate-700 text-slate-300 px-5 py-2 rounded-lg font-bold hover:bg-slate-600 transition">طباعة</button>
                 </div>
             </header>
 
@@ -34,7 +24,12 @@
                     <div class="ml-0 md:ml-8 mb-6 md:mb-0 text-center md:text-right">
                         <h2 class="text-3xl font-bold text-white">{{ student.name }}</h2>
                         <p class="text-blue-400 font-semibold">{{ student.halaqa }}</p>
+                        {% if student.status == True%}
                         <span class="mt-2 inline-block px-3 py-1 text-sm rounded-full bg-green-800 text-green-300">نشط</span>
+                        {% else %}
+                        <span class="mt-2 inline-block px-3 py-1 text-sm rounded-full bg-red-800 text-red-300">متوقف</span>
+                        {% endif %}
+
                     </div>
                     <div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-4 text-center md:text-right">
                         <div>
@@ -47,7 +42,7 @@
                         </div>
                         <div>
                             <span class="text-sm text-slate-400">نسبة الحضور</span>
-                            <p class="font-bold text-white">98%</p>
+                            <p class="font-bold text-white">{{attend_percantage}}%</p>
                         </div>
                         <div>
                             <span class="text-sm text-slate-400">المقرر الأساسي </span>
@@ -61,10 +56,10 @@
                             <p class="font-bold text-white">لا يوجد </p>
                             {% endif %}
                         </div>
-                        <div>
+                        {% comment %} <div>
                             <span class="text-sm text-slate-400">آخر درجة</span>
                             <p class="font-bold text-white">قريباً </p>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
             </div>
@@ -72,25 +67,32 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="bg-slate-800 rounded-xl border border-slate-700">
                     <h3 class="p-4 text-lg font-bold text-white border-b border-slate-700">سجل الحضور الأخير</h3>
+                    {% for atend in attenedance_list %}
                     <ul class="divide-y divide-slate-700 p-4">
-                        <li class="py-2 flex justify-between"><span>الإثنين، 20 أكتوبر</span> <span class="text-green-400">حاضرة</span></li>
-                        <li class="py-2 flex justify-between"><span>الأحد، 19 أكتوبر</span> <span class="text-green-400">حاضرة</span></li>
-                        <li class="py-2 flex justify-between"><span>الخميس، 16 أكتوبر</span> <span class="text-red-400">غائبة</span></li>
+                        <li class="py-2 flex justify-between"><span>{{ atend.day }}</span>
+                            {% if atend.status == True %}
+                             <span class="text-green-400">حاضر</span>
+                            {% else %}
+                            <span class="text-red-400">غائب</span>
+                            {% endif %}
+                            </li>                       
                     </ul>
+                    {% endfor %}
                 </div>
-                <div class="bg-slate-800 rounded-xl border border-slate-700">
+                {% comment %} <div class="bg-slate-800 rounded-xl border border-slate-700">
                     <h3 class="p-4 text-lg font-bold text-white border-b border-slate-700">نتائج الاختبارات</h3>
 
                     <p class="font-bold text-white"> قريباً ان شاء الله </p>
-                    {% comment %} <ul class="divide-y divide-slate-700 p-4">
+                   <ul class="divide-y divide-slate-700 p-4">
                         <li class="py-2 flex justify-between"><span>اختبار سبتمبر</span> <span class="font-bold text-white">95 / 100</span></li>
                         <li class="py-2 flex justify-between"><span>اختبار أغسطس</span> <span class="font-bold text-white">92 / 100</span></li>
                         <li class="py-2 flex justify-between"><span>اختبار يوليو</span> <span class="font-bold text-white">88 / 100</span></li>
-                    </ul> {% endcomment %}
-                </div>
+                    </ul> 
+                </div> {% endcomment %}
             </div>
-            </main>
+            
+        </main>
 
-        </div>
+      
 
 {% endblock %}

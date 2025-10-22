@@ -1,80 +1,68 @@
 {% extends 't_base.html'%}
 {% load static %}
-{% block title %} لوحة التحكم | نظام إدارة الحلقات {% endblock %}
+{% block title %}  التحكم | الرئيسية {% endblock %}
 {% block content %}
       {% csrf_token %}
 
-        <!-- المحتوى الرئيسي -->
-        <div class="flex flex-col flex-1 md:ml-64">
-
-            <!-- ترويسة الجوال -->
-            <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg fixed w-full z-50">
-                <h1 class="text-xl font-bold text-blue-400">نظام إدارة الحلقات</h1>
-                <button id="menu-btn" class="text-slate-300 hover:text-white">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </header>
+      
+           
 
             <!-- مساحة المحتوى -->
             <main class="flex-1 p-6 md:p-10 mt-14 md:mt-0">
                 <header class="mb-10">
-                    <h1 class="text-3xl md:text-4xl font-black text-white">أهلاً بكِ، معلمة {{ user.username }}</h1>
-                    <p class="text-slate-400 mt-2">ملخص سريع لنشاط حلقتك لليوم، الإثنين 20 أكتوبر 2025.</p>
+                    <h1 class="text-3xl md:text-4xl font-black text-white">أهلاً بكِ، معلمة 
+                        <span class="text-1xl md:text-4xl font-black text-green-300">{{ teacher }}</span>
+                    </h1>
+                    <p class="text-slate-400 mt-2">ملخص سريع لنشاط حلقتك لليوم،{{ today_date  }} </p>
                 </header>
 
                 <!-- بطاقات الإحصائيات -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">إجمالي التلاميذ</h3>
-                        <p class="text-4xl sm:text-5xl font-extrabold text-white mt-4">15</p>
+                        <h3 class="text-lg font-bold text-blue-400">إجمالي  التلاميذ :
+                            <span class='text-lg font-bold text-white'>{{ total_std }}</span></h3>
                     </div>
                     <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">الحضور</h3>
-                        <p class="text-4xl sm:text-5xl font-extrabold text-white mt-4">10</p>
+                        <h3 class="text-lg font-bold text-blue-400">الحضور :      
+                        <span class='text-lg font-bold text-white'>{{ attended }}</span></h3>
+
                     </div>
                     <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">الغياب</h3>
-                        <p class="text-4xl sm:text-5xl font-extrabold text-white mt-4">5</p>
+                        <h3 class="text-lg font-bold text-blue-400">الغياب:      
+                        <span class='text-lg font-bold text-white'>{{ absent }}</span></h3>
                     </div>
                 </div>
 
                 <!-- جدول التلاميذ -->
                 <div class="mt-12 bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto">
                     <div class="p-6">
-                        <h2 class="text-2xl font-bold text-white">تلاميذ الحلقة</h2>
+                        <h2 class="text-2xl font-bold text-white">قائمة التلاميذ</h2>
                     </div>
                     <table class="w-full text-right">
                         <thead class="border-b border-slate-700">
                             <tr>
-                                <th class="p-4 text-blue-400 font-semibold">اسم التلميذ</th>
-                                <th class="p-4 text-blue-400 font-semibold">المقرر</th>
+                                <th class="p-4 text-blue-400 font-semibold">الإسم  </th>
+                                <th class="p-4 text-blue-400 font-semibold">الحلقة</th>
                                 <th class="p-4 text-blue-400 font-semibold">الحالة</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for std in students %}
                             <tr class="border-b border-slate-700 hover:bg-slate-700/60">
-                                <td class="p-4 text-white">نورة عبدالله</td>
-                                <td class="p-4">5 أجزاء</td>
+                                
+                                <td class="p-4 text-white">{{ std.name }}</td>
+                                <td class="p-4">{{ std.halaqa }}</td>
+                                {% if std.attendace_today == True %}
                                 <td class="p-4">حضور</td>
-                            </tr>
-                            <tr class="border-b border-slate-700 hover:bg-slate-700/60">
-                                <td class="p-4 text-white">سارة محمد</td>
-                                <td class="p-4">7 أجزاء</td>
-                                <td class="p-4">حضور</td>
-                            </tr>
-                            <tr class="hover:bg-slate-700/60">
-                                <td class="p-4 text-white">أحمد خالد</td>
-                                <td class="p-4">5 أجزاء</td>
+                                {% else %}
                                 <td class="p-4 text-yellow-400">غياب</td>
+                                {% endif %}
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </main>
-        </div>
 
     
 

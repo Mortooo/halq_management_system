@@ -6,7 +6,7 @@ from datetime import date
 
 # Create your models here.
 class StudAttendance(models.Model):
-    student=models.ForeignKey(Student,on_delete=models.CASCADE)
+    student=models.ForeignKey('students.Student',on_delete=models.CASCADE)
     day=models.DateField(default=date.today)
     status=models.BooleanField(default=True)
     notes=models.TextField(blank=True,null=True)

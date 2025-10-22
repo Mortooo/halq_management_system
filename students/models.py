@@ -33,9 +33,14 @@ class Student(models.Model):
     def basic_course(self):
         basic_c=Halaqa.objects.get(pk=self.halaqa.id)
         
-        
-        
         return basic_c.course
+    
+    @property
+    def attendace_today(self):
+        from attendances.models import StudAttendance
+        status=StudAttendance.objects.get(student=self,day=date.today()).status
+        
+        return status
 
     
 class Grade(models.Model):

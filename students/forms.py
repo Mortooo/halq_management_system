@@ -1,4 +1,5 @@
 
+from datetime import date
 from django.forms import ModelForm
 from django import forms
 from .models import Student
@@ -36,10 +37,20 @@ class StudentForm(ModelForm):
     def clean(self):
         clean_data=super().clean()
         name=clean_data.get('name')
+        d_birth=clean_data.get('date_birth')
         
+        # two students cannot have the same name 
         if not self.instance.pk:
             if Student.objects.filter(name=name).exists():
                 raise forms.ValidationError('يوجد طالب في قاعدة البيانات يحمل نفس الإسم !  ')
+            
+        # vaildting date 
+        if d_birth:
+            if d_birth >= date.today():
+                raise forms.ValidationError('تاريخ الميلاد يجب أن لا يكون في المستقبل أو اليوم !')
+            elif (date.today().year - d_birth.year) < 1 :
+                raise forms.ValidationError('يجب أن لا يقل عمر التلميذ عن سنة !')
+
         
         
         return clean_data

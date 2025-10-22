@@ -75,16 +75,26 @@
 
 <body class="bg-slate-900 text-slate-300 flex flex-col min-h-screen">
 
-   
-    
+
+
     <main class="flex-grow">
         <div class="flex min-h-screen">
+             <!-- ترويسة الجوال -->
+            <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg fixed w-full z-50">
+                <h1 class="text-xl font-bold text-blue-400">لوحة تحكم | المعلمة</h1>
+                <button id="menu-btn" class="text-slate-300 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </header>
             <!-- القائمة الجانبية -->
             <aside  id="sidebar" class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden md:block fixed md:relative h-full z-40">
                 <h2 class="text-2xl font-bold text-blue-400 mb-8">لوحة التحكم</h2>
                 <nav dir='rtl' class="space-y-2">
                     <a href="{% url 'teacher_dashboard' %}"
-                        class="text-white flex items-center p-3 rounded-lg font-bold transition-colors
+                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors
                             {% if request.path == '/teacher/dashbord' %}
                                 bg-blue-600/50 text-white font-bold
                             {% else %}
@@ -92,31 +102,34 @@
                             {% endif %}">
                         <span class="ml-4">🏠</span> الرئيسية
                     </a>
-                    <a href="{% url 'students_attendance' user.id %}"
-                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
-                        <span class="ml-4">✔️</span> الحضور والغياب
-                    </a>
-                    <a href="#"
-                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
-                        <span class="ml-4">📖</span> متابعة المقرر   (قريباً)
-                    </a>
-                    <a href="{% url 'weekly_report' user.id %}"
-                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
-                        <span class="ml-4">📅</span> التقارير الأسبوعية
-                    </a>
-                    <a href="#"
-                        class=" disable text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
-                        <span class="ml-4">⭐</span> إدخال الدرجات   (قريباً)
-                    </a>
+
                     <a href="{% url 'students_list' user.id %}"
                         class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors
-                        {% if 'students_list' in request.path %}
+                        {% if '/student/list/' in request.path %}
                             bg-blue-600/50 text-white font-bold
                         {% else %}
                             text-slate-300 hover:bg-slate-700/60
                         {% endif %}">
                         <span class="ml-4">👤</span> ملفات التلاميذ
                     </a>
+
+                    <a href="{% url 'students_attendance' user.id %}"
+                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                        <span class="ml-4">✔️</span> الحضور والغياب
+                    </a>
+                    {% comment %} <a href="#"
+                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                        <span class="ml-4">📖</span> متابعة المقرر   (قريباً)
+                    </a> {% endcomment %}
+                    <a href="{% url 'weekly_report' user.id %}"
+                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                        <span class="ml-4">📅</span> التقارير الأسبوعية
+                    </a>
+                    {% comment %} <a href="#"
+                        class=" disable text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                        <span class="ml-4">⭐</span> إدخال الدرجات   (قريباً)
+                    </a> {% endcomment %}
+                    
                     <a href="{% url 'account_logout'%}"
                         class="bg-red-600 text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
                         <span class="ml-4"></span> تسجيل الخروج

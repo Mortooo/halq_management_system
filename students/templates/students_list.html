@@ -1,0 +1,115 @@
+{% extends 't_base.html'%}
+{% load static %}
+{% block title %} لوحة التحكم | نظام إدارة الحلقات {% endblock %}
+{% block content %}
+
+
+         <!-- المحتوى الرئيسي -->
+        <div class="flex flex-col flex-1 md:ml-64">
+
+            <!-- ترويسة الجوال -->
+             <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg fixed w-full z-50">
+                <h1 class="text-xl font-bold text-blue-400">نظام إدارة الحلقات</h1>
+                <button id="menu-btn" class="text-slate-300 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </header>
+
+            <main class="flex-1 p-6 md:p-10">
+                <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-black text-white">ملفات التلاميذ</h1>
+                        <p class="text-slate-400 mt-2">عرض وبحث في سجلات التلاميذ.</p>
+                    </div>
+                    <a href="{% url 'student_add' user.id %}" class="w-full sm:w-auto mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition">
+                        + إضافة تلميذ جديد
+                    </a>
+                </header>
+                <div>
+                    <form method="GET" action="">    
+                        {% csrf_token %}
+                        <div class="mb-6 flex">
+                            <input type="text" name="q" placeholder="ابحث بالاسم أو الحلقة..." 
+                                class="w-full max-w-lg p-3 bg-slate-800 border border-slate-700 rounded-r-lg text-slate-200 focus:ring-2 focus:ring-blue-500"
+                               > <button type="submit" 
+                                    class="bg-green-600 text-white px-5 py-3 rounded-l-lg font-bold hover:bg-green-700 transition">
+                                بحث
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto hidden md:block">
+                    <table class="w-full text-right">
+                        <thead class="border-b border-slate-700">
+                            <tr>
+                                <th class="p-4 text-blue-400 font-semibold">الاسم</th>
+                                <th class="p-4 text-blue-400 font-semibold">الحلقة</th>
+                                <th class="p-4 text-blue-400 font-semibold">العمر</th>
+                                <th class="p-4 text-blue-400 font-semibold">الحالة</th>
+                                <th class="p-4 text-blue-400 font-semibold">الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700">
+                            {% for student in students %}
+                            <tr>
+                                <td class="p-4 text-white font-semibold">{{ student.name }}</td>
+                                <td class="p-4">{{ student.halaqa }}</td>
+                                <td class="p-4">{{ student.age }} سنة </td>
+                                <td class="p-4">
+                                    {% if student.status == True %}
+                                    <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">نشط</span>
+                                    {% else %}
+                                    <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">منقطع</span>
+                                    {% endif %}
+                                
+                                </td>
+                                <td class="p-4"><a href="{% url 'student_details' student.id %}" class="text-blue-400 hover:underline font-semibold">عرض الملف</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="p-6 text-center text-lg text-slate-400">
+                                    لا توجد نتائج .
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <p>{{ student.get_get_students_by_teacher }}</p>
+                <!-- للهاتف المحمول-->
+                <div class="grid grid-cols-1 gap-4 md:hidden">
+                    {% for student in students %}
+                    <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-bold text-white">{{ student.name }}</h3>
+                            {% if student.status == True %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">نشط</span>
+                            {% else %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">منقطع</span>
+                            {% endif %}
+                        </div>
+                        <p class="text-sm text-slate-400"><strong>الحلقة:</strong> {{ student.halaqa }}</p>
+                        <p class="text-sm text-slate-400"><strong>العمر:</strong> {{ student.age }}</p>
+                        <a href="{% url 'student_details' student.id %}" class="block w-full text-center mt-3 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">عرض الملف</a>
+                    </div>
+                    {% empty %}
+                    <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 text-center">
+                        <p class="text-lg text-slate-400">لا توجد نتائج .</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </main>
+        </div>
+
+{% endblock %}
+
+
+
+
+
+

@@ -1,0 +1,117 @@
+{% extends 't_base.html'%}
+{% load static %}
+{% block title %} لوحة التحكم | نظام إدارة الحلقات {% endblock %}
+{% block content %}
+
+        <div class="flex flex-col flex-1">
+             <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg">
+                <h1 class="text-xl font-bold text-blue-400">إضافة تلميذ</h1>
+                <button class="text-slate-300 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                </button>
+            </header>
+            <main class="flex-1 p-6 md:p-10">
+                <header class="mb-10">
+                    <h1 class="text-3xl md:text-4xl font-black text-white">إضافة تلميذ جديد</h1>
+                    <p class="text-slate-400 mt-2">أدخل بيانات التلميذ لإضافته إلى النظام.</p>
+                </header>
+
+                <div class="max-w-3xl">
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 md:p-8">
+                        <form method='post' class="space-y-6">
+                                {% csrf_token %}
+
+                                <!-- 🧩 Non-field errors (appear at top) -->
+                                {% if form.non_field_errors %}
+                                    <div class="bg-red-900/30 border border-red-700 text-red-300 p-4 rounded-lg mb-4">
+                                    <ul class="list-disc list-inside space-y-1">
+                                        {% for error in form.non_field_errors %}
+                                        <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    </div>
+                                {% endif %}
+                            <div>
+                                <label class="block text-md font-semibold text-blue-400 mb-2">
+                                {{ form.name.label }}<span class="text-red-400">*</span>
+                                </label>
+                                {{ form.name }}
+                                
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-md font-semibold text-blue-400 mb-2">
+                                    {{ form.address.label }}<span class="text-red-400">*</span>
+                                    </label>
+                                    {{ form.address }}
+                                </div>
+                                <div>
+                                    <label class="block text-md font-semibold text-blue-400 mb-2">
+                                    {{ form.tel.label }}<span class="text-red-400">*</span>
+                                    </label>
+                                    {{ form.tel }}
+                                </div>
+                            </div>
+
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-md font-semibold text-blue-400 mb-2">
+                                    {{ form.date_birth.label }}<span class="text-red-400">*</span>
+                                    </label>
+                                    {{ form.date_birth }}
+                                </div>
+                                <div>
+                                    <label class="block text-md font-semibold text-blue-400 mb-2">
+                                    {{ form.grade.label }}<span class="text-red-400">*</span>
+                                    </label>
+                                    {{ form.grade }}
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-md font-semibold text-blue-400 mb-2">
+                                    {{ form.halaqa.label }}<span class="text-red-400">*</span>
+                                    </label>
+                                    {{ form.halaqa }}
+                                </div>
+                                <div>
+                                    <label class="block text-md font-semibold text-blue-400 mb-2">
+                                    {{ form.add_course.label }}
+                                    </label>
+                                    {{ form.add_course }}
+                                </div>
+                            </div>
+
+                            <div class="flex items-center pt-2">
+                                    <label class="block text-md font-semibold text-blue-400 mb-2">
+                                    {{ form.status.label }}<span class="text-red-400">*</span>
+                                    </label>
+                                    {{ form.status }}
+                                {% comment %} <input type="checkbox" id="status" name="status" class="h-4 w-4 rounded bg-slate-700 border-slate-500 text-blue-600 focus:ring-blue-500" checked>
+                                <label for="status" class="mr-3 text-md font-medium text-slate-200">
+                                    التلميذ نشط
+                                </label> {% endcomment %}
+                            </div>
+
+                            <div class="pt-4 flex items-center space-x-4 space-x-reverse">
+                                <button type="submit" class="w-full sm:w-auto bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">
+                                    حفظ 
+                                </button>
+                                {% if student.id %}
+                                <a href="{% url 'student_delete' student.id %}" class="w-full sm:w-auto text-center bg-red-700 text-slate-300 px-8 py-3 rounded-lg font-bold hover:bg-slate-600 transition">
+                                    حذف 
+                                </a>
+                                {% endif %}
+                                <a href="{% url 'students_list' user.id %}" class="w-full sm:w-auto text-center bg-slate-700 text-slate-300 px-8 py-3 rounded-lg font-bold hover:bg-slate-600 transition">
+                                    إلغاء
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+{% endblock %}

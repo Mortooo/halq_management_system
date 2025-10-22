@@ -20,7 +20,12 @@ from halaqs.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('halaq', include('halaqs.urls')),
+    path('halaq/', include('halaqs.urls')),
+    path('superuser/', include('superuser.urls')),
+    path('teacher/', include('teachers.urls')),
+    path('student/', include('students.urls')),
+    path('report/', include('reports.urls')),
+    
     path('',home,name='home'),
     path('accounts/', include('allauth.urls')),  # add this
 

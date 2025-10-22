@@ -1,0 +1,121 @@
+{% extends 't_base.html' %}
+{% load static %}
+
+{% block title %}إرسال التقرير الأسبوعي{% endblock %}
+{% block page_title %}التقرير الأسبوعي{% endblock %}
+
+{% block content %}
+
+
+
+<main class="flex-1 p-6 md:p-10">
+    <header class="hidden md:block mb-10">
+        <h1 class="text-3xl md:text-4xl font-black text-white">إرسال التقرير الأسبوعي</h1>
+        <p class="text-slate-400 mt-2">
+            يرجى ملء النموذج أدناه للأسبوع المنتهي في:
+            <span class="font-bold text-blue-400">{{ current_week_end_date }}</span>
+        </p>
+    </header>
+
+    <div class="max-w-2xl">
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 md:p-8">
+
+            <form method="POST" class="space-y-8">
+                {% csrf_token %}
+
+                <div>
+                    <label for="halaqa" class="block text-lg font-semibold text-blue-400 mb-3">
+                        اختر الحلقة <span class="text-red-400">*</span>
+                    </label>
+                    <select id="halaqa" name="halaqa" class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                        <option value="">-- اختر الحلقة --</option>
+                      
+                        {% for halaqa in halaqats %}
+                            <option value="{{ halaqa.id }}">{{ halaqa.name }}</option>
+                        {% empty %}
+                            <option disabled>لا توجد حلقات مسندة لك حالياً</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="progress" class="block text-lg font-semibold text-blue-400 mb-3">
+                        مقدار المقرر الذي تم تدريسه هذا الأسبوع <span class="text-red-400">*</span>
+                    </label>
+                    <textarea id="progress" name="progress" rows="4" class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="مثال: مراجعة سورة البقرة من آية 50 إلى 100..." required></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-lg font-semibold text-blue-400 mb-3">
+                        مقارنة بالخطة الأسبوعية
+                    </label>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-6 sm:space-x-reverse space-y-3 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="on-track" name="plan_status" type="radio" value="on_track" class="h-4 w-4 text-blue-600 bg-slate-700 border-slate-500 focus:ring-blue-500" checked>
+                            <label for="on-track" class="mr-3 block text-md font-medium text-slate-200">
+                                ضمن الخطة
+                            </label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="advanced" name="plan_status" type="radio" value="advanced" class="h-4 w-4 text-blue-600 bg-slate-700 border-slate-500 focus:ring-blue-500">
+                            <label for="advanced" class="mr-3 block text-md font-medium text-slate-200">
+                                متقدم
+                            </label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="delayed" name="plan_status" type="radio" value="delayed" class="h-4 w-4 text-blue-600 bg-slate-700 border-slate-500 focus:ring-blue-500">
+                            <label for="delayed" class="mr-3 block text-md font-medium text-slate-200">
+                                متأخر
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="delay-reason-container" class="hidden">
+                    <label for="delay-reason" class="block text-lg font-semibold text-blue-400 mb-3">
+                        سبب التأخير
+                    </label>
+                    <textarea id="delay-reason" name="delay_reason" rows="3" class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="يرجى توضيح أسباب التأخير..."></textarea>
+                </div>
+
+                <div id="advanced-reason-container" class="hidden">
+                    <label for="advanced-reason" class="block text-lg font-semibold text-blue-400 mb-3">
+                        مقدار التقدم عن الخطة
+                    </label>
+                    <textarea id="advanced-reason" name="advanced_reason" rows="3" class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="يرجى توضيح الزيادة التي تم إنجازها..."></textarea>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full sm:w-auto bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md">
+                        إرسال التقرير
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const planStatusRadios = document.querySelectorAll('input[name="plan_status"]');
+        const delayReasonContainer = document.getElementById('delay-reason-container');
+        const advancedReasonContainer = document.getElementById('advanced-reason-container');
+
+        function checkStatus() {
+            const selected = document.querySelector('input[name="plan_status"]:checked');
+            if (!selected) return;
+
+            const selectedValue = selected.value;
+
+            delayReasonContainer.classList.toggle('hidden', selectedValue !== 'delayed');
+            advancedReasonContainer.classList.toggle('hidden', selectedValue !== 'advanced');
+        }
+
+        planStatusRadios.forEach(radio => {
+            radio.addEventListener('change', checkStatus);
+        });
+
+        checkStatus(); // التشغيل عند تحميل الصفحة
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 't_base.html'%}
+{% load static %}
+{% block title %} لوحة التحكم | نظام إدارة الحلقات {% endblock %}
+{% block content %}
+
+  
+        <div class="flex flex-col flex-1">
+            <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg">
+                <h1 class="text-xl font-bold text-blue-400">الحضور والغياب</h1>
+                <button class="text-slate-300 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </header>
+            <form method='post'>
+                {% csrf_token %}
+            <main class="flex-1 p-6 md:p-10">
+                <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-10">
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-black text-white">تسجيل الحضور والغياب</h1>
+                        <p class="text-slate-400 mt-2">الثلاثاء، 21 أكتوبر 2025 - حلقة البراعم</p>
+                    </div>
+                    <button type='submit' class="w-full sm:w-auto mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md">
+                        حفظ سجل الحضور
+                    </button>
+                </header>
+               
+                <div class="space-y-4">
+                    {% for student_at in students_att %}
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 sm:p-6 student-card">
+                        <input type="hidden" name="student_id" value="{{ student_at.student.id }}">
+                        <input type="hidden" class="status-input" name="status_{{ student_at.student.id }}" value="{{ student_at.status }}">
+
+                        <div class="flex flex-col sm:flex-row justify-between items-center">
+                            <span class="text-xl font-semibold text-white mb-4 sm:mb-0">{{ student_at.student }}</span>
+                            <div class="flex items-center space-x-3 space-x-reverse">
+                                                           
+                                <button type='button' class="status-btn present-btn px-6 py-2 rounded-md {% if student_at.status == True %}bg-blue-600{% else %}bg-slate-600{% endif %} text-white font-bold w-28 text-center">حاضر</button>
+                                <button type='button' class="status-btn absent-btn px-6 py-2 rounded-md {% if student_at.status == False %}bg-red-600{% else %}bg-slate-600{% endif %}  text-slate-300 font-bold w-28 text-center transition-colors">غائب</button> 
+                            </div>
+                         
+                                
+                        </div>
+                        <div class="reason-container {% if student_at.status == True %}hidden{% endif %} mt-4">
+                            <input type="text" name="notes_{{ student_at.student.id }}" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500" placeholder="اكتب ملاحظة (مثال: بعذر)..." value="{{ student_at.notes }}">
+                        </div>
+                    </div>
+                    
+
+
+                    {% endfor %}  
+                    
+                </div>
+            </main>
+        </form>
+        </div>
+    
+
+
+
+
+    <script>
+        document.querySelectorAll('.student-card').forEach(card => {
+            const presentBtn = card.querySelector('.present-btn');
+            const absentBtn = card.querySelector('.absent-btn');
+            const reasonContainer = card.querySelector('.reason-container');
+            const statusInput = card.querySelector('.status-input');
+
+            presentBtn.addEventListener('click', () => {
+                statusInput.value = "True";
+                
+                // تفعيل زر "حاضر"
+                presentBtn.classList.add('bg-blue-600', 'text-white');
+                presentBtn.classList.remove('bg-slate-600', 'hover:bg-slate-500', 'text-slate-300');
+                
+                // تعطيل زر "غائب"
+                absentBtn.classList.add('bg-slate-600', 'hover:bg-slate-500', 'text-slate-300');
+                absentBtn.classList.remove('bg-red-600', 'text-white');
+                
+                // إخفاء حقل الملاحظات
+                reasonContainer.classList.add('hidden');
+            });
+
+            absentBtn.addEventListener('click', () => {
+
+                statusInput.value = "False";
+
+                // تفعيل زر "غائب"
+                absentBtn.classList.add('bg-red-600', 'text-white');
+                absentBtn.classList.remove('bg-slate-600', 'hover:bg-slate-500', 'text-slate-300');
+                
+                // تعطيل زر "حاضر"
+                presentBtn.classList.add('bg-slate-600', 'hover:bg-slate-500', 'text-slate-300');
+                presentBtn.classList.remove('bg-blue-600', 'text-white');
+                
+                // إظهار حقل الملاحظات
+                reasonContainer.classList.remove('hidden');
+            });
+        });
+    </script>
+
+    <!-- press present ot absent from the data comes -->
+   
+
+{% endblock %}

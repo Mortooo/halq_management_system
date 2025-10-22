@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %}</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <script>
+        // Tailwind Config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Cairo', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+
+    <!-- سكربت تشغيل القائمة في الجوال -->
+ <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const navLinks = sidebar.querySelectorAll('a');
+
+        // ✅ إظهار/إخفاء القائمة عند الضغط على زر القائمة
+        menuBtn.addEventListener('click', (event) => {
+            event.stopPropagation(); // يمنع إغلاقها فورًا بعد الفتح
+            sidebar.classList.toggle('hidden');
+        });
+
+        // ✅ إخفاء القائمة عند الضغط على أحد الروابط (في الجوال فقط)
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 768) { // md breakpoint
+                    sidebar.classList.add('hidden');
+                }
+            });
+        });
+
+        // ✅ إخفاء القائمة عند الضغط في أي مكان خارجها
+        document.addEventListener('click', (event) => {
+            const isClickInside = sidebar.contains(event.target) || menuBtn.contains(event.target);
+            if (!isClickInside && window.innerWidth < 768) {
+                sidebar.classList.add('hidden');
+            }
+        });
+
+        // ✅ عند تكبير الشاشة، نتأكد أن القائمة تظهر دائمًا
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                sidebar.classList.remove('hidden');
+            }
+        });
+    });
+</script>
+
+</head>
+
+<body class="bg-slate-900 text-slate-300 flex flex-col min-h-screen">
+
+   
+    
+    <main class="flex-grow">
+        <div class="flex min-h-screen">
+            <!-- القائمة الجانبية -->
+            <aside  id="sidebar" class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden md:block fixed md:relative h-full z-40">
+                <h2 class="text-2xl font-bold text-blue-400 mb-8">لوحة التحكم</h2>
+                <nav dir='rtl' class="space-y-2">
+                    <a href="{% url 'teacher_dashboard' %}"
+                        class="text-white flex items-center p-3 rounded-lg font-bold transition-colors
+                            {% if request.path == '/teacher/dashbord' %}
+                                bg-blue-600/50 text-white font-bold
+                            {% else %}
+                                text-slate-300 hover:bg-slate-700/60
+                            {% endif %}">
+                        <span class="ml-4">🏠</span> الرئيسية
+                    </a>
+                    <a href="{% url 'students_attendance' user.id %}"
+                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                        <span class="ml-4">✔️</span> الحضور والغياب
+                    </a>
+                    <a href="#"
+                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                        <span class="ml-4">📖</span> متابعة المقرر   (قريباً)
+                    </a>
+                    <a href="{% url 'weekly_report' user.id %}"
+                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                        <span class="ml-4">📅</span> التقارير الأسبوعية
+                    </a>
+                    <a href="#"
+                        class=" disable text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                        <span class="ml-4">⭐</span> إدخال الدرجات   (قريباً)
+                    </a>
+                    <a href="{% url 'students_list' user.id %}"
+                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors
+                        {% if 'students_list' in request.path %}
+                            bg-blue-600/50 text-white font-bold
+                        {% else %}
+                            text-slate-300 hover:bg-slate-700/60
+                        {% endif %}">
+                        <span class="ml-4">👤</span> ملفات التلاميذ
+                    </a>
+                    <a href="{% url 'account_logout'%}"
+                        class="bg-red-600 text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
+                        <span class="ml-4"></span> تسجيل الخروج
+                    </a>
+                </nav>
+            </aside>
+
+        {% block content %}
+        {% endblock %}
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 border-t border-slate-700 mt-auto">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+             <h2 class="text-lg font-semibold text-white mb-2">نظام إدارة الحلقات القرآنية</h2>
+            <p class="text-slate-400">تصميم: مرتضى محمد الخير &copy; 2025</p>
+        </div>
+    </footer>
+
+</body>
+</html>

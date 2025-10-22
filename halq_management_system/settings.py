@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-!plj_+$)=g5wa%^r$_1!9zllg@$1icnj5x9#ke4wvss-d7n=uc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'teachers',
     'students',
     'attendances',
+    'superuser',
     'reports',
     'allauth',
     'allauth.account',
+
 ]
 
 MIDDLEWARE = [
@@ -150,10 +152,19 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-LOGIN_REDIRECT_URL = '/'       # where to go after login
+# LOGIN_REDIRECT_URL = 'superuser_dashboard'       # where to go after login
 LOGOUT_REDIRECT_URL = '/'      # where to go after logout
 
 ACCOUNT_EMAIL_VERIFICATION = "none"  # can be "mandatory"
 ACCOUNT_AUTHENTICATION_METHOD = "username"  # or "email" / "username_email"
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_ADAPTER = 'accounts.adapter.MyAccountAdapter'
+
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.loclx.io',
+]
+
+
 

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المشرفة | نظام إدارة الحلقات</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind Config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Cairo', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-900 text-slate-300">
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden md:block">
+            <h2 class="text-2xl font-bold text-blue-400 mb-8">لوحة التحكم</h2>
+            <nav class="space-y-2">
+                <a href="#" class="bg-blue-600/50 text-white flex items-center p-3 rounded-lg font-bold">
+                    <span class="ml-4">📊</span> الرئيسية
+                </a>
+                <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
+                    <span class="ml-4">👩‍🏫</span> إدارة المعلمات
+                </a>
+                <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
+                    <span class="ml-4">👤</span> إدارة التلاميذ
+                </a>
+                <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
+                    <span class="ml-4">📅</span> مراجعة التقارير
+                </a>
+                <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
+                    <span class="ml-4">📈</span> الإحصائيات
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex flex-col flex-1">
+            <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg">
+                <h1 class="text-xl font-bold text-blue-400">لوحة التحكم</h1>
+                <button class="text-slate-300 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </header>
+
+            <main class="flex-1 p-6 md:p-10">
+                <header class="mb-10">
+                    <h1 class="text-3xl md:text-4xl font-black text-white">مرحباً بكِ، مشرفة خدووووج </h1>
+                    <p class="text-slate-400 mt-2">نظرة شاملة على أداء الحلقات اليوم.</p>
+                </header>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-lg font-bold text-blue-400">إجمالي الحلقات</h3>
+                        <p class="text-5xl font-extrabold text-white mt-4">5</p>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-lg font-bold text-blue-400">إجمالي التلاميذ</h3>
+                        <p class="text-5xl font-extrabold text-white mt-4">75</p>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-lg font-bold text-blue-400">حضور المعلمات اليوم</h3>
+                        <p class="text-5xl font-extrabold text-white mt-4">4 <span class="text-2xl text-slate-400">/
+                                5</span></p>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-lg font-bold text-blue-400">متوسط الحضور</h3>
+                        <p class="text-5xl font-extrabold text-white mt-4">95%</p>
+                    </div>
+                </div>
+
+                <div class="mt-12 bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto">
+                    <div class="p-6 flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-white">نظرة سريعة على الحلقات</h2>
+                        <a href="#" class="text-sm text-blue-400 hover:underline">عرض الكل</a>
+                    </div>
+                    <table class="w-full text-right">
+                        <thead class="border-b border-slate-700">
+                            <tr>
+                                <th class="p-4 text-blue-400 font-semibold">اسم الحلقة</th>
+                                <th class="p-4 text-blue-400 font-semibold">المعلمة</th>
+                                <th class="p-4 text-blue-400 font-semibold">عدد التلاميذ</th>
+                                <th class="p-4 text-blue-400 font-semibold">حالة الخطة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/60">
+                                <td class="p-4 text-white">حلقة البراعم</td>
+                                <td class="p-4">فاطمة علي</td>
+                                <td class="p-4">15</td>
+                                <td class="p-4"><span
+                                        class="px-3 py-1 text-sm rounded-full bg-green-800 text-green-300">ضمن
+                                        الخطة</span></td>
+                            </tr>
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/60">
+                                <td class="p-4 text-white">حلقة الزهور</td>
+                                <td class="p-4 text-yellow-400">عائشة (غائبة)</td>
+                                <td class="p-4">16</td>
+                                <td class="p-4"><span
+                                        class="px-3 py-1 text-sm rounded-full bg-yellow-800 text-yellow-300">متأخر</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-700/60">
+                                <td class="p-4 text-white">حلقة الأترجة</td>
+                                <td class="p-4">خديجة أحمد</td>
+                                <td class="p-4">14</td>
+                                <td class="p-4"><span
+                                        class="px-3 py-1 text-sm rounded-full bg-blue-800 text-blue-300">متقدم</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

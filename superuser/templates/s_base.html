@@ -37,55 +37,53 @@
     </style>
 
     <!-- سكربت تشغيل القائمة في الجوال -->
- <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const menuBtn = document.getElementById('menu-btn');
-        const sidebar = document.getElementById('sidebar');
-        const navLinks = sidebar.querySelectorAll('a');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuBtn = document.getElementById('menu-btn');
+            const sidebar = document.getElementById('sidebar');
+            const navLinks = sidebar.querySelectorAll('a');
 
-        // ✅ إظهار/إخفاء القائمة عند الضغط على زر القائمة
-        menuBtn.addEventListener('click', (event) => {
-            event.stopPropagation(); // يمنع إغلاقها فورًا بعد الفتح
-            sidebar.classList.toggle('hidden');
-        });
+            // ✅ إظهار/إخفاء القائمة عند الضغط على زر القائمة
+            menuBtn.addEventListener('click', (event) => {
+                event.stopPropagation(); // يمنع إغلاقها فورًا بعد الفتح
+                sidebar.classList.toggle('hidden');
+            });
 
-        // ✅ إخفاء القائمة عند الضغط على أحد الروابط (في الجوال فقط)
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) { // md breakpoint
+            // ✅ إخفاء القائمة عند الضغط على أحد الروابط (في الجوال فقط)
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 768) { // md breakpoint
+                        sidebar.classList.add('hidden');
+                    }
+                });
+            });
+
+            // ✅ إخفاء القائمة عند الضغط في أي مكان خارجها
+            document.addEventListener('click', (event) => {
+                const isClickInside = sidebar.contains(event.target) || menuBtn.contains(event.target);
+                if (!isClickInside && window.innerWidth < 768) {
                     sidebar.classList.add('hidden');
                 }
             });
-        });
 
-        // ✅ إخفاء القائمة عند الضغط في أي مكان خارجها
-        document.addEventListener('click', (event) => {
-            const isClickInside = sidebar.contains(event.target) || menuBtn.contains(event.target);
-            if (!isClickInside && window.innerWidth < 768) {
-                sidebar.classList.add('hidden');
-            }
+            // ✅ عند تكبير الشاشة، نتأكد أن القائمة تظهر دائمًا
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('hidden');
+                }
+            });
         });
-
-        // ✅ عند تكبير الشاشة، نتأكد أن القائمة تظهر دائمًا
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 768) {
-                sidebar.classList.remove('hidden');
-            }
-        });
-    });
-</script>
+    </script>
 
 </head>
 
 <body class="bg-slate-900 text-slate-300 flex flex-col min-h-screen">
 
-
-
     <main class="flex-grow">
         <div class="flex min-h-screen">
-             <!-- ترويسة الجوال -->
+            <!-- ترويسة الجوال -->
             <header class="bg-slate-800 md:hidden flex items-center justify-between p-4 shadow-lg fixed w-full z-50">
-                <h1 class="text-xl font-bold text-blue-400">لوحة تحكم | المعلمة</h1>
+                <h1 class="text-xl font-bold text-blue-400">لوحة تحكم | المشرفة</h1>
                 <button id="menu-btn" class="text-slate-300 hover:text-white">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -93,70 +91,44 @@
                     </svg>
                 </button>
             </header>
-            <!-- القائمة الجانبية -->
-            <aside  id="sidebar" class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden md:block fixed md:relative h-full z-40">
+
+            <aside id="sidebar" class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden md:block fixed md:relative h-full z-40">
                 <h2 class="text-2xl font-bold text-blue-400 mb-8">لوحة التحكم</h2>
                 <nav dir='rtl' class="space-y-2">
-                    <a href="{% url 'teacher_dashboard' %}"
-                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors
-                            {% if request.path == '/teacher/dashbord' %}
-                                bg-blue-600/50 text-white font-bold
-                            {% else %}
-                                text-slate-300 hover:bg-slate-700/60
-                            {% endif %}">
-                        <span class="ml-4">🏠</span> الرئيسية
+                    <a href="{% url 'superuser_dashboard' %}" class="bg-blue-600/50 text-white flex items-center p-3 rounded-lg font-bold">
+                        <span class="ml-4">📊</span> الرئيسية
                     </a>
-
-                    <a href="{% url 'students_list' user.id %}"
-                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors
-                        {% if '/student/list/' in request.path %}
-                            bg-blue-600/50 text-white font-bold
-                        {% else %}
-                            text-slate-300 hover:bg-slate-700/60
-                        {% endif %}">
-                        <span class="ml-4">👤</span> ملفات التلاميذ
+                    <a href="{% url 'teacher_list' %}" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
+                        <span class="ml-4">👩‍🏫</span> إدارة المعلمات
                     </a>
-
-                    <a href="{% url 'students_attendance' user.id %}"
-                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors
-                        {% if 'students_attendance' in request.path %}
-                            bg-blue-600/50 text-white font-bold
-                        {% else %}
-                            text-slate-300 hover:bg-slate-700/60
-                        {% endif %}">
+                    <a href="{% url 'halaqa_list' %}" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
+                        <span class="ml-4">🏷️</span> إدارة الحلقات
+                    </a>
+                    <a href="{% url 'teacher_attendance' %}" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
                         <span class="ml-4">✔️</span> الحضور والغياب
                     </a>
-                    {% comment %} <a href="#"
-                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
-                        <span class="ml-4">📖</span> متابعة المقرر   (قريباً)
-                    </a> {% endcomment %}
-                    <a href="{% url 'weekly_report' user.id %}"
-                        class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors
-                        {% if 'weekly_report' in request.path %}
-                            bg-blue-600/50 text-white font-bold
-                        {% else %}
-                            text-slate-300 hover:bg-slate-700/60
-                        {% endif %}">
-                        <span class="ml-4">📅</span> التقارير الأسبوعية
+                    <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
+                        <span class="ml-4">👤</span> ادارة المستخدمين
                     </a>
-                    {% comment %} <a href="#"
-                        class=" disable text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
-                        <span class="ml-4">⭐</span> إدخال الدرجات   (قريباً)
+                    <a href="{% url 'total_reports' %}" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
+                        <span class="ml-4">📅</span> مراجعة التقارير
+                    </a>
+                    {% comment %} <a href="#" class="text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg">
+                        <span class="ml-4">📈</span> الإحصائيات
                     </a> {% endcomment %}
-                    
-                    <a href="{% url 'account_logout'%}"
+                     <a href="{% url 'account_logout'%}"
                         class="bg-red-600 text-slate-300 hover:bg-slate-700/60 flex items-center p-3 rounded-lg transition-colors">
                         <span class="ml-4"></span> تسجيل الخروج
                     </a>
                 </nav>
             </aside>
 
-        {% block content %}
-        {% endblock %}
-
+            {% block content %}
+            {% endblock %}
         </div>
     </main>
-        <!-- showing message -->
+
+   <!-- showing message -->
         {% if messages %}
         <div id="messages-container" class="fixed top-5 right-5 z-50 space-y-2">
         {% for message in messages %}

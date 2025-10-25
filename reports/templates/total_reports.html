@@ -1,0 +1,123 @@
+{% extends 's_base.html' %} {# Or the supervisor's base template #}
+{% load static %}
+
+{# 1. Browser Title #}
+{% block title %}مراجعة التقارير{% endblock %}
+
+{# 2. Mobile Header Title #}
+{% block page_title %}مراجعة التقارير{% endblock %}
+
+
+{# 3. Page Content #}
+{% block content %}
+<main class="flex-1 p-6 md:p-10">
+    <header class="hidden md:block mb-10">
+        <h1 class="text-3xl md:text-4xl font-black text-white">مراجعة التقارير الأسبوعية</h1>
+        <p class="text-slate-400 mt-2">عرض وتصفية التقارير المرسلة من جميع المعلمات.</p>
+    </header>
+
+    <form method="get" >
+        <div class="mb-8 p-6 bg-slate-800 rounded-xl border border-slate-700 flex flex-col md:flex-row gap-4">
+            <div class="flex-1">
+                <label for="filter_teacher" class="block text-sm font-medium text-blue-400 mb-1">تصفية حسب المعلمة:</label>
+                <select id="filter_teacher" name="teacher" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- كل المعلمات --</option>
+                    {% for  teacher in teachers %}
+                    <option value="{{ teacher.id }}">{{ teacher.name}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            <div class="flex-1">
+                <label for="filter_halaqa" class="block text-sm font-medium text-blue-400 mb-1">تصفية حسب الحلقة:</label>
+                <select id="filter_halaqa" name="halaqa" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- كل الحلقات --</option>
+                    {% for  halaqa in halaqats_list %}
+                    <option value="{{ halaqa.id }}">{{ halaqa.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-700 transition h-full">
+                    تصفية
+                </button>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto hidden md:block">
+        <table class="w-full text-right">
+            <thead class="border-b border-slate-700">
+                <tr>
+                    <th class="p-4 text-blue-400 font-semibold">المعلمة</th>
+                    <th class="p-4 text-blue-400 font-semibold">الحلقة</th>
+                    <th class="p-4 text-blue-400 font-semibold">تاريخ نهاية الأسبوع</th>
+                    <th class="p-4 text-blue-400 font-semibold">الحالة</th>
+                    <th class="p-4 text-blue-400 font-semibold">الإجراء</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-700">
+                
+                {# Loop through reports here #}
+                {% for report in reports_list %}
+                <tr>
+                    <td class="p-4 text-white font-semibold">{{ report.teacher.name }}</td>
+                    <td class="p-4">{{ report.halaqa.name }}</td>
+                    <td class="p-4">{{ report.end_w_date|date:"Y/m/d" }}</td>
+                    <td class="p-4">
+                        {% if report.compare_plan == 'delayed' %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">متأخر</span>
+                        {% elif report.compare_plan == 'advanced' %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-blue-800 text-blue-300">متقدم</span>
+                        {% else %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">ضمن الخطة</span>
+                        {% endif %}
+                    </td>
+                    <td class="p-4">
+                        <a href="{% url 'report_details' report.id %}" class="text-blue-400 hover:underline font-semibold">عرض التفاصيل</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="p-6 text-center text-slate-400">
+                        لا توجد تقارير تطابق معايير التصفية.
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 md:hidden">
+        
+        {# Loop through reports here #}
+        {% for report in reports_list %}
+        <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 space-y-3">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white">{{ report.halaqa.name }}</h3>
+                 {% if report.compare_plan == 'delayed' %}
+                    <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">متأخر</span>
+                {% elif report.compare_plan == 'advanced' %}
+                    <span class="px-3 py-1 text-xs rounded-full bg-blue-800 text-blue-300">متقدم</span>
+                {% else %}
+                    <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">ضمن الخطة</span>
+                {% endif %}
+            </div>
+            <p class="text-sm text-slate-400"><strong>المعلمة:</strong> {{ report.teacher.name }}</p>
+            <p class="text-sm text-slate-400"><strong>الأسبوع المنتهي في:</strong> {{ report.end_w_date|date:"Y/m/d" }}</p>
+            <a href="{% url 'report_details' report.id %}" class="block w-full text-center mt-3 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">
+                عرض التفاصيل
+            </a>
+        </div>
+        {% empty %}
+        <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 text-center">
+            <p class="text-slate-400">لا توجد تقارير تطابق معايير التصفية.</p>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</main>
+{% endblock %}

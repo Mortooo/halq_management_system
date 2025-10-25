@@ -1,0 +1,76 @@
+{% extends 's_base.html' %} {# تأكد من أن هذا هو اسم القالب الأساسي الصحيح للمشرفة #}
+{% load static %}
+
+{# 1. عنوان المتصفح #}
+{% block title %}إضافة معلمة جديدة{% endblock %}
+
+{# 2. عنوان الصفحة في الهيدر (للجوال) #}
+{% block page_title %}إضافة معلمة{% endblock %}
+
+
+{# 3. محتوى الصفحة #}
+{% block content %}
+<main class="flex-1 p-6 md:p-10 mt-14 md:mt-0">
+    <header class="hidden md:block mb-10">
+        <h1 class="text-3xl md:text-4xl font-black text-white">إضافة معلمة جديدة</h1>
+        <p class="text-slate-400 mt-2">أدخل بيانات المعلمة وحساب الدخول الخاص بها.</p>
+    </header>
+
+    <div class="max-w-2xl">
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 md:p-8">
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="bg-red-900/50 border border-red-700 text-red-300 p-4 rounded-lg">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-md font-semibold text-blue-400 mb-2">
+                        {{ field.label }}
+                        {# إضافة علامة النجمة للحقول الإلزامية #}
+                        {% if field.field.required %}
+                            <span class="text-red-400">*</span>
+                        {% endif %}
+                    </label>
+                    
+                    {# نضيف بعض الكلاسات للحقل ليتناسب مع التصميم #}
+                    {% comment %} {{ field.as_widget.attrs.class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500" }} {% endcomment %}
+                    
+                    {{ field }}
+
+                    {% if field.errors %}
+                        <div class="text-red-400 text-sm mt-1">
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    {% if field.help_text %}
+                        <p class="text-slate-500 text-sm mt-1">{{ field.help_text }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="pt-4 flex items-center space-x-4 space-x-reverse">
+                    <button type="submit" class="w-auto bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        حفظ المعلمة
+                    </button>
+                    <a href="{% url 'teacher_list' %}" class="w-auto text-center bg-slate-700 text-slate-300 px-8 py-3 rounded-lg font-bold hover:bg-slate-600 transition">
+                        إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 's_base.html' %} {# أو القالب الأساسي للمشرفة #}
+{% load static %}
+
+{# 1. عنوان المتصفح #}
+{% block title %}تفاصيل التقرير الأسبوعي{% endblock %}
+
+{# 2. عنوان الصفحة في الهيدر (للجوال) #}
+{% block page_title %}تفاصيل التقرير{% endblock %}
+
+
+{# 3. محتوى الصفحة #}
+{% block content %}
+<main class="flex-1 p-6 md:p-10">
+    <header class="hidden md:block mb-8">
+        <h1 class="text-3xl md:text-4xl font-black text-white">تفاصيل التقرير الأسبوعي</h1>
+        <p class="text-slate-400 mt-2">عرض محتوى التقرير المرسل.</p>
+    </header>
+
+    <div class="max-w-3xl">
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 md:p-8 space-y-6">
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-b border-slate-700 pb-4">
+                <div>
+                    <span class="text-sm text-slate-400">المعلمة</span>
+                    <p class="font-bold text-white text-lg">{{ report.teacher.name|default:"غير محدد" }}</p>
+                </div>
+                <div>
+                    <span class="text-sm text-slate-400">الحلقة</span>
+                    <p class="font-bold text-white text-lg">{{ report.halaqa.name|default:"غير محدد" }}</p>
+                </div>
+                <div>
+                    <span class="text-sm text-slate-400">الأسبوع المنتهي في</span>
+                    <p class="font-bold text-white text-lg">{{ report.end_w_date|date:"Y/m/d"|default:"غير محدد" }}</p>
+                </div>
+            </div>
+
+            <div>
+                <span class="text-sm font-semibold text-blue-400">حالة الخطة</span>
+                <p class="mt-1">
+                    {% if report.compare_plan == 'delayed' %}
+                        <span class="px-4 py-1 text-base rounded-full bg-red-800 text-red-300 font-semibold">متأخر</span>
+                    {% elif report.compare_plan == 'advanced' %}
+                        <span class="px-4 py-1 text-base rounded-full bg-blue-800 text-blue-300 font-semibold">متقدم</span>
+                    {% else %}
+                        <span class="px-4 py-1 text-base rounded-full bg-green-800 text-green-300 font-semibold">ضمن الخطة</span>
+                    {% endif %}
+                </p>
+            </div>
+
+            <div>
+                <span class="text-sm font-semibold text-blue-400">مقدار المقرر المنجز هذا الأسبوع</span>
+                <p class="mt-1 bg-slate-900/50 border border-slate-700 rounded-lg p-4 text-slate-200 whitespace-pre-wrap">
+                    {{ report.amount|default:"لم يتم التحديد" }}
+                </p>
+            </div>
+
+            {% if report.compare_plan == 'delayed'  %}
+            <div>
+                <span class="text-sm font-semibold text-red-400">سبب التأخير</span>
+                <p class="mt-1 bg-slate-900/50 border border-slate-700 rounded-lg p-4 text-slate-200 whitespace-pre-wrap">
+                    {{ report.notes }}
+                </p>
+            </div>
+            {% endif %}
+
+            {% if report.compare_plan == 'advanced' %}
+             <div>
+                <span class="text-sm font-semibold text-blue-400">مقدار التقدم عن الخطة</span>
+                <p class="mt-1 bg-slate-900/50 border border-slate-700 rounded-lg p-4 text-slate-200 whitespace-pre-wrap">
+                    {{ report.notes }}
+                </p>
+            </div>
+            {% endif %}
+
+            <div class="pt-4 border-t border-slate-700">
+                <a href="{% url 'total_reports' %}" class="inline-block bg-slate-700 text-slate-300 px-6 py-2 rounded-lg font-bold hover:bg-slate-600 transition">
+                    &rarr; العودة إلى قائمة التقارير
+                </a>
+            </div>
+
+        </div>
+    </div>
+</main>
+{% endblock %}

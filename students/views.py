@@ -97,55 +97,55 @@ class StudentDelete(DeleteView):
         return reverse_lazy('students_list', kwargs={'pk': self.request.user.id})
     
 # Create your views here.
-class StudentAttList(ListView):
-    template_name='student_att.html'
-    model=StudAttendance
-    context_object_name='students_att'
+# class StudentAttList(ListView):
+#     template_name='student_att.html'
+#     model=StudAttendance
+#     context_object_name='students_att'
     
        
     
     
-    def get_context_data(self, **kwargs):
-        context=super().get_context_data(**kwargs)
+#     def get_context_data(self, **kwargs):
+#         context=super().get_context_data(**kwargs)
         
-        ###################(stage 1)##########################
-        # get the user is log in
-        user=self.kwargs.get('pk')
-        # get the teacher with user creidentions
-        teacher=Teacher.objects.get(user_name_id=user)
-        # get the list halaqat the teacher teach
-        halaqats=Halaqa.objects.filter(res_teacher=teacher)
-        # get studets whom are teached the the teacher 
-        students=Student.objects.filter(halaqa__in=halaqats)
-        ###################(stage 2)##########################
-        # create attendance record for every students whom has no record for today 
-        current_date=date.today()
-        for student in students:
-            if not StudAttendance.objects.filter(student=student,day=current_date).exists():
-                StudAttendance.objects.create(student=student)
+#         ###################(stage 1)##########################
+#         # get the user is log in
+#         user=self.kwargs.get('pk')
+#         # get the teacher with user creidentions
+#         teacher=Teacher.objects.get(user_name_id=user)
+#         # get the list halaqat the teacher teach
+#         halaqats=Halaqa.objects.filter(res_teacher=teacher)
+#         # get studets whom are teached the the teacher 
+#         students=Student.objects.filter(halaqa__in=halaqats)
+#         ###################(stage 2)##########################
+#         # create attendance record for every students whom has no record for today 
+#         current_date=date.today()
+#         for student in students:
+#             if not StudAttendance.objects.filter(student=student,day=current_date).exists():
+#                 StudAttendance.objects.create(student=student)
 
-        return context
+#         return context
     
-    def post(self,request,*args, **kwargs):
+#     def post(self,request,*args, **kwargs):
         
-        student_ids = request.POST.getlist('student_id')     
+#         student_ids = request.POST.getlist('student_id')     
          
-        for student_id in student_ids:
-            student=Student.objects.get(id=student_id)
-            status=request.POST.get(f'status_{student_id}')
-            notes=request.POST.get(f'notes_{student_id}')
+#         for student_id in student_ids:
+#             student=Student.objects.get(id=student_id)
+#             status=request.POST.get(f'status_{student_id}')
+#             notes=request.POST.get(f'notes_{student_id}')
             
-            StudAttendance.objects.update_or_create(
-                student=student,
-                defaults={
-                'status': status,
-                'notes': notes
-                }  
-            )
+#             StudAttendance.objects.update_or_create(
+#                 student=student,
+#                 defaults={
+#                 'status': status,
+#                 'notes': notes
+#                 }  
+#             )
             
              
-        return redirect(request.path)
-        # return self.render_to_response(context)
+#         return redirect(request.path)
+#         # return self.render_to_response(context)
     
     
     

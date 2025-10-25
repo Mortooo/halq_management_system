@@ -1,9 +1,11 @@
 from datetime import date, timedelta
 from django.shortcuts import render
+from django.views.generic import ListView,DetailView
 
 from halaqs.models import Halaqa
 from reports.models import WeekReport
 from teachers.models import Teacher
+from django.contrib import messages
 
 # Create your views here.
 
@@ -64,9 +66,52 @@ def show_weekly_report(request,pk):
                 end_w_date=end_of_week
 
             )
+            
+        messages.success(request,"تم ارسال التقرير بنجاح ")
+        
         
         context={'current_week_end_date':end_of_week,'halaqats':halaqats,}
         
         return render(request,'weekly_report.html',context)
+    
+    
+
+
+class TotalReport(ListView):
+    template_name='total_reports.html'
+    model=WeekReport
+    context_object_name='reports_list'
+    
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        
+        halaqat_list=Halaqa.objects.all()
+        teachers=Teacher.objects.all()
+        
+        context['halaqats_list']=halaqat_list
+        context['teachers']=teachers
+        
+        return context
+    
+    def get_queryset(self):
+        query=super().get_queryset()
+        
+        halaqa=self.request.GET.get('halaqa')
+        teacher=self.request.GET.get('teacher')
+        
+        if teacher:
+            query=query.filter(halaqa__res_teacher=teacher)
+        
+        if halaqa:
+            query=query.filter(halaqa=halaqa)
+        
+        
+        return query
+    
+class ReportDetails(DetailView):
+    template_name='report_details.html'
+    model=WeekReport
+    context_object_name='report'
+    
     
     

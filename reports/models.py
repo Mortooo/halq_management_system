@@ -10,3 +10,9 @@ class WeekReport(models.Model):
     compare_plan=models.CharField(max_length=10,blank=False,null=False)
     notes=models.TextField(blank=True,null=True)
     
+    @property
+    def teacher(self):
+        teach=Halaqa.objects.get(pk=self.halaqa.id).res_teacher
+        
+        return teach
+    

@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import StudentsList,StudentCreate,StudentDetails,StudentUpdate,StudentDelete,StudentAttList
+from .views import StudentsList,StudentCreate,StudentDetails,StudentUpdate,StudentDelete
 from django.contrib.auth.decorators import login_required
+from attendances.views import StudentAttList
 
 urlpatterns = [
     path('list/<int:pk>',login_required(StudentsList.as_view()),name='students_list'),

@@ -1,0 +1,110 @@
+{% extends 's_base.html' %}
+{% load static %}
+
+{% block title %}إدارة المعلمات{% endblock %}
+
+{% block page_title %}إدارة المعلمات{% endblock %}
+
+
+{% block content %}
+
+<main class="flex-1 p-6 md:p-10 mt-14 md:mt-0">
+    <header class="hidden md:block mb-10">
+        <h1 class="text-3xl md:text-4xl font-black text-white">إدارة المعلمات</h1>
+        <p class="text-slate-400 mt-2">إضافة وتعديل وحذف بيانات المعلمات.</p>
+    </header>
+
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+        <a href="{% url 'add_teacher' %}" class="w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md text-center">
+            + إضافة معلمة جديدة
+        </a>
+        
+        <form method="GET" action="" class="w-full md:w-auto md:max-w-sm">
+            <div class="flex">
+                <input type="text" name="q" placeholder="ابحث باسم المعلمة..." 
+                       class="w-full p-3 bg-slate-800 border border-slate-700 rounded-r-lg text-slate-200 focus:ring-2 focus:ring-blue-500"
+                       value="{{ request.GET.q }}">
+                <button type="submit" 
+                        class="bg-blue-600 text-white px-5 py-3 rounded-l-lg font-bold hover:bg-blue-700 transition">
+                    بحث
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto hidden md:block">
+        <table class="w-full text-right">
+            <thead class="border-b border-slate-700">
+                <tr>
+                    <th class="p-4 text-blue-400 font-semibold">الاسم</th>
+                    <th class="p-4 text-blue-400 font-semibold">الحلقات المشرفة عليها</th>
+                    <th class="p-4 text-blue-400 font-semibold">رقم الهاتف</th>
+                    <th class="p-4 text-blue-400 font-semibold">إجراءات</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-700">
+                
+                {% for teacher in teachers %}
+                <tr>
+                    <td class="p-4 text-white font-semibold">{{ teacher.name }}</td>
+                    <td class="p-4 text-sm">
+                        {% for halaqa in teacher.halaqa_set.all %}
+                            {{ halaqa.name }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            <span class="text-slate-500">لا توجد</span>
+                        {% endfor %} 
+                    </td>
+                    <td class="p-4 text-slate-300">{{ teacher.tel|default:"-" }}</td>
+                    <td class="p-4 space-x-2 space-x-reverse">
+                        <a href="{% url 'edit_teacher' teacher.id %}" class="text-blue-400 hover:underline">تعديل</a>
+                        <a href="{% url 'delete_teacher' teacher.id %}" class="text-red-400 hover:underline">حذف</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="p-6 text-center text-slate-400">
+                        لا يوجد معلمات مسجلات في النظام حالياً.
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 md:hidden">
+        
+        {% for teacher in teachers %}
+        <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 space-y-3">
+            <h3 class="text-lg font-bold text-white">{{ teacher.name }}</h3>
+            
+            <p class="text-sm text-slate-400">
+                <strong>الحلقات:</strong>
+                {% for halaqa in teacher.halaqa_set.all %}
+                    {{ halaqa.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    <span class="text-slate-500">لا توجد</span>
+                {% endfor %}
+            </p>
+            <p class="text-sm text-slate-400"><strong>الهاتف:</strong> {{ teacher.tel|default:"-" }}</p>
+            
+            <div class="pt-2 flex items-center space-x-3 space-x-reverse">
+                <a href="{% url 'edit_teacher' teacher.id %}" class="w-full text-center bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">
+                    تعديل
+                </a> 
+                <a href="{% url 'delete_teacher' teacher.id %}" class="w-full text-center bg-red-600/20 text-red-300 py-2 rounded-lg font-semibold hover:bg-red-600/40">
+                   حذف
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 text-center">
+            <p class_name="text-slate-400">لا يوجد معلمات مسجلات في النظام حالياً.</p>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</main>
+{% endblock %}

@@ -1,4 +1,4 @@
-{% extends 't_base.html'%}
+{% extends 's_base.html'%}
 {% load static %}
 {% block title %} لوحة التحكم | نظام إدارة الحلقات {% endblock %}
 {% block content %}
@@ -26,43 +26,36 @@
                
                 <div class="space-y-4">
 
-                    <form method="get">
-                        <select name="selected_halaqa" class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500"
-                        onchange="this.form.submit()"
-                        >
-                            <option value="">اختر الحلقة </option>
-                            {% for halaqa in halaqats %}
-                            <option value={{ halaqa.id }}> {{ halaqa }}</option>
-                            {% endfor %}
-                        </select>
-                    </form>
-
                     <form method='post'>
                         {% csrf_token %}
-                        {% for student_at in students_att %}
-                        <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 sm:p-6 student-card">
-                            <input type="hidden" name="student_id" value="{{ student_at.student.id }}">
-                            <input type="hidden" class="status-input" name="status_{{ student_at.student.id }}" value="{{ student_at.status }}">
+                        {% for teacher_at in teacher_att %}
+                        <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 sm:p-6 teacher-card">
+                            <input type="hidden" name="teacher_id" value="{{ teacher_at.teacher.id }}">
+                            <input type="hidden" class="status-input" name="status_{{ teacher_at.teacher.id }}" value="{{ teacher_at.status }}">
 
                             <div class="flex flex-col sm:flex-row justify-between items-center">
-                                <span class="text-xl font-semibold text-white mb-4 sm:mb-0">{{ student_at.student }}</span>
+                                <span class="text-xl font-semibold text-white mb-4 sm:mb-0">{{ teacher_at.teacher }}</span>
                                 <div class="flex items-center space-x-3 space-x-reverse">
                                                             
-                                    <button type='button' class="status-btn present-btn px-6 py-2 rounded-md {% if student_at.status == True %}bg-blue-600{% else %}bg-slate-600{% endif %} text-white font-bold w-28 text-center">حاضر</button>
-                                    <button type='button' class="status-btn absent-btn px-6 py-2 rounded-md {% if student_at.status == False %}bg-red-600{% else %}bg-slate-600{% endif %}  text-slate-300 font-bold w-28 text-center transition-colors">غائب</button> 
+                                    <button type='button' class="status-btn present-btn px-6 py-2 rounded-md {% if teacher_at.status == True %}bg-blue-600{% else %}bg-slate-600{% endif %} text-white font-bold w-28 text-center">حاضر</button>
+                                    <button type='button' class="status-btn absent-btn px-6 py-2 rounded-md {% if teacher_at.status == False %}bg-red-600{% else %}bg-slate-600{% endif %}  text-slate-300 font-bold w-28 text-center transition-colors">غائب</button> 
                                 </div>
                             
                                     
                             </div>
-                            <div class="reason-container {% if student_at.status == True %}hidden{% endif %} mt-4">
-                                <input type="text" name="notes_{{ student_at.student.id }}" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500" placeholder="اكتب ملاحظة (مثال: بعذر)..." value="{{ student_at.notes }}">
+                            <div class="reason-container {% if teacher_at.status == True %}hidden{% endif %} mt-4">
+                                <input type="text" name="notes_{{ teacher_at.teacher.id }}" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500" placeholder="اكتب ملاحظة (مثال: بعذر)..." value="{{ teacher_at.notes }}">
                             </div>
                         </div>
                         {% endfor %}  
                         <button type='submit' class="w-full sm:w-auto mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md">
                         حفظ سجل الحضور
                         </button>
+                        <a href="{% url 'attendance_record' %}" class="w-full sm:w-auto mt-4 sm:mt-0 bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 transition duration-300 shadow-md" >
+                        عرض سجل الحضور
+                        </a>
                     </form>
+                        
 
               
                     
@@ -77,7 +70,7 @@
 
 
     <script>
-        document.querySelectorAll('.student-card').forEach(card => {
+        document.querySelectorAll('.teacher-card').forEach(card => {
             const presentBtn = card.querySelector('.present-btn');
             const absentBtn = card.querySelector('.absent-btn');
             const reasonContainer = card.querySelector('.reason-container');

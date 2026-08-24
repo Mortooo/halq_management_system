@@ -12,7 +12,7 @@
                 </header>
 
                 <!-- بطاقات الإحصائيات -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
                     <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center gap-4">
                         <span class="flex-shrink-0 p-3 rounded-xl bg-blue-600/20 flex items-center">
                             {% include 'partials/icons/users.svg' with icon_class='h-7 w-7 text-blue-400' only %}
@@ -38,6 +38,15 @@
                         <div>
                             <h3 class="text-sm font-semibold text-slate-400">غياب اليوم</h3>
                             <p class="text-4xl font-extrabold text-white mt-1">{{ absent }}</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center gap-4">
+                        <span class="flex-shrink-0 p-3 rounded-xl bg-yellow-600/20 flex items-center">
+                            {% include 'partials/icons/calendar-days.svg' with icon_class='h-7 w-7 text-yellow-400' only %}
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-400">لم يسجل اليوم</h3>
+                            <p class="text-4xl font-extrabold text-white mt-1">{{ not_recorded }}</p>
                         </div>
                     </div>
                 </div>

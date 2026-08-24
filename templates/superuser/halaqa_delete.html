@@ -1,21 +1,46 @@
 {% extends 'superuser/s_base.html'%}
 {% load static %}
-{% block title %} حذف حلقة {% endblock %}
+{% block title %} حذف حلقة | نظام إدارة الحلقات {% endblock %}
 {% block content %}
 
-<div dir="rtl" class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-10 px-6">
-<div class="max-w-xl mx-auto mt-20 p-6 bg-white shadow-lg rounded-lg text-center">
-    <h2 class="text-black text-2xl font-bold mb-4">هل أنت متأكد من حذف الحلقة؟</h2>
-    <p class="mb-6 text-gray-700">{{ halaqa.name }} </p>
+<main class="p-6 md:p-10">
+    <div class="max-w-xl mx-auto mt-10 bg-slate-800 rounded-3xl shadow-2xl border border-slate-700 p-10 text-center">
+        <span class="inline-flex p-3 rounded-2xl bg-red-600/20 mb-4">
+            {% include 'partials/icons/trash.svg' with icon_class='h-9 w-9 text-red-400' only %}
+        </span>
+        <h2 class="text-white text-2xl font-bold mb-2">هل أنت متأكد من حذف الحلقة؟</h2>
+        <p class="mb-2 text-lg font-bold text-blue-300">حلقة {{ halaqa.name }}</p>
 
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg shadow-md ms-4">
-            حذف
-        </button>
-        <a href="{% url 'superuser:halaqa_list' %}" class="text-black bg-gray-300 hover:bg-gray-400 px-6 py-2 rounded-lg">إلغاء</a>
-    </form>
-</div>
-</div>
+        {% if reports_count > 0 %}
+        <div role="alert" class="bg-red-900/40 border border-red-700 text-red-300 p-4 rounded-xl mb-8 mt-4">
+            لا يمكن حذف هذه الحلقة لارتباطها بـ <strong>{{ reports_count }}</strong> تقرير أسبوعي.
+            احذف التقارير المرتبطة أولاً.
+        </div>
+        <form method="post" class="flex items-center justify-center gap-4">
+            {% csrf_token %}
+            <button type="submit" disabled aria-disabled="true"
+                    class="bg-slate-600 text-slate-400 px-8 py-3 rounded-lg font-bold cursor-not-allowed">
+                حذف
+            </button>
+            <a href="{% url 'superuser:halaqa_list' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold transition">رجوع</a>
+        </form>
+        {% else %}
+        {% if students_count > 0 %}
+        <div role="status" class="bg-yellow-900/40 border border-yellow-700 text-yellow-300 p-4 rounded-xl mb-4 mt-4">
+            تنبيه: يوجد <strong>{{ students_count }}</strong> تلميذ مرتبط بهذه الحلقة وسيصبح بدون حلقة بعد الحذف.
+        </div>
+        {% else %}
+        <p class="mb-8 text-sm text-slate-400">لا توجد تقارير أو تلاميذ مرتبطون بهذه الحلقة. سيتم الحذف نهائياً ولا يمكن التراجع.</p>
+        {% endif %}
+        <form method="post" class="flex items-center justify-center gap-4">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition">
+                حذف
+            </button>
+            <a href="{% url 'superuser:halaqa_list' %}" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-8 py-3 rounded-lg font-bold transition">إلغاء</a>
+        </form>
+        {% endif %}
+    </div>
+</main>
 
 {% endblock %}

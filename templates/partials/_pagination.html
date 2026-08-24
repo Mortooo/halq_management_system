@@ -1,0 +1,19 @@
+{% if is_paginated %}
+<nav class="mt-8 flex items-center justify-center gap-2" aria-label="التنقل بين الصفحات">
+    {% if page_obj.has_previous %}
+    <a href="{% querystring page=page_obj.previous_page_number %}"
+       class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 transition font-bold">
+        السابق
+    </a>
+    {% endif %}
+    <span class="px-4 py-2 rounded-lg bg-blue-600 text-white font-bold" dir="ltr">
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+    </span>
+    {% if page_obj.has_next %}
+    <a href="{% querystring page=page_obj.next_page_number %}"
+       class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 transition font-bold">
+        التالي
+    </a>
+    {% endif %}
+</nav>
+{% endif %}

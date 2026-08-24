@@ -1,9 +1,9 @@
-{% extends 'teachers/t_base.html'%}
+{% extends 'superuser/s_base.html'%}
 {% load static %}
 {% block title %} حذف تلميذ | نظام إدارة الحلقات {% endblock %}
 {% block content %}
 
-{% url 'students:students_list' user.id as cancel_url %}
+{% url 'students:students_manage' as cancel_url %}
 {% include 'partials/_delete_confirm.html' with confirm_title='هل أنت متأكد من حذف التلميذ؟' object_name=student.name confirm_message='سيتم حذف التلميذ وجميع سجلات حضوره نهائياً ولا يمكن التراجع عن ذلك.' cancel_url=cancel_url %}
 
 {% endblock %}

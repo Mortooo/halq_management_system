@@ -37,6 +37,12 @@
                     {% url 'superuser:halaqa_list' as u_halaqat %}
                     {% include 'partials/_nav_item.html' with item_url=u_halaqat current=request.path label='إدارة الحلقات' icon='partials/icons/tag.svg' %}
 
+                    {% url 'students:students_manage' as u_students %}
+                    {% include 'partials/_nav_item.html' with item_url=u_students current=request.path label='إدارة التلاميذ' icon='partials/icons/academic-cap.svg' %}
+
+                    {% url 'students:grade_manage' as u_grades %}
+                    {% include 'partials/_nav_item.html' with item_url=u_grades current=request.path label='إدارة الصفوف' icon='partials/icons/book-open.svg' %}
+
                     {% url 'attendances:teacher_attendance' as u_teacher_att %}
                     {% include 'partials/_nav_item.html' with item_url=u_teacher_att current=request.path label='الحضور والغياب' icon='partials/icons/check-circle.svg' %}
 

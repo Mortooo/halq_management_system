@@ -1,0 +1,13 @@
+{% extends 'superuser/s_base.html'%}
+{% load static %}
+{% block title %} بيانات التلميذ | نظام إدارة الحلقات {% endblock %}
+{% block content %}
+
+{% url 'students:students_manage' as cancel_url %}
+{% if student.id %}
+    {% include 'partials/_student_form.html' with page_title='تعديل بيانات التلميذ' page_subtitle='حدّث بيانات التلميذ ثم اضغط حفظ.' cancel_url=cancel_url delete_url_name='students:student_delete_su' %}
+{% else %}
+    {% include 'partials/_student_form.html' with page_title='إضافة تلميذ جديد' page_subtitle='أدخل بيانات التلميذ لإضافته إلى النظام.' cancel_url=cancel_url %}
+{% endif %}
+
+{% endblock %}

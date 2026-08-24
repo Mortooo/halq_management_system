@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import dashbord
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from .views import TeacherDashboard
 
 app_name = 'teachers'
 
+staff_required=user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser),login_url='/')
+
 urlpatterns = [
-    path('dashboard', login_required(dashbord.as_view()), name='teacher_dashboard'),
+    path('dashboard', staff_required(TeacherDashboard.as_view()), name='teacher_dashboard'),
 ]

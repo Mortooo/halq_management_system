@@ -9,7 +9,6 @@ class Student(models.Model):
     address=models.CharField(max_length=100,blank=False,null=False)
     tel=models.CharField(max_length=10,blank=False,null=False)
     date_birth=models.DateField(blank=False,null=False)
-    # halaqa=models.OneToOneField(Halaqa,on_delete=models.SET_NULL,blank=True,null=True)
     halaqa=models.ForeignKey(Halaqa,on_delete=models.SET_NULL,blank=False,null=True)
     add_course=models.CharField(max_length=50,blank=True,null=True)
     grade=models.ForeignKey('students.Grade',on_delete=models.SET_NULL,blank=False,null=True)

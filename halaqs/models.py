@@ -11,18 +11,6 @@ class Halaqa(models.Model):
     notes=models.TextField(blank=True,null=True)
 
     @property
-    def attend_today_list(self):
-        from attendances.models import StudAttendance
-        from students.models import Student
-
-        today=date.today()
-        students=Student.objects.filter(halaqa=self)
-        attendance=StudAttendance.objects.filter(student__in=students,day=today)
-
-
-        return attendance
-        
-    @property
     def total_students(self):
         
         from students.models import Student
@@ -44,10 +32,6 @@ class Halaqa(models.Model):
         
         return total
     
-    
-    @property
-    def teacher_status(self):
-        return None
     
     @property
     def plan_status(self):

@@ -1,0 +1,112 @@
+{% extends 'superuser/s_base.html' %}
+{% load static %}
+
+{% block title %}إدارة التلاميذ | نظام إدارة الحلقات{% endblock %}
+
+{% block content %}
+
+<main class="p-6 md:p-10">
+    <header class="hidden md:block mb-10">
+        <h1 class="text-3xl md:text-4xl font-black text-white">إدارة التلاميذ</h1>
+        <p class="text-slate-400 mt-2">عرض وتعديل وحذف بيانات جميع التلاميذ.</p>
+    </header>
+
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+        <a href="{% url 'students:student_add_su' %}" class="w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md text-center flex items-center justify-center gap-2">
+            {% include 'partials/icons/plus.svg' with icon_class='h-5 w-5' only %}
+            إضافة تلميذ جديد
+        </a>
+
+        <form method="GET" action="" class="w-full md:w-auto md:max-w-sm">
+            <div class="flex">
+                <input type="text" name="q" placeholder="ابحث بالاسم أو الحلقة..."
+                       class="w-full p-3 bg-slate-800 border border-slate-700 rounded-s-lg text-slate-200 focus:ring-2 focus:ring-blue-500"
+                       value="{{ request.GET.q }}">
+                <button type="submit"
+                        class="bg-blue-600 text-white px-5 py-3 rounded-e-lg font-bold hover:bg-blue-700 transition flex items-center gap-2">
+                    {% include 'partials/icons/magnifying-glass.svg' with icon_class='h-5 w-5' only %}
+                    بحث
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto hidden md:block">
+        <table class="w-full text-right">
+            <thead class="border-b border-slate-700">
+                <tr>
+                    <th class="p-4 text-blue-400 font-semibold">الاسم</th>
+                    <th class="p-4 text-blue-400 font-semibold">الحلقة</th>
+                    <th class="p-4 text-blue-400 font-semibold">الصف</th>
+                    <th class="p-4 text-blue-400 font-semibold">الحالة</th>
+                    <th class="p-4 text-blue-400 font-semibold">إجراءات</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-700">
+                {% for student in students %}
+                <tr>
+                    <td class="p-4 text-white font-semibold">{{ student.name }}</td>
+                    <td class="p-4 text-slate-300">{{ student.halaqa|default:'-' }}</td>
+                    <td class="p-4 text-slate-300">{{ student.grade|default:'-' }}</td>
+                    <td class="p-4">
+                        {% if student.status %}
+                        <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">نشط</span>
+                        {% else %}
+                        <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">متوقف</span>
+                        {% endif %}
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <a href="{% url 'students:student_edit_su' student.id %}" aria-label="تعديل بيانات التلميذ" title="تعديل" class="p-2 rounded-lg bg-blue-600/20 text-blue-400 hover:bg-blue-600/40 transition">
+                                {% include 'partials/icons/pencil-square.svg' with icon_class='h-5 w-5' only %}
+                            </a>
+                            <a href="{% url 'students:student_delete_su' student.id %}" aria-label="حذف التلميذ" title="حذف" class="p-2 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600/40 transition">
+                                {% include 'partials/icons/trash.svg' with icon_class='h-5 w-5' only %}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="p-0">
+                        {% include 'partials/_empty_state.html' with title='لا يوجد تلاميذ' subtitle='لم يتم تسجيل أي تلميذ في النظام حتى الآن.' icon='partials/icons/academic-cap.svg' %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 md:hidden">
+        {% for student in students %}
+        <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 space-y-3">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white">{{ student.name }}</h3>
+                {% if student.status %}
+                <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">نشط</span>
+                {% else %}
+                <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">متوقف</span>
+                {% endif %}
+            </div>
+            <p class="text-sm text-slate-400"><strong>الحلقة:</strong> {{ student.halaqa|default:'-' }}</p>
+            <p class="text-sm text-slate-400"><strong>الصف:</strong> {{ student.grade|default:'-' }}</p>
+            <div class="pt-2 flex items-center gap-3">
+                <a href="{% url 'students:student_edit_su' student.id %}" class="w-full text-center bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">
+                    تعديل
+                </a>
+                <a href="{% url 'students:student_delete_su' student.id %}" class="w-full text-center bg-red-600/20 text-red-300 py-2 rounded-lg font-semibold hover:bg-red-600/40">
+                    حذف
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="md:hidden">
+            {% include 'partials/_empty_state.html' with title='لا يوجد تلاميذ' subtitle='لم يتم تسجيل أي تلميذ في النظام حتى الآن.' icon='partials/icons/academic-cap.svg' %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% include 'partials/_pagination.html' %}
+
+</main>
+{% endblock %}

@@ -1,16 +1,17 @@
 from datetime import date
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 
 from halaqs.models import Halaqa
 from students.models import Student
 from attendances.models import TeachAttendance,StudAttendance
 from django.views.generic import ListView,CreateView,UpdateView,DeleteView
 
-from superuser.forms import TeacherForm
+from teachers.forms import TeacherForm
 from halaqs.forms import HalaqaForm
 from teachers.models import Teacher
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 # Create your views here.
 
@@ -115,7 +116,25 @@ class HalaqaDelete(DeleteView):
     template_name='superuser/halaqa_delete.html'
     model=Halaqa
     context_object_name='halaqa'
-    success_url=reverse_lazy('superuser:halaqa_list')
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        # weekly reports cascade-delete with the halaqa -> must be surfaced
+        context['reports_count']=self.object.weekreport_set.count()
+        context['students_count']=self.object.student_set.count()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object=self.get_object()
+        if self.object.weekreport_set.exists():
+            messages.error(request,'لا يمكن حذف حلقة مرتبطة بتقارير أسبوعية !')
+            return redirect('superuser:delete_halaqa', pk=self.object.pk)
+        response=super().post(request,*args,**kwargs)
+        messages.success(request,'تم حذف الحلقة بنجاح')
+        return response
+
+    def get_success_url(self):
+        return reverse('superuser:halaqa_list')
 
 class UsersList(ListView):
     template_name="superuser/user_manage.html"

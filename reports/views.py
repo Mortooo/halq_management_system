@@ -1,125 +1,97 @@
 from datetime import date, timedelta
+
+from django.contrib import messages
 from django.shortcuts import render
-from django.views.generic import ListView,DetailView
+from django.views.generic import ListView, DetailView
 
 from halaqs.models import Halaqa
 from reports.models import WeekReport
 from teachers.models import Teacher
-from django.contrib import messages
 
-# Create your views here.
 
-def show_weekly_report(request,pk):
+def _to_int(value):
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return None
 
-    # Get the date of the end of week 
+
+def _week_end_date():
+    """تاريخ نهاية الأسبوع الحالي (الخميس)."""
     today = date.today()
-    week_end_day = 3
-    days_until_thursday = week_end_day - today.weekday()
+    days_until_thursday = 3 - today.weekday()
     if days_until_thursday < 0:
         days_until_thursday += 7
+    return today + timedelta(days=days_until_thursday)
 
-    end_of_week = today + timedelta(days=days_until_thursday)
-    #list of halaqats that teacher responsable of 
-    user=request.user
-    teacher=Teacher.objects.filter(user_name=user).first()
-    halaqats=Halaqa.objects.filter(res_teacher=teacher) if teacher else Halaqa.objects.none()
-    #####################################################################
-       
-    if request.method == 'GET' :
-                        
-        context={'current_week_end_date':end_of_week,'halaqats':halaqats,}
-        
-        return render(request,'reports/weekly_report.html',context)
-    
-    if request.method == 'POST': 
-        
-        halaqa=request.POST.get('halaqa')
-        progress=request.POST.get('progress')
-        plan_status=request.POST.get('plan_status')
-        delay_reason=request.POST.get('delay_reason')
-        advanced_amount=request.POST.get('advanced_reason')
-        notes=''
-        
-        if plan_status=='advanced':
-            notes=advanced_amount
-        elif plan_status=='delayed':
-            notes=delay_reason
 
-        if user.is_superuser:
-            selected_halaqa=Halaqa.objects.filter(id=halaqa).first()
-        else:
-            selected_halaqa=halaqats.filter(id=halaqa).first()
+def show_weekly_report(request):
+    end_of_week = _week_end_date()
 
-        if selected_halaqa is None or not progress or plan_status not in ('on_track','advanced','delayed'):
-            messages.error(request,"حدث خطأ أثناء إرسال التقرير، تحقق من البيانات ")
-            context={'current_week_end_date':end_of_week,'halaqats':halaqats,}
-            return render(request,'reports/weekly_report.html',context)
+    teacher = Teacher.objects.filter(user_name=request.user).first() if request.user.is_authenticated else None
+    halaqats = Halaqa.objects.filter(res_teacher=teacher) if teacher else Halaqa.objects.none()
 
-        #check if there are reprort of this halaqa in this week if yes update if no create 
-        if WeekReport.objects.filter(end_w_date=end_of_week,halaqa=selected_halaqa).exists():
-            
-             WeekReport.objects.filter(end_w_date=end_of_week,halaqa=selected_halaqa).update(
-                halaqa=selected_halaqa,
-                amount=progress,
-                compare_plan=plan_status,
-                notes=notes,
-                end_w_date=end_of_week
-            )
-        else:
-            WeekReport.objects.create(
-                halaqa=selected_halaqa,
-                amount=progress,
-                compare_plan=plan_status,
-                notes=notes,
-                end_w_date=end_of_week
+    if request.method == 'GET':
+        return render(request, 'reports/weekly_report.html',
+                      {'current_week_end_date': end_of_week, 'halaqats': halaqats})
 
-            )
-            
-        messages.success(request,"تم ارسال التقرير بنجاح ")
-        
-        
-        context={'current_week_end_date':end_of_week,'halaqats':halaqats,}
-        
-        return render(request,'reports/weekly_report.html',context)
-    
-    
+    progress = request.POST.get('progress', '').strip()
+    plan_status = request.POST.get('plan_status')
+
+    notes = ''
+    if plan_status == 'advanced':
+        notes = request.POST.get('advanced_reason', '').strip()
+    elif plan_status == 'delayed':
+        notes = request.POST.get('delay_reason', '').strip()
+
+    if request.user.is_superuser:
+        selected_halaqa = Halaqa.objects.filter(id=_to_int(request.POST.get('halaqa'))).first()
+    else:
+        selected_halaqa = halaqats.filter(id=_to_int(request.POST.get('halaqa'))).first()
+
+    if selected_halaqa is None or not progress or plan_status not in ('on_track', 'advanced', 'delayed'):
+        messages.error(request, 'يرجى اختيار الحلقة وكتابة مقدار المنجز بشكل صحيح.')
+        return render(request, 'reports/weekly_report.html',
+                      {'current_week_end_date': end_of_week, 'halaqats': halaqats})
+
+    WeekReport.objects.update_or_create(
+        halaqa=selected_halaqa,
+        end_w_date=end_of_week,
+        defaults={'amount': progress, 'compare_plan': plan_status, 'notes': notes},
+    )
+    messages.success(request, 'تم إرسال التقرير الأسبوعي بنجاح.')
+
+    return render(request, 'reports/weekly_report.html',
+                  {'current_week_end_date': end_of_week, 'halaqats': halaqats})
 
 
 class TotalReport(ListView):
-    template_name='reports/total_reports.html'
-    model=WeekReport
-    context_object_name='reports_list'
-    
-    def get_context_data(self, **kwargs):
-        context=super().get_context_data(**kwargs)
-        
-        halaqat_list=Halaqa.objects.all()
-        teachers=Teacher.objects.all()
-        
-        context['halaqats_list']=halaqat_list
-        context['teachers']=teachers
-        
-        return context
-    
+    template_name = 'reports/total_reports.html'
+    model = WeekReport
+    context_object_name = 'reports_list'
+    paginate_by = 30
+
     def get_queryset(self):
-        query=super().get_queryset()
-        
-        halaqa=self.request.GET.get('halaqa')
-        teacher=self.request.GET.get('teacher')
-        
+        qs = super().get_queryset().select_related('halaqa__res_teacher').order_by('-end_w_date', 'halaqa__name')
+
+        teacher = _to_int(self.request.GET.get('teacher'))
         if teacher:
-            query=query.filter(halaqa__res_teacher=teacher)
-        
+            qs = qs.filter(halaqa__res_teacher_id=teacher)
+
+        halaqa = _to_int(self.request.GET.get('halaqa'))
         if halaqa:
-            query=query.filter(halaqa=halaqa)
-        
-        
-        return query
-    
+            qs = qs.filter(halaqa_id=halaqa)
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['halaqats_list'] = Halaqa.objects.order_by('name')
+        context['teachers'] = Teacher.objects.order_by('name')
+        return context
+
+
 class ReportDetails(DetailView):
-    template_name='reports/report_details.html'
-    model=WeekReport
-    context_object_name='report'
-    
-    
-    
+    template_name = 'reports/report_details.html'
+    model = WeekReport
+    context_object_name = 'report'

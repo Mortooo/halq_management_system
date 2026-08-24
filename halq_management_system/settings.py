@@ -115,7 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en'
-USE_L10N = True
 
 
 TIME_ZONE = 'UTC'
@@ -165,14 +164,15 @@ AUTHENTICATION_BACKENDS = [
 LOGOUT_REDIRECT_URL = '/'      # where to go after logout
 
 ACCOUNT_EMAIL_VERIFICATION = "none"  # can be "mandatory"
-ACCOUNT_AUTHENTICATION_METHOD = "username"  # or "email" / "username_email"
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_LOGIN_METHODS = {"username"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
 ACCOUNT_ADAPTER = 'accounts.adapter.MyAccountAdapter'
 
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.loclx.io',
+    'https://*.pythonanywhere.com',
+    'http://*.pythonanywhere.com'
 ]
 
 

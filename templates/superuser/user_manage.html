@@ -1,25 +1,24 @@
-{% extends 'superuser/s_base.html' %} {# أو القالب الأساسي للمشرفة #}
+{% extends 'superuser/s_base.html' %}
 {% load static %}
 
-{# 1. عنوان المتصفح #}
 {% block title %}إدارة المستخدمين{% endblock %}
-
-{# 2. عنوان الصفحة في الهيدر (للجوال) #}
 {% block page_title %}إدارة المستخدمين{% endblock %}
 
-
-{# 3. محتوى الصفحة #}
 {% block content %}
 <main class="p-6 md:p-10">
     <header class="hidden md:block mb-10">
         <h1 class="text-3xl md:text-4xl font-black text-white">إدارة المستخدمين</h1>
-        <p class="text-slate-400 mt-2">عرض وإدارة حسابات مستخدمي النظام.</p>
+        <p class="text-slate-400 mt-2">عرض حسابات النظام وتفعيلها أو تعطيلها.</p>
     </header>
 
     <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
-        <a href="{% url 'superuser:add_user' %}" class="w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md text-center">
-            + إضافة مستخدم جديد
-        </a>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <a href="{% url 'superuser:teacher_list' %}" class="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md text-center flex items-center justify-center gap-2">
+                {% include 'partials/icons/users.svg' with icon_class='h-5 w-5' only %}
+                إدارة المعلمات
+            </a>
+            <p class="text-sm text-slate-400">تُنشأ حسابات المعلمات تلقائياً عند إضافة معلمة جديدة.</p>
+        </div>
 
         <form method="GET" action="" class="w-full md:w-auto md:max-w-sm">
             <div class="flex">
@@ -27,13 +26,13 @@
                        class="w-full p-3 bg-slate-800 border border-slate-700 rounded-s-lg text-slate-200 focus:ring-2 focus:ring-blue-500"
                        value="{{ request.GET.q }}">
                 <button type="submit"
-                        class="bg-blue-600 text-white px-5 py-3 rounded-e-lg font-bold hover:bg-blue-700 transition">
+                        class="bg-blue-600 text-white px-5 py-3 rounded-e-lg font-bold hover:bg-blue-700 transition flex items-center gap-2">
+                    {% include 'partials/icons/magnifying-glass.svg' with icon_class='h-5 w-5' only %}
                     بحث
                 </button>
             </div>
         </form>
     </div>
-
 
     <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto hidden md:block">
         <table class="w-full text-right">
@@ -41,26 +40,25 @@
                 <tr>
                     <th class="p-4 text-blue-400 font-semibold">اسم المستخدم</th>
                     <th class="p-4 text-blue-400 font-semibold">الاسم الكامل</th>
-                    <th class="p-4 text-blue-400 font-semibold">الدور </th>
+                    <th class="p-4 text-blue-400 font-semibold">الدور</th>
                     <th class="p-4 text-blue-400 font-semibold">الحالة</th>
                     <th class="p-4 text-blue-400 font-semibold">إجراءات</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-700">
 
-                {# Loop through users here #}
                 {% for user_account in users %}
                 <tr>
                     <td class="p-4 text-white font-semibold">{{ user_account.username }}</td>
                     <td class="p-4">{{ user_account.get_full_name|default:"-" }}</td>
-                    <td class="p-4 text-sm">
-                        {# عرض مجموعات المستخدم #}
-                         {% if user_account.is_superuser == True %}
-                            <span>مشرفة</span>
+                    <td class="p-4">
+                        {% if user_account.is_superuser %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-blue-800 text-blue-300">مشرفة</span>
+                        {% elif user_account.teacher %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">معلمة</span>
                         {% else %}
-                            <span>معلمة</span>
+                            <span class="px-3 py-1 text-xs rounded-full bg-slate-700 text-slate-300">غير مرتبطة</span>
                         {% endif %}
-
                     </td>
                     <td class="p-4">
                         {% if user_account.is_active %}
@@ -69,21 +67,34 @@
                              <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">غير نشط</span>
                         {% endif %}
                     </td>
-                    {% comment %} <td class="p-4 gap-2">
-                        <a href="{% url 'edit_user' user_account.id %}" class="text-blue-400 hover:underline">تعديل</a>
-                        {% if user_account.is_active %}
-                            <a href="{% url 'deactivate_user' user_account.id %}" class="text-yellow-400 hover:underline">إلغاء تفعيل</a>
-                        {% else %}
-                             <a href="{% url 'activate_user' user_account.id %}" class="text-green-400 hover:underline">تفعيل</a>
-                        {% endif %}
-                        {# يمكنك إضافة رابط لحذف المستخدم هنا إذا لزم الأمر #}
-                        <a href="{% url 'delete_user' user_account.id %}" class="text-red-400 hover:underline">حذف</a> 
-                    </td> {% endcomment %}
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            {% if not user_account.is_superuser %}
+                            <form method="post" action="{% url 'superuser:toggle_user' user_account.id %}">
+                                {% csrf_token %}
+                                {% if user_account.is_active %}
+                                <button type="submit" aria-label="إلغاء التفعيل" title="إلغاء التفعيل" class="p-2 rounded-lg bg-yellow-600/20 text-yellow-400 hover:bg-yellow-600/40 transition">
+                                    {% include 'partials/icons/pause.svg' with icon_class='h-5 w-5' only %}
+                                </button>
+                                {% else %}
+                                <button type="submit" aria-label="تفعيل" title="تفعيل" class="p-2 rounded-lg bg-green-600/20 text-green-400 hover:bg-green-600/40 transition">
+                                    {% include 'partials/icons/play.svg' with icon_class='h-5 w-5' only %}
+                                </button>
+                                {% endif %}
+                            </form>
+                            <a href="{% url 'superuser:delete_user' user_account.id %}" aria-label="حذف المستخدم" title="حذف" class="p-2 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600/40 transition">
+                                {% include 'partials/icons/trash.svg' with icon_class='h-5 w-5' only %}
+                            </a>
+                            {% else %}
+                            <span class="text-xs text-slate-500">حساب المشرفة محمي</span>
+                            {% endif %}
+                        </div>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="p-6 text-center text-slate-400">
-                        لا يوجد مستخدمون يطابقون معايير البحث.
+                    <td colspan="5" class="p-0">
+                        {% include 'partials/_empty_state.html' with title='لا يوجد مستخدمون' subtitle='لا يوجد مستخدمون يطابقون معايير البحث.' icon='partials/icons/users.svg' %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -108,31 +119,40 @@
             <p class="text-sm text-slate-400"><strong>الاسم:</strong> {{ user_account.get_full_name|default:"-" }}</p>
             <p class="text-sm text-slate-400">
                 <strong>الدور:</strong>
-                {% if user_account.is_superuser == True %}
-                    <span>مشرفة</span>
+                {% if user_account.is_superuser %}
+                    مشرفة
+                {% elif user_account.teacher %}
+                    معلمة
                 {% else %}
-                    <span>معلمة</span>
+                    غير مرتبطة
                 {% endif %}
             </p>
 
-            {% comment %} <div class="pt-2 flex items-center gap-3">
-                <a href="{% url 'edit_user' user_account.id %}" class="flex-1 text-center bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 text-sm">
-                    تعديل
-                </a>
-                 {% if user_account.is_active %}
-                    <a href="{% url 'deactivate_user' user_account.id %}" class="flex-1 text-center bg-yellow-600/20 text-yellow-300 py-2 rounded-lg font-semibold hover:bg-yellow-600/40 text-sm">
-                        إلغاء تفعيل
-                    </a>
-                {% else %}
-                    <a href="{% url 'activate_user' user_account.id %}" class="flex-1 text-center bg-green-600/20 text-green-300 py-2 rounded-lg font-semibold hover:bg-green-600/40 text-sm">
+            {% if not user_account.is_superuser %}
+            <div class="pt-2 flex items-center gap-3">
+                <form method="post" action="{% url 'superuser:toggle_user' user_account.id %}" class="flex-1">
+                    {% csrf_token %}
+                    {% if user_account.is_active %}
+                    <button type="submit" class="w-full bg-yellow-600/20 text-yellow-300 py-2 rounded-lg font-semibold hover:bg-yellow-600/40 text-sm">
+                        إلغاء التفعيل
+                    </button>
+                    {% else %}
+                    <button type="submit" class="w-full bg-green-600/20 text-green-300 py-2 rounded-lg font-semibold hover:bg-green-600/40 text-sm">
                         تفعيل
-                    </a>
-                {% endif %} {% endcomment %}
+                    </button>
+                    {% endif %}
+                </form>
+                <a href="{% url 'superuser:delete_user' user_account.id %}" class="flex-1 text-center bg-red-600/20 text-red-300 py-2 rounded-lg font-semibold hover:bg-red-600/40 text-sm">
+                    حذف
+                </a>
             </div>
+            {% else %}
+            <p class="text-xs text-slate-500">حساب المشرفة محمي</p>
+            {% endif %}
         </div>
         {% empty %}
-        <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 text-center">
-            <p class="text-slate-400">لا يوجد مستخدمون يطابقون معايير البحث.</p>
+        <div class="md:hidden">
+            {% include 'partials/_empty_state.html' with title='لا يوجد مستخدمون' subtitle='لا يوجد مستخدمون يطابقون معايير البحث.' icon='partials/icons/users.svg' %}
         </div>
         {% endfor %}
 

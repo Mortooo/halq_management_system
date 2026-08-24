@@ -12,7 +12,5 @@ class WeekReport(models.Model):
     
     @property
     def teacher(self):
-        teach=Halaqa.objects.get(pk=self.halaqa.id).res_teacher
-        
-        return teach
+        return self.halaqa.res_teacher
     

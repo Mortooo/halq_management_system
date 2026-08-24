@@ -1,23 +1,32 @@
 {% extends 'superuser/s_base.html'%}
 {% load static %}
-{% block title %} لوحة التحكم | نظام إدارة الحلقات {% endblock %}
+{% block title %} حذف معلمة | نظام إدارة الحلقات {% endblock %}
 {% block content %}
 
-<div dir="rtl" class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-10 px-6">
-<div class="max-w-xl mx-auto mt-20 p-6 bg-white shadow-lg rounded-lg text-center">
-    <h2 class="text-black text-2xl font-bold mb-4">هل أنت متأكد من حذف المعلم؟</h2>
-    <p class="mb-6 text-gray-700">{{ teacher.name }} </p>
+<main class="p-6 md:p-10">
+    <div class="max-w-xl mx-auto mt-10 bg-slate-800 rounded-3xl shadow-2xl border border-slate-700 p-10 text-center">
+        <span class="inline-flex p-3 rounded-2xl bg-red-600/20 mb-4">
+            {% include 'partials/icons/trash.svg' with icon_class='h-9 w-9 text-red-400' only %}
+        </span>
+        <h2 class="text-white text-2xl font-bold mb-2">هل أنت متأكد من حذف المعلمة؟</h2>
+        <p class="mb-2 text-lg font-bold text-blue-300">{{ teacher.name }}</p>
 
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg shadow-md ms-4">
-            حذف
-        </button>
-        <a href="{% url 'superuser:teacher_list' %}" class="text-black bg-gray-300 hover:bg-gray-400 px-6 py-2 rounded-lg">إلغاء</a>
-    </form>
-</div>
-</div>
+        {% if has_account %}
+        <div role="alert" class="bg-red-900/40 border border-red-700 text-red-300 p-4 rounded-xl mb-4 mt-4">
+            تنبيه: سيتم أيضاً حذف <strong>حساب الدخول</strong> المرتبط بها ولن تستطيع تسجيل الدخول بعد الحذف.
+        </div>
+        {% else %}
+        <p class="mb-8 text-sm text-slate-400">لا يوجد حساب دخول مرتبط بهاذه المعلمة. سيتم الحذف نهائياً ولا يمكن التراجع.</p>
+        {% endif %}
+
+        <form method="post" class="flex items-center justify-center gap-4 mt-4">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition">
+                حذف
+            </button>
+            <a href="{% url 'superuser:teacher_list' %}" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-8 py-3 rounded-lg font-bold transition">إلغاء</a>
+        </form>
+    </div>
+</main>
 
 {% endblock %}
-
-

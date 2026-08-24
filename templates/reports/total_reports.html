@@ -23,7 +23,7 @@
                 <select id="filter_teacher" name="teacher" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500">
                     <option value="">-- كل المعلمات --</option>
                     {% for  teacher in teachers %}
-                    <option value="{{ teacher.id }}">{{ teacher.name}}</option>
+                    <option value="{{ teacher.id }}" {% if request.GET.teacher == teacher.id|stringformat:"s" %}selected{% endif %}>{{ teacher.name}}</option>
                     {% endfor %}
 
                 </select>
@@ -33,7 +33,7 @@
                 <select id="filter_halaqa" name="halaqa" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500">
                     <option value="">-- كل الحلقات --</option>
                     {% for  halaqa in halaqats_list %}
-                    <option value="{{ halaqa.id }}">{{ halaqa.name }}</option>
+                    <option value="{{ halaqa.id }}" {% if request.GET.halaqa == halaqa.id|stringformat:"s" %}selected{% endif %}>{{ halaqa.name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -80,8 +80,8 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="p-6 text-center text-slate-400">
-                        لا توجد تقارير تطابق معايير التصفية.
+                    <td colspan="5" class="p-6">
+                        {% include 'partials/_empty_state.html' with title='لا توجد تقارير' subtitle='لا توجد تقارير تطابق معايير التصفية.' icon='partials/icons/file-text.svg' %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -89,6 +89,8 @@
             </tbody>
         </table>
     </div>
+
+{% include 'partials/_pagination.html' %}
 
     <div class="grid grid-cols-1 gap-4 md:hidden">
         
@@ -112,10 +114,12 @@
             </a>
         </div>
         {% empty %}
-        <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 text-center">
-            <p class="text-slate-400">لا توجد تقارير تطابق معايير التصفية.</p>
+        <div class="bg-slate-800 rounded-lg border border-slate-700 p-6">
+            {% include 'partials/_empty_state.html' with title='لا توجد تقارير' subtitle='لا توجد تقارير تطابق معايير التصفية.' icon='partials/icons/file-text.svg' %}
         </div>
         {% endfor %}
+
+{% include 'partials/_pagination.html' %}
 
     </div>
 

@@ -7,5 +7,5 @@ app_name = 'teachers'
 staff_required=user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser),login_url='/')
 
 urlpatterns = [
-    path('dashboard', staff_required(TeacherDashboard.as_view()), name='teacher_dashboard'),
+    path('dashboard/', staff_required(TeacherDashboard.as_view()), name='teacher_dashboard'),
 ]

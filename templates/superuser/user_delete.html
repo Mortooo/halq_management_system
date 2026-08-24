@@ -1,0 +1,51 @@
+{% extends 'superuser/s_base.html'%}
+{% load static %}
+{% block title %} حذف مستخدم | نظام إدارة الحلقات {% endblock %}
+{% block content %}
+
+<main class="p-6 md:p-10">
+    <div class="max-w-xl mx-auto mt-10 bg-slate-800 rounded-3xl shadow-2xl border border-slate-700 p-10 text-center">
+        <span class="inline-flex p-3 rounded-2xl bg-red-600/20 mb-4">
+            {% include 'partials/icons/trash.svg' with icon_class='h-9 w-9 text-red-400' only %}
+        </span>
+        <h2 class="text-white text-2xl font-bold mb-2">هل أنت متأكد من حذف المستخدم؟</h2>
+        <p class="mb-2 text-lg font-bold text-blue-300">{{ target_user.username }}</p>
+
+        {% if target_user.is_superuser %}
+        <div role="alert" class="bg-red-900/40 border border-red-700 text-red-300 p-4 rounded-xl mb-8 mt-4">
+            لا يمكن حذف حساب المشرفة !
+        </div>
+        <form method="post" class="flex items-center justify-center gap-4">
+            {% csrf_token %}
+            <button type="submit" disabled aria-disabled="true"
+                    class="bg-slate-600 text-slate-400 px-8 py-3 rounded-lg font-bold cursor-not-allowed">
+                حذف
+            </button>
+            <a href="{% url 'superuser:users_list' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold transition">رجوع</a>
+        </form>
+        {% elif is_linked %}
+        <div role="alert" class="bg-red-900/40 border border-red-700 text-red-300 p-4 rounded-xl mb-8 mt-4">
+            هذا الحساب مرتبط بمعلمة. احذفي المعلمة من <strong>إدارة المعلمات</strong> وسيُحذف الحساب معها.
+        </div>
+        <form method="post" class="flex items-center justify-center gap-4">
+            {% csrf_token %}
+            <button type="submit" disabled aria-disabled="true"
+                    class="bg-slate-600 text-slate-400 px-8 py-3 rounded-lg font-bold cursor-not-allowed">
+                حذف
+            </button>
+            <a href="{% url 'superuser:teacher_list' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold transition">إدارة المعلمات</a>
+        </form>
+        {% else %}
+        <p class="mb-8 text-sm text-slate-400">حساب غير مرتبط بأي معلمة. سيتم الحذف نهائياً ولا يمكن التراجع.</p>
+        <form method="post" class="flex items-center justify-center gap-4">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition">
+                حذف
+            </button>
+            <a href="{% url 'superuser:users_list' %}" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-8 py-3 rounded-lg font-bold transition">إلغاء</a>
+        </form>
+        {% endif %}
+    </div>
+</main>
+
+{% endblock %}

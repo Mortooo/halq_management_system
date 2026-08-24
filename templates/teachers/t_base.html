@@ -37,7 +37,7 @@
                     {% url 'attendances:student_attendance' user.id as u_attendance %}
                     {% include 'partials/_nav_item.html' with item_url=u_attendance current=request.path label='الحضور والغياب' icon='partials/icons/check-circle.svg' %}
 
-                    {% url 'reports:weekly_report' user.id as u_reports %}
+                    {% url 'reports:weekly_report' as u_reports %}
                     {% include 'partials/_nav_item.html' with item_url=u_reports current=request.path label='التقارير الأسبوعية' icon='partials/icons/calendar-days.svg' %}
 
                     <div class="pt-2 mt-2 border-t border-slate-700">

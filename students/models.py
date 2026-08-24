@@ -31,16 +31,18 @@ class Student(models.Model):
     
     @property
     def basic_course(self):
-        basic_c=Halaqa.objects.get(pk=self.halaqa.id)
-        
-        return basic_c.course
+        if self.halaqa:
+            return self.halaqa.course
+        return None
     
     @property
     def attendace_today(self):
         from attendances.models import StudAttendance
-        status=StudAttendance.objects.get(student=self,day=date.today()).status
+        record=StudAttendance.objects.filter(student=self,day=date.today()).first()
         
-        return status
+        if record is None:
+            return None
+        return record.status
 
     
 class Grade(models.Model):

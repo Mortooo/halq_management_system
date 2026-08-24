@@ -1,0 +1,105 @@
+{% extends 'teachers/t_base.html'%}
+{% load static %}
+{% block title %}لوحة المعلمة | نظام إدارة الحلقات {% endblock %}
+{% block content %}
+
+            <main class="p-6 md:p-10">
+                <header class="mb-10">
+                    <h1 class="text-3xl md:text-4xl font-black text-white">أهلاً بكِ، معلمة
+                        <span class="text-green-300">{{ teacher }}</span>
+                    </h1>
+                    <p class="text-slate-400 mt-2">ملخص سريع لنشاط حلقتك لليوم، {{ today_date }}</p>
+                </header>
+
+                <!-- بطاقات الإحصائيات -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center gap-4">
+                        <span class="flex-shrink-0 p-3 rounded-xl bg-blue-600/20 flex items-center">
+                            {% include 'partials/icons/users.svg' with icon_class='h-7 w-7 text-blue-400' only %}
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-400">إجمالي التلاميذ</h3>
+                            <p class="text-4xl font-extrabold text-white mt-1">{{ total_std }}</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center gap-4">
+                        <span class="flex-shrink-0 p-3 rounded-xl bg-green-600/20 flex items-center">
+                            {% include 'partials/icons/check-circle.svg' with icon_class='h-7 w-7 text-green-400' only %}
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-400">حضور اليوم</h3>
+                            <p class="text-4xl font-extrabold text-white mt-1">{{ attended }}</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center gap-4">
+                        <span class="flex-shrink-0 p-3 rounded-xl bg-red-600/20 flex items-center">
+                            {% include 'partials/icons/x-circle.svg' with icon_class='h-7 w-7 text-red-400' only %}
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-400">غياب اليوم</h3>
+                            <p class="text-4xl font-extrabold text-white mt-1">{{ absent }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قائمة التلاميذ -->
+                <div class="mt-12 bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold text-white">قائمة التلاميذ</h2>
+                    </div>
+                    {% if students %}
+                    <!-- جدول للشاشات المتوسطة وأكبر -->
+                    <table class="hidden md:table w-full text-right">
+                        <thead class="border-b border-slate-700">
+                            <tr>
+                                <th class="p-4 text-blue-400 font-semibold">الاسم</th>
+                                <th class="p-4 text-blue-400 font-semibold">الحلقة</th>
+                                <th class="p-4 text-blue-400 font-semibold">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for std in students %}
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/60 transition">
+                                <td class="p-4">
+                                    <a href="{% url 'students:student_details' std.id %}" class="text-white hover:text-blue-400 transition">{{ std.name }}</a>
+                                </td>
+                                <td class="p-4">{{ std.halaqa }}</td>
+                                <td class="p-4">
+                                    {% if std.attendace_today == True %}
+                                        <span class="px-3 py-1 text-sm rounded-full bg-green-800 text-green-300">حضور</span>
+                                    {% elif std.attendace_today == False %}
+                                        <span class="px-3 py-1 text-sm rounded-full bg-yellow-800 text-yellow-300">غياب</span>
+                                    {% else %}
+                                        <span class="px-3 py-1 text-sm rounded-full bg-slate-700 text-slate-400">لم يسجل</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- بطاقات للجوال -->
+                    <div class="md:hidden divide-y divide-slate-700">
+                        {% for std in students %}
+                        <a href="{% url 'students:student_details' std.id %}" class="block p-4 hover:bg-slate-700/60 transition">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-white">{{ std.name }}</span>
+                                {% if std.attendace_today == True %}
+                                    <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">حضور</span>
+                                {% elif std.attendace_today == False %}
+                                    <span class="px-3 py-1 text-xs rounded-full bg-yellow-800 text-yellow-300">غياب</span>
+                                {% else %}
+                                    <span class="px-3 py-1 text-xs rounded-full bg-slate-700 text-slate-400">لم يسجل</span>
+                                {% endif %}
+                            </div>
+                            <p class="text-sm text-slate-400">{{ std.halaqa }}</p>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        {% include 'partials/_empty_state.html' with title='لا يوجد تلاميذ بعد' subtitle='لم تتم إضافة أي تلميذة إلى حلقتك حتى الآن.' icon='partials/icons/academic-cap.svg' %}
+                    {% endif %}
+                </div>
+            </main>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+<a href="{{ item_url }}"
+    {% if item_url == current %}aria-current="page"{% endif %}
+    class="flex items-center p-3 rounded-lg transition-colors
+    {% if variant == 'danger' %}
+        bg-red-600/90 text-white hover:bg-red-600 font-bold
+    {% elif item_url == current %}
+        bg-blue-600/50 text-white font-bold
+    {% else %}
+        text-slate-300 hover:bg-slate-700/60
+    {% endif %}">
+    <span class="me-4 shrink-0 flex items-center">
+        {% include icon with icon_class='h-6 w-6' only %}
+    </span>
+    <span>{{ label }}</span>
+</a>

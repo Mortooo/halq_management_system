@@ -10,7 +10,7 @@ from halaqs.models import Halaqa
 
 
 class dashbord(ListView):
-    template_name='teacher_dashboard.html'
+    template_name='teachers/teacher_dashboard.html'
     model=Student
     context_object_name='students'
     
@@ -20,16 +20,20 @@ class dashbord(ListView):
         context=super().get_context_data(**kwargs)
         # show the name of the teacher 
         user=self.request.user
-        teacher=Teacher.objects.get(user_name=user)  
+        teacher=Teacher.objects.filter(user_name=user).first()
         #show today date 
         today=date.today
-        # total number of students 
-        total_std=Student.objects.filter(halaqa__res_teacher=teacher).count()
-        # total student attend and absent  
-        attend=StudAttendance.objects.filter(student__halaqa__res_teacher=teacher,status=True).count()
-        absent=StudAttendance.objects.filter(student__halaqa__res_teacher=teacher,status=False).count()
-        # list of students taugth by teacher
-        list_stds=Student.objects.filter(halaqa__res_teacher=teacher)
+        if teacher:
+            # total number of students 
+            total_std=Student.objects.filter(halaqa__res_teacher=teacher).count()
+            # total student attend and absent  
+            attend=StudAttendance.objects.filter(student__halaqa__res_teacher=teacher,status=True).count()
+            absent=StudAttendance.objects.filter(student__halaqa__res_teacher=teacher,status=False).count()
+            # list of students taugth by teacher
+            list_stds=Student.objects.filter(halaqa__res_teacher=teacher)
+        else:
+            total_std=attend=absent=0
+            list_stds=Student.objects.none()
         
         
         

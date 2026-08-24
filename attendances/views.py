@@ -12,7 +12,7 @@ from django.contrib import messages
 
 
 class StudentAttList(ListView):
-    template_name='student_att.html'
+    template_name='attendances/student_att.html'
     model=StudAttendance
     context_object_name='students_att'
     
@@ -56,31 +56,32 @@ class StudentAttList(ListView):
     def post(self,request,*args, **kwargs):
         today=date.today()
 
-        
-        student_ids = request.POST.getlist('student_id')     
-         
+
+        student_ids = request.POST.getlist('student_id')
+
         for student_id in student_ids:
-            student=Student.objects.get(id=student_id)
-            status=request.POST.get(f'status_{student_id}')
+            student=Student.objects.filter(id=student_id,halaqa__res_teacher__user_name=request.user).first()
+            if student is None:
+                continue
+            status=request.POST.get(f'status_{student_id}')=='True'
             notes=request.POST.get(f'notes_{student_id}')
-            
+
             StudAttendance.objects.update_or_create(
                 student=student,
                 defaults={
                 'status': status,
                 'notes': notes
                 },
-                day=today  
+                day=today
             )
-            
-            messages.success(request, "✅ تم حفظ السجلات بنجاح")
 
-            
-             
+        messages.success(request, "✅ تم حفظ السجلات بنجاح")
+
+
         return redirect(request.path)
     
 class TeacherAttList(ListView):
-    template_name='teacher_attendance.html'
+    template_name='attendances/teacher_attendance.html'
     model=TeachAttendance
     context_object_name='teacher_att'
     
@@ -109,14 +110,16 @@ class TeacherAttList(ListView):
     def post(self,request,*args, **kwargs):
         today=date.today()
 
-        
-        teacher_ids = request.POST.getlist('teacher_id')     
-         
+
+        teacher_ids = request.POST.getlist('teacher_id')
+
         for teacher_id in teacher_ids:
-            teacher=Teacher.objects.get(id=teacher_id)
-            status=request.POST.get(f'status_{teacher_id}')
+            teacher=Teacher.objects.filter(id=teacher_id).first()
+            if teacher is None:
+                continue
+            status=request.POST.get(f'status_{teacher_id}')=='True'
             notes=request.POST.get(f'notes_{teacher_id}')
-            
+
             TeachAttendance.objects.update_or_create(
                 teacher=teacher,
                 defaults={
@@ -125,15 +128,14 @@ class TeacherAttList(ListView):
                 },
                 day=today
             )
-            
-            messages.success(request, "✅ تم حفظ السجلات بنجاح")
 
-            
-             
+        messages.success(request, "✅ تم حفظ السجلات بنجاح")
+
+
         return redirect(request.path)
     
 class AttendanceRecord(ListView):
-    template_name='attendance_record.html'
+    template_name='attendances/attendance_record.html'
     model=TeachAttendance
     context_object_name='teacher_att'
     

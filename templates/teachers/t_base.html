@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    {% include 'partials/_head_assets.html' %}
+    <title>{% block title %}لوحة التحكم | نظام إدارة الحلقات{% endblock %}</title>
+    {% include 'partials/_sidebar_js.html' %}
+</head>
+
+<body class="bg-slate-900 text-slate-300 flex flex-col min-h-screen">
+
+    <main class="flex-grow">
+        <div class="flex min-h-screen">
+            <!-- ترويسة الجوال -->
+            <header class="bg-slate-800 border-b border-slate-700 md:hidden flex items-center justify-between p-4 shadow-lg fixed w-full z-50">
+                <h1 class="text-xl font-bold text-blue-400">لوحة تحكم | المعلمة</h1>
+                <button id="menu-btn" aria-label="فتح القائمة" aria-expanded="false" class="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700 transition">
+                    {% include 'partials/icons/bars-3.svg' with icon_class='h-6 w-6' only %}
+                </button>
+            </header>
+
+            <!-- القائمة الجانبية -->
+            <aside id="sidebar" class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden fixed md:block md:sticky md:top-0 h-full md:h-screen self-start overflow-y-auto z-40 shadow-2xl md:shadow-none">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl font-bold text-blue-400">لوحة التحكم</h2>
+                    <button id="sidebar-close" aria-label="إغلاق القائمة" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition md:hidden">
+                        {% include 'partials/icons/x-mark.svg' with icon_class='h-5 w-5' only %}
+                    </button>
+                </div>
+                <nav dir="rtl" class="space-y-2">
+                    {% url 'teachers:teacher_dashboard' as u_home %}
+                    {% include 'partials/_nav_item.html' with item_url=u_home current=request.path label='الرئيسية' icon='partials/icons/home.svg' %}
+
+                    {% url 'students:students_list' user.id as u_students %}
+                    {% include 'partials/_nav_item.html' with item_url=u_students current=request.path label='ملفات التلاميذ' icon='partials/icons/academic-cap.svg' %}
+
+                    {% url 'attendances:student_attendance' user.id as u_attendance %}
+                    {% include 'partials/_nav_item.html' with item_url=u_attendance current=request.path label='الحضور والغياب' icon='partials/icons/check-circle.svg' %}
+
+                    {% url 'reports:weekly_report' user.id as u_reports %}
+                    {% include 'partials/_nav_item.html' with item_url=u_reports current=request.path label='التقارير الأسبوعية' icon='partials/icons/calendar-days.svg' %}
+
+                    <div class="pt-2 mt-2 border-t border-slate-700">
+                        {% url 'account_logout' as u_logout %}
+                        {% include 'partials/_nav_item.html' with item_url=u_logout current=request.path label='تسجيل الخروج' icon='partials/icons/logout.svg' variant='danger' %}
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- مساحة المحتوى -->
+            <div class="flex-1 min-w-0 pt-[61px] md:pt-0">
+                {% block content %}
+                {% endblock %}
+            </div>
+
+        </div>
+    </main>
+
+    {% include 'partials/_messages.html' %}
+    {% include 'partials/_footer.html' %}
+
+    <!-- ✅ Alpine.js for transitions -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+</body>
+</html>

@@ -10,7 +10,12 @@ class StudAttendance(models.Model):
     day=models.DateField(default=date.today)
     status=models.BooleanField(default=True)
     notes=models.TextField(blank=True,null=True)
-    
+
+    class Meta:
+        constraints=[
+            models.UniqueConstraint(fields=['student','day'],name='unique_student_day_attendance')
+        ]
+
     def __str__(self):
         
         return f'att for {self.student} on date {self.day}  '
@@ -20,6 +25,11 @@ class TeachAttendance(models.Model):
     day=models.DateField(default=date.today)
     status=models.BooleanField(default=True)
     notes=models.TextField(blank=True,null=True)
+
+    class Meta:
+        constraints=[
+            models.UniqueConstraint(fields=['teacher','day'],name='unique_teacher_day_attendance')
+        ]
     
     def __str__(self):
         

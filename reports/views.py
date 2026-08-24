@@ -21,15 +21,15 @@ def show_weekly_report(request,pk):
     end_of_week = today + timedelta(days=days_until_thursday)
     #list of halaqats that teacher responsable of 
     user=request.user
-    teacher=Teacher.objects.get(user_name=user)
-    halaqats=Halaqa.objects.filter(res_teacher=teacher.id)
+    teacher=Teacher.objects.filter(user_name=user).first()
+    halaqats=Halaqa.objects.filter(res_teacher=teacher) if teacher else Halaqa.objects.none()
     #####################################################################
        
     if request.method == 'GET' :
                         
         context={'current_week_end_date':end_of_week,'halaqats':halaqats,}
         
-        return render(request,'weekly_report.html',context)
+        return render(request,'reports/weekly_report.html',context)
     
     if request.method == 'POST': 
         
@@ -44,9 +44,17 @@ def show_weekly_report(request,pk):
             notes=advanced_amount
         elif plan_status=='delayed':
             notes=delay_reason
-        
-        selected_halaqa = Halaqa.objects.get(id=halaqa)
-        
+
+        if user.is_superuser:
+            selected_halaqa=Halaqa.objects.filter(id=halaqa).first()
+        else:
+            selected_halaqa=halaqats.filter(id=halaqa).first()
+
+        if selected_halaqa is None or not progress or plan_status not in ('on_track','advanced','delayed'):
+            messages.error(request,"حدث خطأ أثناء إرسال التقرير، تحقق من البيانات ")
+            context={'current_week_end_date':end_of_week,'halaqats':halaqats,}
+            return render(request,'reports/weekly_report.html',context)
+
         #check if there are reprort of this halaqa in this week if yes update if no create 
         if WeekReport.objects.filter(end_w_date=end_of_week,halaqa=selected_halaqa).exists():
             
@@ -72,13 +80,13 @@ def show_weekly_report(request,pk):
         
         context={'current_week_end_date':end_of_week,'halaqats':halaqats,}
         
-        return render(request,'weekly_report.html',context)
+        return render(request,'reports/weekly_report.html',context)
     
     
 
 
 class TotalReport(ListView):
-    template_name='total_reports.html'
+    template_name='reports/total_reports.html'
     model=WeekReport
     context_object_name='reports_list'
     
@@ -109,7 +117,7 @@ class TotalReport(ListView):
         return query
     
 class ReportDetails(DetailView):
-    template_name='report_details.html'
+    template_name='reports/report_details.html'
     model=WeekReport
     context_object_name='report'
     

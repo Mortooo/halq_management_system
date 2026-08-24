@@ -4,28 +4,26 @@
 {% block title %}إدارة البريد الإلكتروني{% endblock %}
 
 {% block content %}
-<div dir="rtl" class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-10 px-6">
+<div dir="rtl" class="min-h-screen py-10 px-6">
 
-  <div class="max-w-2xl mx-auto bg-white shadow-2xl rounded-3xl p-8 border border-gray-200 relative">
+  <div class="max-w-2xl mx-auto bg-slate-800 shadow-2xl rounded-3xl p-8 border border-slate-700 relative">
 
-    <!-- 🔘 زر تسجيل الخروج في الأعلى -->
     <div class="absolute top-4 left-4">
       <form method="post" action="{% url 'account_logout' %}">
         {% csrf_token %}
         <button type="submit"
                 class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-md text-sm transition duration-200 flex items-center gap-1">
-          <i class="bi bi-box-arrow-right"></i>
           تسجيل الخروج
         </button>
       </form>
     </div>
 
-    <h1 class="text-2xl font-bold text-indigo-800 mb-6 text-center">
-      ✉️ إدارة البريد الإلكتروني
+    <h1 class="text-2xl font-bold text-white mb-6 text-center">
+      إدارة البريد الإلكتروني
     </h1>
 
     {% if emailaddresses %}
-      <p class="text-gray-600 mb-6 text-center">
+      <p class="text-slate-400 mb-6 text-center">
         البريد الإلكترونيّات المرتبطة بحسابك:
       </p>
 
@@ -33,40 +31,39 @@
         {% csrf_token %}
         {% for radio in emailaddress_radios %}
           {% with emailaddress=radio.emailaddress %}
-            <div class="flex items-center justify-between border border-gray-200 rounded-lg p-4 hover:bg-indigo-50 transition duration-200">
+            <div class="flex items-center justify-between border border-slate-600 rounded-lg p-4 hover:bg-slate-700/50 transition duration-200">
               <label for="{{ radio.id }}" class="flex items-center gap-3 w-full cursor-pointer">
                 <input type="radio" id="{{ radio.id }}" name="email" value="{{ emailaddress.email }}"
                        {% if radio.checked %}checked{% endif %}
-                       class="text-indigo-600 focus:ring-indigo-500 w-5 h-5">
-                <span class="font-medium text-gray-800">{{ emailaddress.email }}</span>
+                       class="text-blue-600 focus:ring-blue-500 w-5 h-5 bg-slate-900 border-slate-500">
+                <span class="font-medium text-white">{{ emailaddress.email }}</span>
               </label>
 
               <div class="flex gap-2 text-sm">
                 {% if emailaddress.verified %}
-                  <span class="bg-green-100 text-green-700 px-2 py-1 rounded-lg">موثق ✅</span>
+                  <span class="bg-green-800 text-green-300 px-2 py-1 rounded-lg">موثق</span>
                 {% else %}
-                  <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-lg">غير موثق ⚠️</span>
+                  <span class="bg-yellow-800 text-yellow-300 px-2 py-1 rounded-lg">غير موثق</span>
                 {% endif %}
                 {% if emailaddress.primary %}
-                  <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-lg">رئيسي 🌟</span>
+                  <span class="bg-blue-800 text-blue-300 px-2 py-1 rounded-lg">رئيسي</span>
                 {% endif %}
               </div>
             </div>
           {% endwith %}
         {% endfor %}
 
-        <!-- أزرار الإجراءات -->
         <div class="flex flex-wrap justify-center gap-3 mt-6">
           <button type="submit" name="action_primary"
-                  class="bg-indigo-700 hover:bg-indigo-800 text-white px-5 py-2 rounded-lg shadow-md transition">
+                  class="bg-blue-700 hover:bg-blue-600 text-white px-5 py-2 rounded-lg shadow-md transition font-bold">
             اجعل البريد رئيسي
           </button>
           <button type="submit" name="action_send"
-                  class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow-md transition">
+                  class="bg-slate-600 hover:bg-slate-500 text-white px-5 py-2 rounded-lg shadow-md transition font-bold">
             إعادة إرسال التحقق
           </button>
           <button type="submit" name="action_remove"
-                  class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg shadow-md transition"
+                  class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg shadow-md transition font-bold"
                   onclick="return confirm('هل أنت متأكد أنك تريد حذف البريد المحدد؟');">
             حذف البريد
           </button>
@@ -74,21 +71,21 @@
       </form>
 
     {% else %}
-      <div class="bg-yellow-50 border border-yellow-300 text-yellow-800 p-4 rounded-xl text-center">
-        لا توجد عناوين بريد إلكتروني مرتبطة بحسابك حالياً 📭
+      <div role="status" class="bg-yellow-900/40 border border-yellow-700 text-yellow-300 p-4 rounded-xl text-center">
+        لا توجد عناوين بريد إلكتروني مرتبطة بحسابك حالياً
       </div>
     {% endif %}
 
     {% if can_add_email %}
-      <hr class="my-8 border-gray-300">
-      <h2 class="text-xl font-semibold text-indigo-800 mb-4 text-center">➕ إضافة بريد إلكتروني جديد</h2>
+      <hr class="my-8 border-slate-600">
+      <h2 class="text-xl font-semibold text-white mb-4 text-center">إضافة بريد إلكتروني جديد</h2>
 
       <form method="post" action="{% url 'account_email' %}" class="space-y-4">
         {% csrf_token %}
         <input type="email" name="email" required placeholder="أدخل بريدك الإلكتروني الجديد"
-               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-indigo-200 focus:outline-none">
+               class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none">
         <button type="submit" name="action_add"
-                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg shadow-md transition">
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow-md transition">
           إضافة البريد الإلكتروني
         </button>
       </form>

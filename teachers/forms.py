@@ -18,6 +18,7 @@ class TeacherForm(ModelForm):
         max_length=10,
         validators=[validate_tel],
         required=False,
+        widget=forms.TelInput(attrs={'class': INPUT_CLASS, 'placeholder': '05XXXXXXXX', 'dir': 'ltr', 'style': 'text-align:left'}),
     )
 
     username = forms.CharField(
@@ -49,7 +50,7 @@ class TeacherForm(ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': INPUT_CLASS}),
             'address': forms.TextInput(attrs={'class': INPUT_CLASS}),
-            'tel': forms.TextInput(attrs={'class': INPUT_CLASS}),
+            'tel': forms.TelInput(attrs={'class': INPUT_CLASS, 'placeholder': '05XXXXXXXX', 'dir': 'ltr', 'style': 'text-align:left'}),
             'email': forms.EmailInput(attrs={'class': INPUT_CLASS}),
         }
 

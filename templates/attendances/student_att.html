@@ -30,21 +30,21 @@
                         {% csrf_token %}
                         {% for student_at in students_att %}
                         <div class="card p-4 sm:p-6 student-card">
-                            <input type="hidden" name="student_id" value="{{ student_at.student.id }}">
-                            <input type="hidden" class="status-input" name="status_{{ student_at.student.id }}" value="{{ student_at.status }}">
+                            <input type="hidden" name="student_id" value="{{ student_at.id }}">
+                            <input type="hidden" class="status-input" name="status_{{ student_at.id }}" value="{{ student_at.att_status }}">
 
                             <div class="flex flex-col sm:flex-row justify-between items-center">
-                                <span class="text-xl font-semibold mb-4 sm:mb-0">{{ student_at.student }}</span>
+                                <span class="text-xl font-semibold mb-4 sm:mb-0">{{ student_at.name }}</span>
                                 <div class="flex items-center gap-3">
 
-                                    <button type='button' class="att-btn present-btn {% if student_at.status == True %}on-present{% endif %}">حاضر</button>
-                                    <button type='button' class="att-btn absent-btn {% if student_at.status == False %}on-absent{% endif %}">غائب</button>
+                                    <button type='button' class="att-btn present-btn {% if student_at.att_status == True %}on-present{% endif %}">حاضر</button>
+                                    <button type='button' class="att-btn absent-btn {% if student_at.att_status == False %}on-absent{% endif %}">غائب</button>
                                 </div>
 
 
                             </div>
-                            <div class="reason-container {% if student_at.status == True %}hidden{% endif %} mt-4">
-                                <input type="text" name="notes_{{ student_at.student.id }}" class="input" placeholder="اكتب ملاحظة (مثال: بعذر)..." value="{{ student_at.notes }}">
+                            <div class="reason-container {% if student_at.att_status == True %}hidden{% endif %} mt-4">
+                                <input type="text" name="notes_{{ student_at.id }}" class="input" placeholder="اكتب ملاحظة (مثال: بعذر)..." value="{{ student_at.att_notes|default_if_none:'' }}">
                             </div>
                         </div>
                         {% endfor %}

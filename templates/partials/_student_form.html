@@ -87,15 +87,15 @@
                 </div>
 
                 <div class="pt-4 flex flex-wrap items-center gap-4">
-                    <button type="submit" class="btn btn-primary w-full sm:w-auto px-8 py-3">
-                        حفظ
+                    <button type="submit" class="btn btn-primary px-8 py-3">
+                        {% if student.id %}حفظ التعديلات{% else %}إضافة طالب{% endif %}
                     </button>
                     {% if student.id %}
-                    <a href="{% url delete_url_name student.id %}" class="btn btn-danger w-full sm:w-auto px-8 py-3 text-center">
+                    <a href="{% url delete_url_name student.id %}" class="btn btn-danger px-8 py-3 text-center">
                         حذف
                     </a>
                     {% endif %}
-                    <a href="{{ cancel_url }}" class="w-full sm:btn btn-secondary px-8 py-3">
+                    <a href="{{ cancel_url }}" class="btn btn-ghost px-8 py-3 text-center">
                         إلغاء
                     </a>
                 </div>

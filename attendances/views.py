@@ -1,6 +1,7 @@
 from datetime import date
 from django.shortcuts import redirect, render
 from django.views.generic import ListView
+from django.db.models import OuterRef, Subquery
 
 from halaqs.models import Halaqa
 from students.models import Student
@@ -32,29 +33,31 @@ def _parse_range(start_value, end_value):
 
 class StudentAttList(ListView):
     template_name='attendances/student_att.html'
-    model=StudAttendance
+    model=Student
     context_object_name='students_att'
 
 
     def get_queryset(self):
-
-        queryset=super().get_queryset()
-        #################### get the date and list of students #########################
         today=date.today()
         user=self.request.user
-        students=Student.objects.filter(halaqa__res_teacher__user_name=user,status=True)
-        ##############################################################################################
-        queryset=queryset.filter(student__in=students,day=today)
+        queryset=Student.objects.filter(halaqa__res_teacher__user_name=user,status=True)
+
         selected_halaqa=_to_int(self.request.GET.get("selected_halaqa"))
-
         if selected_halaqa:
-            queryset=queryset.filter(student__halaqa__id=selected_halaqa)
+            queryset=queryset.filter(halaqa__id=selected_halaqa)
 
-        # when the teacher open attendace tab create attendance for every student with default true is attend
-        for student in students:
-            if not StudAttendance.objects.filter(student=student,day=today).exists():
-                StudAttendance.objects.create(student=student)
-
+        att_today=Subquery(
+            StudAttendance.objects.filter(student=OuterRef('pk'),day=today).values('status')[:1]
+        )
+        notes_today=Subquery(
+            StudAttendance.objects.filter(student=OuterRef('pk'),day=today).values('notes')[:1]
+        )
+        att_id=Subquery(
+            StudAttendance.objects.filter(student=OuterRef('pk'),day=today).values('id')[:1]
+        )
+        queryset=queryset.annotate(
+            att_status=att_today, att_notes=notes_today, att_id=att_id
+        ).order_by('halaqa__name','name')
 
         return queryset
 
@@ -75,7 +78,6 @@ class StudentAttList(ListView):
     def post(self,request,*args, **kwargs):
         today=date.today()
 
-
         student_ids = request.POST.getlist('student_id')
         saved=0
 
@@ -88,16 +90,16 @@ class StudentAttList(ListView):
 
             StudAttendance.objects.update_or_create(
                 student=student,
+                day=today,
                 defaults={
                 'status': status,
                 'notes': notes
-                },
-                day=today
+                }
             )
             saved+=1
 
         if saved:
-            messages.success(request, f"✅ تم حفظ سجلات حضور {saved} تلميذ/ة بنجاح")
+            messages.success(request, f"تم حفظ سجلات حضور {saved} تلميذ/ة بنجاح")
         else:
             messages.warning(request, "لم يتم حفظ أي سجل !")
 
@@ -106,24 +108,26 @@ class StudentAttList(ListView):
 
 class TeacherAttList(ListView):
     template_name='attendances/teacher_attendance.html'
-    model=TeachAttendance
+    model=Teacher
     context_object_name='teacher_att'
 
 
 
     def get_queryset(self):
         today=date.today()
-        queryset=super().get_queryset().select_related('teacher')
-        teachers=Teacher.objects.all()
-        queryset=queryset.filter(day=today)
+        queryset=Teacher.objects.all()
 
-        # opening the sheet pre-creates a default-present row for every teacher
-        for teacher in teachers:
-            if not TeachAttendance.objects.filter(teacher=teacher,day=today).exists():
-                TeachAttendance.objects.create(teacher=teacher)
+        att_today=Subquery(
+            TeachAttendance.objects.filter(teacher=OuterRef('pk'),day=today).values('status')[:1]
+        )
+        notes_today=Subquery(
+            TeachAttendance.objects.filter(teacher=OuterRef('pk'),day=today).values('notes')[:1]
+        )
+        queryset=queryset.annotate(
+            att_status=att_today, att_notes=notes_today
+        ).order_by('name')
 
-
-        return queryset.order_by('teacher__name')
+        return queryset
 
 
     def get_context_data(self, **kwargs):
@@ -134,7 +138,6 @@ class TeacherAttList(ListView):
 
     def post(self,request,*args, **kwargs):
         today=date.today()
-
 
         teacher_ids = request.POST.getlist('teacher_id')
         saved=0
@@ -148,16 +151,16 @@ class TeacherAttList(ListView):
 
             TeachAttendance.objects.update_or_create(
                 teacher=teacher,
+                day=today,
                 defaults={
                 'status': status,
                 'notes': notes
-                },
-                day=today
+                }
             )
             saved+=1
 
         if saved:
-            messages.success(request, f"✅ تم حفظ سجلات حضور {saved} معلمة/ة بنجاح")
+            messages.success(request, f"تم حفظ سجلات حضور {saved} معلمة/ة بنجاح")
         else:
             messages.warning(request, "لم يتم حفظ أي سجل !")
 

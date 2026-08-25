@@ -17,6 +17,7 @@ class StudentForm(ModelForm):
     tel = forms.CharField(
         max_length=10,
         validators=[validate_tel],
+        widget=forms.TelInput(attrs={'class': INPUT_CLASS, 'placeholder': '05XXXXXXXX', 'dir': 'ltr', 'style': 'text-align:left'}),
     )
 
     class Meta:
@@ -37,7 +38,7 @@ class StudentForm(ModelForm):
         widgets={
             'name':forms.TextInput(attrs={'class':INPUT_CLASS}),
             'address':forms.TextInput(attrs={'class':INPUT_CLASS}),
-            'tel':forms.TextInput(attrs={'class':INPUT_CLASS}),
+            'tel':forms.TelInput(attrs={'class':INPUT_CLASS, 'placeholder': '05XXXXXXXX', 'dir': 'ltr', 'style': 'text-align:left'}),
             'halaqa':forms.Select(attrs={'class':INPUT_CLASS}),
             'status':forms.CheckboxInput(attrs={'class':"h-4 w-4 rounded bg-slate-700 border-slate-500 text-blue-600 focus:ring-blue-500"}),
             'date_birth':forms.DateInput(

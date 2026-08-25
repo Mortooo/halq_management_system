@@ -150,8 +150,8 @@ body {
 }
 .nav-link:hover { background: var(--chrome-hover); color: #fff; }
 .nav-link.active { background: var(--chrome-hover); color: var(--chrome-heading); font-weight: 700; box-shadow: inset -3px 0 0 var(--accent); }
-.nav-link.danger { color: #f2a6a6; }
-.nav-link.danger:hover { background: rgba(220, 38, 38, 0.18); color: #fecaca; }
+.nav-link.danger { color: #fff; background: var(--danger); }
+.nav-link.danger:hover { background: var(--danger-hover); }
 
 /* ================= Dark chrome surfaces ================= */
 .sidebar {

@@ -9,12 +9,12 @@
 
 <body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
 
-    <main class="flex-grow">
-        <div class="flex min-h-screen">
+    <main class="flex-grow flex flex-col">
+        <div class="flex flex-1">
             <!-- ترويسة الجوال -->
-            <header class="bg-emerald-700 border-b border-emerald-800 md:hidden flex items-center justify-between p-4 fixed w-full z-50">
-                <h1 class="text-xl font-bold text-white">لوحة تحكم | المعلمة</h1>
-                <button id="menu-btn" aria-label="فتح القائمة" aria-expanded="false" class="p-2 rounded-lg text-white hover:text-white/80 hover:bg-emerald-800 transition">
+            <header class="bg-white border-b border-slate-200 md:hidden flex items-center justify-between p-4 fixed w-full z-50">
+                <h1 class="text-xl font-bold text-emerald-700">لوحة تحكم | المعلمة</h1>
+                <button id="menu-btn" aria-label="فتح القائمة" aria-expanded="false" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition md:hidden">
                     {% include 'partials/icons/bars-3.svg' with icon_class='h-6 w-6' only %}
                 </button>
             </header>
@@ -43,7 +43,7 @@
 
                     <div class="pt-2 mt-2 border-t border-white/10">
                         {% url 'account_logout' as u_logout %}
-                        {% include 'partials/_nav_item.html' with item_url=u_logout current=request.path label='تسجيل الخروج' icon='partials/icons/logout.svg' variant='danger' %}
+                        {% include 'partials/_nav_item.html' with item_url=u_logout current=request.path label='تسجيل الخروج' icon='partials/icons/logout.svg' variant='danger'  %}
                     </div>
                 </nav>
             </aside>
@@ -58,7 +58,6 @@
     </main>
 
     {% include 'partials/_messages.html' %}
-    {% include 'partials/_footer.html' %}
 
     <!-- ✅ Alpine.js for transitions -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

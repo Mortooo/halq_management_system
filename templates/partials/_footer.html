@@ -1,4 +1,4 @@
-<footer class="bg-slate-800 border-t border-slate-700 mt-auto">
+﻿<footer class="bg-slate-800 border-t border-slate-700 mt-auto">
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div class="grid gap-10 md:grid-cols-3 mb-10">
 
@@ -19,7 +19,7 @@
                     <li><a href="{% url 'home' %}" class="text-slate-400 hover:text-blue-400 transition">الصفحة الرئيسية</a></li>
                     {% if user.is_authenticated %}
                         {% if user.is_superuser %}
-                        <li><a href="{% url 'superuser:dashboard' %}" class="text-slate-400 hover:text-blue-400 transition">لوحة المشرف</a></li>
+                        <li><a href="{% url 'administration:dashboard' %}" class="text-slate-400 hover:text-blue-400 transition">لوحة المشرف</a></li>
                         <li><a href="{% url 'students:students_manage' %}" class="text-slate-400 hover:text-blue-400 transition">إدارة الطالبات</a></li>
                         <li><a href="{% url 'reports:total_reports' %}" class="text-slate-400 hover:text-blue-400 transition">التقارير الأسبوعية</a></li>
                         {% elif user.is_staff %}

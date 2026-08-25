@@ -1,4 +1,4 @@
-{% extends 'superuser/s_base.html' %}
+﻿{% extends 'administration/s_base.html' %}
 {% load static %}
 
 {% block title %}إدارة المستخدمين{% endblock %}
@@ -13,7 +13,7 @@
 
     <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-            <a href="{% url 'superuser:teacher_list' %}" class="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md text-center flex items-center justify-center gap-2">
+            <a href="{% url 'administration:teacher_list' %}" class="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md text-center flex items-center justify-center gap-2">
                 {% include 'partials/icons/users.svg' with icon_class='h-5 w-5' only %}
                 إدارة المعلمات
             </a>
@@ -70,7 +70,7 @@
                     <td class="p-4">
                         <div class="flex items-center gap-2">
                             {% if not user_account.is_superuser %}
-                            <form method="post" action="{% url 'superuser:toggle_user' user_account.id %}">
+                            <form method="post" action="{% url 'administration:toggle_user' user_account.id %}">
                                 {% csrf_token %}
                                 {% if user_account.is_active %}
                                 <button type="submit" aria-label="إلغاء التفعيل" title="إلغاء التفعيل" class="p-2 rounded-lg bg-yellow-600/20 text-yellow-400 hover:bg-yellow-600/40 transition">
@@ -82,7 +82,7 @@
                                 </button>
                                 {% endif %}
                             </form>
-                            <a href="{% url 'superuser:delete_user' user_account.id %}" aria-label="حذف المستخدم" title="حذف" class="p-2 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600/40 transition">
+                            <a href="{% url 'administration:delete_user' user_account.id %}" aria-label="حذف المستخدم" title="حذف" class="p-2 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600/40 transition">
                                 {% include 'partials/icons/trash.svg' with icon_class='h-5 w-5' only %}
                             </a>
                             {% else %}
@@ -130,7 +130,7 @@
 
             {% if not user_account.is_superuser %}
             <div class="pt-2 flex items-center gap-3">
-                <form method="post" action="{% url 'superuser:toggle_user' user_account.id %}" class="flex-1">
+                <form method="post" action="{% url 'administration:toggle_user' user_account.id %}" class="flex-1">
                     {% csrf_token %}
                     {% if user_account.is_active %}
                     <button type="submit" class="w-full bg-yellow-600/20 text-yellow-300 py-2 rounded-lg font-semibold hover:bg-yellow-600/40 text-sm">
@@ -142,7 +142,7 @@
                     </button>
                     {% endif %}
                 </form>
-                <a href="{% url 'superuser:delete_user' user_account.id %}" class="flex-1 text-center bg-red-600/20 text-red-300 py-2 rounded-lg font-semibold hover:bg-red-600/40 text-sm">
+                <a href="{% url 'administration:delete_user' user_account.id %}" class="flex-1 text-center bg-red-600/20 text-red-300 py-2 rounded-lg font-semibold hover:bg-red-600/40 text-sm">
                     حذف
                 </a>
             </div>

@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -28,13 +28,13 @@
                     </button>
                 </div>
                 <nav dir="rtl" class="space-y-2">
-                    {% url 'superuser:dashboard' as u_dashboard %}
+                    {% url 'administration:dashboard' as u_dashboard %}
                     {% include 'partials/_nav_item.html' with item_url=u_dashboard current=request.path label='الرئيسية' icon='partials/icons/chart-bar.svg' %}
 
-                    {% url 'superuser:teacher_list' as u_teachers %}
+                    {% url 'administration:teacher_list' as u_teachers %}
                     {% include 'partials/_nav_item.html' with item_url=u_teachers current=request.path label='إدارة المعلمات' icon='partials/icons/academic-cap.svg' %}
 
-                    {% url 'superuser:halaqa_list' as u_halaqat %}
+                    {% url 'administration:halaqa_list' as u_halaqat %}
                     {% include 'partials/_nav_item.html' with item_url=u_halaqat current=request.path label='إدارة الحلقات' icon='partials/icons/tag.svg' %}
 
                     {% url 'students:students_manage' as u_students %}
@@ -46,7 +46,7 @@
                     {% url 'attendances:teacher_attendance' as u_teacher_att %}
                     {% include 'partials/_nav_item.html' with item_url=u_teacher_att current=request.path label='الحضور والغياب' icon='partials/icons/check-circle.svg' %}
 
-                    {% url 'superuser:users_list' as u_users %}
+                    {% url 'administration:users_list' as u_users %}
                     {% include 'partials/_nav_item.html' with item_url=u_users current=request.path label='إدارة المستخدمين' icon='partials/icons/user.svg' %}
 
                     {% url 'reports:total_reports' as u_total_reports %}

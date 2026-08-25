@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+﻿from django.shortcuts import redirect
 from django.views.generic import ListView,CreateView,UpdateView,DeleteView,DetailView
 from django.http import Http404
 from students.models import Student, Grade
@@ -117,7 +117,7 @@ class StudentDelete(TeacherOwnedStudentMixin,DeleteView):
 # ---------- Superuser-side management (all students) ----------
 
 class SUStudentList(ListView):
-    template_name='superuser/students_manage.html'
+    template_name='administration/students_manage.html'
     model=Student
     context_object_name='students'
     paginate_by=15
@@ -131,7 +131,7 @@ class SUStudentList(ListView):
 
 
 class SUStudentCreate(UserFormKwargsMixin,CreateView):
-    template_name='superuser/student_edit.html'
+    template_name='administration/student_edit.html'
     model=Student
     form_class=StudentForm
 
@@ -140,7 +140,7 @@ class SUStudentCreate(UserFormKwargsMixin,CreateView):
 
 
 class SUStudentUpdate(TeacherOwnedStudentMixin,UserFormKwargsMixin,UpdateView):
-    template_name='superuser/student_edit.html'
+    template_name='administration/student_edit.html'
     model=Student
     form_class=StudentForm
 
@@ -149,7 +149,7 @@ class SUStudentUpdate(TeacherOwnedStudentMixin,UserFormKwargsMixin,UpdateView):
 
 
 class SUStudentDelete(TeacherOwnedStudentMixin,DeleteView):
-    template_name='superuser/student_delete.html'
+    template_name='administration/student_delete.html'
     model=Student
 
     def get_success_url(self):
@@ -159,7 +159,7 @@ class SUStudentDelete(TeacherOwnedStudentMixin,DeleteView):
 # ---------- Superuser-side grade management ----------
 
 class SUGradeList(ListView):
-    template_name='superuser/grades_manage.html'
+    template_name='administration/grades_manage.html'
     model=Grade
     context_object_name='grades'
 
@@ -168,7 +168,7 @@ class SUGradeList(ListView):
 
 
 class SUGradeCreate(CreateView):
-    template_name='superuser/grade_add.html'
+    template_name='administration/grade_add.html'
     model=Grade
     form_class=GradeForm
 
@@ -183,7 +183,7 @@ class SUGradeCreate(CreateView):
 
 
 class SUGradeUpdate(UpdateView):
-    template_name='superuser/grade_add.html'
+    template_name='administration/grade_add.html'
     model=Grade
     form_class=GradeForm
 
@@ -198,7 +198,7 @@ class SUGradeUpdate(UpdateView):
 
 
 class SUGradeDelete(DeleteView):
-    template_name='superuser/grade_delete.html'
+    template_name='administration/grade_delete.html'
     model=Grade
 
     def get_context_data(self, **kwargs):

@@ -1,11 +1,9 @@
+﻿from halq_management_system.access import staff_required, superuser_required
 from django.urls import path
 from .views import StudentsList,StudentCreate,StudentDetails,StudentUpdate,StudentDelete,SUStudentList,SUStudentCreate,SUStudentUpdate,SUStudentDelete,SUGradeList,SUGradeCreate,SUGradeUpdate,SUGradeDelete
-from django.contrib.auth.decorators import user_passes_test
 
 app_name = 'students'
 
-superuser_required=user_passes_test(lambda u: u.is_authenticated and u.is_superuser,login_url='/')
-staff_required=user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser),login_url='/')
 
 urlpatterns = [
     path('list/<int:pk>/',staff_required(StudentsList.as_view()),name='students_list'),

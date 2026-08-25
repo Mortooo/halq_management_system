@@ -1,11 +1,10 @@
+﻿from halq_management_system.access import superuser_required
 from django.urls import path
 
 from .views import dashboard ,TeacherList,TeacherCreate,TeacherUpdate,TeacherDelete,UsersList,HalaqaList,HalaqaCreate,HalaqaUpdate,HalaqaDelete,toggle_user_active,UserDelete
-from django.contrib.auth.decorators import user_passes_test
 
-app_name = 'superuser'
+app_name = 'administration'
 
-superuser_required=user_passes_test(lambda u: u.is_authenticated and u.is_superuser,login_url='/')
 
 urlpatterns = [
     path('dashboard/' ,superuser_required(dashboard),name='dashboard'),

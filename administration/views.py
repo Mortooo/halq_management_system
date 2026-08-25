@@ -1,4 +1,4 @@
-from datetime import date
+﻿from datetime import date
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.db.models import Q
@@ -49,12 +49,12 @@ def dashboard(request):
 
 
 
-    return render(request,'superuser/superuser_dashboard.html',context)
+    return render(request,'administration/dashboard.html',context)
 
 
 class TeacherList(ListView):
     model=Teacher
-    template_name='superuser/teacher_manage.html'
+    template_name='administration/teacher_manage.html'
     context_object_name='teachers'
     
     def get_queryset(self):
@@ -70,21 +70,21 @@ class TeacherList(ListView):
         return query
 
 class TeacherCreate(CreateView):
-    template_name='superuser/teacher_add.html'
+    template_name='administration/teacher_add.html'
     model=Teacher
     form_class=TeacherForm
-    success_url=reverse_lazy('superuser:teacher_list')
+    success_url=reverse_lazy('administration:teacher_list')
     
 class TeacherUpdate(UpdateView):
-    template_name='superuser/teacher_add.html'
+    template_name='administration/teacher_add.html'
     model=Teacher
     form_class=TeacherForm
-    success_url=reverse_lazy('superuser:teacher_list')
+    success_url=reverse_lazy('administration:teacher_list')
     
 class TeacherDelete(DeleteView):
-    template_name='superuser/teacher_delete.html'
+    template_name='administration/teacher_delete.html'
     model=Teacher
-    success_url=reverse_lazy('superuser:teacher_list')
+    success_url=reverse_lazy('administration:teacher_list')
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
@@ -107,7 +107,7 @@ class TeacherDelete(DeleteView):
 
 class HalaqaList(ListView):
     model=Halaqa
-    template_name='superuser/halaqa_manage.html'
+    template_name='administration/halaqa_manage.html'
     context_object_name='halaqats'
 
     def get_queryset(self):
@@ -120,20 +120,20 @@ class HalaqaList(ListView):
 
 
 class HalaqaCreate(CreateView):
-    template_name='superuser/halaqa_add.html'
+    template_name='administration/halaqa_add.html'
     model=Halaqa
     form_class=HalaqaForm
-    success_url=reverse_lazy('superuser:halaqa_list')
+    success_url=reverse_lazy('administration:halaqa_list')
 
 
 class HalaqaUpdate(UpdateView):
-    template_name='superuser/halaqa_add.html'
+    template_name='administration/halaqa_add.html'
     model=Halaqa
     form_class=HalaqaForm
-    success_url=reverse_lazy('superuser:halaqa_list')
+    success_url=reverse_lazy('administration:halaqa_list')
 
 class HalaqaDelete(DeleteView):
-    template_name='superuser/halaqa_delete.html'
+    template_name='administration/halaqa_delete.html'
     model=Halaqa
     context_object_name='halaqa'
 
@@ -148,16 +148,16 @@ class HalaqaDelete(DeleteView):
         self.object=self.get_object()
         if self.object.weekreport_set.exists():
             messages.error(request,'لا يمكن حذف حلقة مرتبطة بتقارير أسبوعية !')
-            return redirect('superuser:delete_halaqa', pk=self.object.pk)
+            return redirect('administration:delete_halaqa', pk=self.object.pk)
         response=super().post(request,*args,**kwargs)
         messages.success(request,'تم حذف الحلقة بنجاح')
         return response
 
     def get_success_url(self):
-        return reverse('superuser:halaqa_list')
+        return reverse('administration:halaqa_list')
 
 class UsersList(ListView):
-    template_name="superuser/user_manage.html"
+    template_name="administration/user_manage.html"
     model=User
     context_object_name='users'
 
@@ -174,18 +174,18 @@ def toggle_user_active(request, pk):
     target=get_object_or_404(User, pk=pk)
     if target.is_superuser:
         messages.error(request,'لا يمكن تعطيل حساب المشرفة !')
-        return redirect('superuser:users_list')
+        return redirect('administration:users_list')
     target.is_active=not target.is_active
     target.save()
     if target.is_active:
         messages.success(request,'تم تنشيط الحساب بنجاح')
     else:
         messages.success(request,'تم تعطيل الحساب ولن تستطيع الدخول')
-    return redirect('superuser:users_list')
+    return redirect('administration:users_list')
 
 
 class UserDelete(DeleteView):
-    template_name='superuser/user_delete.html'
+    template_name='administration/user_delete.html'
     model=User
     context_object_name='target_user'
 
@@ -198,13 +198,13 @@ class UserDelete(DeleteView):
         self.object=self.get_object()
         if self.object.is_superuser:
             messages.error(request,'لا يمكن حذف حساب المشرفة !')
-            return redirect('superuser:users_list')
+            return redirect('administration:users_list')
         if Teacher.objects.filter(user_name_id=self.object.pk).exists():
             messages.error(request,'هذا الحساب مرتبط بمعلمة ! احذفي المعلمة من إدارة المعلمات وسيُحذف الحساب معها.')
-            return redirect('superuser:delete_user', pk=self.object.pk)
+            return redirect('administration:delete_user', pk=self.object.pk)
         response=super().post(request,*args,**kwargs)
         messages.success(request,'تم حذف المستخدم بنجاح')
         return response
 
     def get_success_url(self):
-        return reverse('superuser:users_list')
+        return reverse('administration:users_list')

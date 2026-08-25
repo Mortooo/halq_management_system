@@ -1,63 +1,179 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}الصفحة الرئيسية{% endblock %}
+{% block title %}نظام إدارة الحلقات القرآنية{% endblock %}
 
 {% block content %}
 
- <nav class="bg-slate-800/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex-shrink-0">
-                    <h1 class="text-2xl font-bold text-ؤ">نظام إدارة الحلقات</h1>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ms-10 flex items-baseline gap-4">
-                        {% if user.is_authenticated %}
+<nav class="bg-slate-800/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <div class="flex-shrink-0">
+                <h1 class="text-2xl font-bold text-white">نظام إدارة الحلقات</h1>
+            </div>
+            <div class="hidden md:block">
+                <div class="ms-10 flex items-baseline gap-4">
+                    {% if user.is_authenticated %}
+                        {% if user.is_superuser %}
+                        <a href="{% url 'superuser:dashboard' %}" class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition duration-300 shadow-sm">لوحة المشرف</a>
+                        {% elif user.is_staff %}
+                        <a href="{% url 'teachers:teacher_dashboard' %}" class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition duration-300 shadow-sm">لوحة المعلمة</a>
+                        {% endif %}
                         <form method="post" action="{% url 'account_logout' %}">
                             {% csrf_token %}
                             <button type="submit" class="bg-red-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-red-700 transition duration-300 shadow-sm">تسجيل الخروج</button>
                         </form>
-                        {% else %}
-                        <a href="{% url 'account_login' %}" class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition duration-300 shadow-sm">تسجيل الدخول</a>
-                        {% endif %}
-                    </div>
+                    {% else %}
+                    <a href="{% url 'account_login' %}" class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition duration-300 shadow-sm">تسجيل الدخول</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
-    </nav>
-    <section class="text-center py-20 px-6 bg-slate-800">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">منصة إدارة الحلقات القرآنية</h2>
-        <p class="text-slate-300 max-w-2xl mx-auto mb-8">
-            نظام شامل لإدارة الطلاب، الحلقات، الحضور، وعدد الأجزاء التي تم تدريسها بشكل رقمي متكامل وسهل الاستخدام.
-        </p>
-        <a href="{% url 'account_login' %}" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md 
-            hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1 transition duration-300">
-            تسجيل الدخول
-        </a>
-    </section>
+    </div>
+</nav>
 
-    <section id="about" class="max-w-6xl mx-auto py-20 px-6">
-        <h2 class="text-2xl md:text-3xl font-bold text-blue-400 mb-6 text-center">حول النظام</h2>
-        <p class="text-slate-300 text-lg leading-relaxed text-center mb-12">
-            نظام إدارة الحلقات هو منصة متطورة تساعد الخلاوى ومراكز ومدارس تحفيظ القران الكريم  في تنظيم سير العملية التعليمية من خلال أدوات رقمية متكاملة
-            تسهل التواصل بين المعلمين والمشرفين والإدارة. 
-            يهدف النظام إلى تحويل إدارة الحلقات من الطريقة الورقية التقليدية إلى إدارة رقمية فعّالة ودقيقة.
+<!-- Hero -->
+<section class="relative overflow-hidden">
+    <div class="max-w-7xl mx-auto text-center py-24 px-6">
+        <span class="inline-block px-4 py-1 mb-6 text-sm font-semibold text-blue-300 bg-blue-950/60 border border-blue-800 rounded-full">
+            منصة رقمية متكاملة لتحفيظ القرآن الكريم
+        </span>
+        <h2 class="text-4xl md:text-6xl font-black text-white leading-tight mb-6">
+            أدرِ حلقاتك القرآنية
+            <span class="text-blue-400">بكل سهولة واحترافية</span>
+        </h2>
+        <p class="text-slate-400 max-w-3xl mx-auto text-lg md:text-xl leading-relaxed mb-10">
+            نظام متكامل يساعد حلقات ومراكز ومدارس تحفيظ القرآن الكريم على تنظيم العملية التعليمية:
+            إدارة المعلمات والطالبات والحلقات، رصد الحضور اليومي، ومتابعة التقدم الأسبوعي عبر تقارير دقيقة —
+            بدلاً من السجلات الورقية التقليدية.
         </p>
-
-        <div class="grid md:grid-cols-3 gap-8 mt-10">
-            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition">
-                <h3 class="text-blue-400 text-xl font-semibold mb-3">إدارة الطلاب</h3>
-                <p class="text-slate-400">إضافة وتحديث معلومات الطلاب بسهولة مع متابعة مستوياتهم وتقدمهم الأكاديمي.</p>
-            </div>
-            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition">
-                <h3 class="text-blue-400 text-xl font-semibold mb-3">متابعة الحضور</h3>
-                <p class="text-slate-400">تسجيل الحضور اليومي وإصدار تقارير دقيقة عن انتظام الطلاب في الحلقات.</p>
-            </div>
-            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition">
-                <h3 class="text-blue-400 text-xl font-semibold mb-3">تقارير الأداء</h3>
-                <p class="text-slate-400">عرض إحصائيات وتقارير شاملة لمستوى الحلقات والأداء العام للمؤسسة.</p>
-            </div>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {% if user.is_authenticated %}
+                {% if user.is_superuser %}
+                <a href="{% url 'superuser:dashboard' %}" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:-translate-y-1 transition duration-300">الذهاب إلى لوحة التحكم</a>
+                {% elif user.is_staff %}
+                <a href="{% url 'teachers:teacher_dashboard' %}" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:-translate-y-1 transition duration-300">الذهاب إلى لوحة التحكم</a>
+                {% endif %}
+            {% else %}
+            <a href="{% url 'account_login' %}" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:-translate-y-1 transition duration-300">ابدأ الآن — تسجيل الدخول</a>
+            {% endif %}
+            <a href="#features" class="px-8 py-3 bg-slate-800 border border-slate-700 text-slate-200 font-semibold rounded-lg hover:bg-slate-700 transition duration-300">تعرف على المميزات</a>
         </div>
-    </section>
+    </div>
+    <div class="absolute top-0 -start-32 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 -end-32 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+</section>
+
+<!-- Features -->
+<section id="features" class="max-w-6xl mx-auto py-20 px-6">
+    <h2 class="text-3xl md:text-4xl font-black text-white text-center mb-4">مميزات النظام</h2>
+    <p class="text-slate-400 text-center max-w-2xl mx-auto mb-14">
+        كل ما تحتاجه إدارة الحلقة في مكان واحد، بواجهة عربية بسيطة تعمل على الحاسب والجوال.
+    </p>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <div class="bg-slate-800 p-7 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-950/70 border border-blue-900 mb-5">
+                {% include 'partials/icons/users.svg' with icon_class='w-6 h-6 text-blue-400' %}
+            </span>
+            <h3 class="text-blue-400 text-xl font-bold mb-3">إدارة الطالبات</h3>
+            <p class="text-slate-400 leading-relaxed">إضافة وتحديث بيانات الطالبات ومستوياتهم الدراسية، مع بحث وتصفية سريعة وسجل كامل لكل طالبة.</p>
+        </div>
+
+        <div class="bg-slate-800 p-7 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-950/70 border border-blue-900 mb-5">
+                {% include 'partials/icons/book-open.svg' with icon_class='w-6 h-6 text-blue-400' %}
+            </span>
+            <h3 class="text-blue-400 text-xl font-bold mb-3">تنظيم الحلقات</h3>
+            <p class="text-slate-400 leading-relaxed">إنشاء الحلقات وإسناد كل حلقة إلى معلمة مع تحديد المقرر الأساسي ومتابعة طالباتها.</p>
+        </div>
+
+        <div class="bg-slate-800 p-7 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-950/70 border border-blue-900 mb-5">
+                {% include 'partials/icons/check-circle.svg' with icon_class='w-6 h-6 text-blue-400' %}
+            </span>
+            <h3 class="text-blue-400 text-xl font-bold mb-3">رصد الحضور اليومي</h3>
+            <p class="text-slate-400 leading-relaxed">كشف حضور يومي لكل حلقة يُعبأ بنقرة واحدة، مع تسجيل حالات الغياب وأسبابها وحفظها فوراً.</p>
+        </div>
+
+        <div class="bg-slate-800 p-7 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-950/70 border border-blue-900 mb-5">
+                {% include 'partials/icons/pencil-square.svg' with icon_class='w-6 h-6 text-blue-400' %}
+            </span>
+            <h3 class="text-blue-400 text-xl font-bold mb-3">التقارير الأسبوعية</h3>
+            <p class="text-slate-400 leading-relaxed">ترسل كل معلمة تقريراً أسبوعياً بمقدار المنجز مقارنة بالخطة (ضمن الخطة / متقدمة / متأخرة) ويراجعه المشرف.</p>
+        </div>
+
+        <div class="bg-slate-800 p-7 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-950/70 border border-blue-900 mb-5">
+                {% include 'partials/icons/academic-cap.svg' with icon_class='w-6 h-6 text-blue-400' %}
+            </span>
+            <h3 class="text-blue-400 text-xl font-bold mb-3">المستويات والصفوف</h3>
+            <p class="text-slate-400 leading-relaxed">إدارة صفوف الحفظ والمستويات الدراسية وربط الطالبات بها لمتابعة التقدم الأكاديمي.</p>
+        </div>
+
+        <div class="bg-slate-800 p-7 rounded-xl border border-slate-700 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-950/70 border border-blue-900 mb-5">
+                {% include 'partials/icons/chart-bar.svg' with icon_class='w-6 h-6 text-blue-400' %}
+            </span>
+            <h3 class="text-blue-400 text-xl font-bold mb-3">لوحة متابعة للمشرف</h3>
+            <p class="text-slate-400 leading-relaxed">نظرة شاملة للمشرف: عدد المعلمات والحلقات والطالبات، غياب اليوم، وسجلات الحضور والتقارير قابلة للتصفية.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- How it works -->
+<section class="bg-slate-800/50 border-y border-slate-700/60">
+    <div class="max-w-6xl mx-auto py-20 px-6">
+        <h2 class="text-3xl md:text-4xl font-black text-white text-center mb-14">كيف يعمل النظام؟</h2>
+
+        <div class="grid md:grid-cols-2 gap-10">
+
+            <div class="bg-slate-800 p-8 rounded-xl border border-slate-700">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-950/70 border border-blue-900">
+                        {% include 'partials/icons/user.svg' with icon_class='w-6 h-6 text-blue-400' %}
+                    </span>
+                    <h3 class="text-2xl font-bold text-white">للمشرفة</h3>
+                </div>
+                <ol class="space-y-4 text-slate-400 leading-relaxed list-none">
+                    <li class="flex gap-3"><span class="text-blue-400 font-bold shrink-0">١.</span> تضيف المعلمات فينشئ لهنَّ النظام حساب دخول تلقائياً.</li>
+                    <li class="flex gap-3"><span class="text-blue-400 font-bold shrink-0">٢.</span> تنظم الحلقات وتوزع الطالبات عليها وتحدد المستويات.</li>
+                    <li class="flex gap-3"><span class="text-blue-400 font-bold shrink-0">٣.</span> تراجع يومياً كشف الحضور وسجل الغياب، وأسبوعياً تقارير إنجاز المعلمات.</li>
+                </ol>
+            </div>
+
+            <div class="bg-slate-800 p-8 rounded-xl border border-slate-700">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-950/70 border border-blue-900">
+                        {% include 'partials/icons/home.svg' with icon_class='w-6 h-6 text-blue-400' %}
+                    </span>
+                    <h3 class="text-2xl font-bold text-white">للمعلمة</h3>
+                </div>
+                <ol class="space-y-4 text-slate-400 leading-relaxed list-none">
+                    <li class="flex gap-3"><span class="text-blue-400 font-bold shrink-0">١.</span> تدخل إلى لوحتها فتجد حالة طلاب اليوم أمامها مباشرة.</li>
+                    <li class="flex gap-3"><span class="text-blue-400 font-bold shrink-0">٢.</span> ترصد حضور حلقتها في ثوانٍ معدودة وتدوين ملاحظات الغياب.</li>
+                    <li class="flex gap-3"><span class="text-blue-400 font-bold shrink-0">٣.</span> ترسل تقريرها الأسبوعي بمقدار ما تم تدريسه مقارنة بالخطة.</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="text-center py-20 px-6">
+    <h2 class="text-3xl md:text-4xl font-black text-white mb-4">جاهزة للبدء؟</h2>
+    <p class="text-slate-400 max-w-xl mx-auto mb-8">
+        يتم إنشاء الحسابات من خلال مشرفة النظام. إذا كان لديك حساب، سجّلي الدخول للوصول إلى لوحتك.
+    </p>
+    {% if not user.is_authenticated %}
+    <a href="{% url 'account_login' %}" class="inline-block px-10 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:-translate-y-1 transition duration-300">
+        تسجيل الدخول
+    </a>
+    {% endif %}
+</section>
+
 {% endblock %}

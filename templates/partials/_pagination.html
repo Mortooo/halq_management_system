@@ -1,3 +1,4 @@
+{% load query_compat %}
 {% if is_paginated %}
 <nav class="mt-8 flex items-center justify-center gap-2" aria-label="التنقل بين الصفحات">
     {% if page_obj.has_previous %}

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'attendances',
     'superuser',
     'reports',
+    'halq_management_system',  # templatetags (query_compat)
     'allauth',
     'allauth.account',
 

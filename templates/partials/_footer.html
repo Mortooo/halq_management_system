@@ -1,65 +1,37 @@
-﻿<footer class="bg-slate-800 border-t border-slate-700 mt-auto">
+<footer class="footer mt-auto">
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div class="grid gap-10 md:grid-cols-3 mb-10">
 
             <!-- About -->
             <div>
-                <h3 class="text-lg font-bold text-white mb-3">نظام إدارة الحلقات القرآنية</h3>
-                <p class="text-slate-400 leading-relaxed text-sm">
-                    منصة رقمية متكاملة تساعد حلقات ومراكز ومدارس تحفيظ القرآن الكريم على إدارة
-                    المعلمات والطالبات والحلقات، ورصد الحضور اليومي، ومتابعة التقدم الأسبوعي
-                    بتقارير دقيقة — بديلاً عصرياً عن السجلات الورقية.
+                <h3 class="text-lg font-bold mb-3">مركز تحفيظ القرآن الكريم</h3>
+                <p class="leading-relaxed text-sm">
+                    نظام متكامل لإدارة الحلقات القرآنية، يجمع المعلمين والتلاميذ والإدارة في منصة واحدة.
                 </p>
             </div>
 
-            <!-- Quick links -->
+            <!-- Quick Links -->
             <div>
-                <h3 class="text-lg font-bold text-white mb-3">روابط سريعة</h3>
+                <h3 class="text-lg font-bold mb-3">روابط سريعة</h3>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="{% url 'home' %}" class="text-slate-400 hover:text-blue-400 transition">الصفحة الرئيسية</a></li>
-                    {% if user.is_authenticated %}
-                        {% if user.is_superuser %}
-                        <li><a href="{% url 'administration:dashboard' %}" class="text-slate-400 hover:text-blue-400 transition">لوحة المشرف</a></li>
-                        <li><a href="{% url 'students:students_manage' %}" class="text-slate-400 hover:text-blue-400 transition">إدارة الطالبات</a></li>
-                        <li><a href="{% url 'reports:total_reports' %}" class="text-slate-400 hover:text-blue-400 transition">التقارير الأسبوعية</a></li>
-                        {% elif user.is_staff %}
-                        <li><a href="{% url 'teachers:teacher_dashboard' %}" class="text-slate-400 hover:text-blue-400 transition">لوحة المعلمة</a></li>
-                        <li><a href="{% url 'reports:weekly_report' %}" class="text-slate-400 hover:text-blue-400 transition">إرسال التقرير الأسبوعي</a></li>
-                        {% endif %}
-                    {% else %}
-                    <li><a href="{% url 'account_login' %}" class="text-slate-400 hover:text-blue-400 transition">تسجيل الدخول</a></li>
-                    {% endif %}
+                    <li><a href="/" class="hover:text-emerald-300 transition">الرئيسية</a></li>
+                    <li><a href="{% url 'account_login' %}" class="hover:text-emerald-300 transition">تسجيل الدخول</a></li>
+                    <li><a href="{% url 'account_signup' %}" class="hover:text-emerald-300 transition">إنشاء حساب</a></li>
                 </ul>
             </div>
 
-            <!-- Features summary -->
+            <!-- Contact -->
             <div>
-                <h3 class="text-lg font-bold text-white mb-3">ماذا يوفر لك النظام؟</h3>
-                <ul class="space-y-2 text-sm text-slate-400">
-                    <li class="flex items-center gap-2">
-                        {% include 'partials/icons/check-circle.svg' with icon_class='w-4 h-4 text-green-500 shrink-0' %}
-                        كشف حضور يومي لكل حلقة
-                    </li>
-                    <li class="flex items-center gap-2">
-                        {% include 'partials/icons/check-circle.svg' with icon_class='w-4 h-4 text-green-500 shrink-0' %}
-                        تقارير أسبوعية بمقارنة الخطة
-                    </li>
-                    <li class="flex items-center gap-2">
-                        {% include 'partials/icons/check-circle.svg' with icon_class='w-4 h-4 text-green-500 shrink-0' %}
-                        حسابات دخول تُنشأ للمعلمات تلقائياً
-                    </li>
-                    <li class="flex items-center gap-2">
-                        {% include 'partials/icons/check-circle.svg' with icon_class='w-4 h-4 text-green-500 shrink-0' %}
-                        واجهة عربية تعمل على الجوال والحاسب
-                    </li>
+                <h3 class="text-lg font-bold mb-3">تواصل معنا</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>البريد الإلكتروني: info@quran-center.com</li>
+                    <li>الهاتف: 0500000000</li>
                 </ul>
             </div>
-
         </div>
 
-        <div class="border-t border-slate-700 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-slate-500">
-            <p>نظام إدارة الحلقات القرآنية &copy; {% now 'Y' %} — جميع الحقوق محفوظة</p>
-            <p>تصميم وتطوير: مرتضى محمد الخير</p>
+        <div class="divider border-t pt-6 text-center text-sm">
+            &copy; 2026 مركز تحفيظ القرآن الكريم. جميع الحقوق محفوظة.
         </div>
     </div>
 </footer>

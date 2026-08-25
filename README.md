@@ -7,7 +7,7 @@ A Django 5.2 web application for managing Quran study circles (halaqat): teacher
 ### Public
 - Landing page (`/`) with role-aware navigation (login link, or logout button for signed-in users)
 
-### Superuser (admin)
+### Administrator (`/administration/`)
 - Dashboard with system overview (teachers, halaqat, students, today's absences)
 - Full CRUD for teachers — **creating a teacher automatically creates her login account** (username + password set on the same form); deleting a teacher deletes the linked account
 - Full CRUD for halaqat and grades (deletes are blocked while dependent records exist, e.g. reports attached to a halaqa)
@@ -35,22 +35,29 @@ A Django 5.2 web application for managing Quran study circles (halaqat): teacher
 ## Project Structure
 
 ```
-halq_management_system/
-├── halq_management_system/   # settings, root urls, wsgi/asgi
-├── accounts/                 # allauth adapter (role-based login redirect)
-├── halaqs/                   # Halaqa model (+ form used by superuser app)
-├── teachers/                 # teacher dashboard
-├── students/                 # student & grade views/forms (teacher + SU sides)
-├── attendances/              # daily sheets + record browsers
-├── reports/                  # weekly report submit/review
-├── superuser/                # admin dashboard & management pages
-├── templates/                # base layouts, per-app pages, partials/icons
+halq_management_system/          # repo root
+├── core/                        # settings, root urls, wsgi/asgi
+│   ├── adapter.py               # allauth adapter (role-based login redirect)
+│   ├── access.py                # shared staff_required / superuser_required decorators
+│   └── templatetags/            # version-proof pagination helpers
+├── halaqs/                      # Halaqa model (+ form used by administration app)
+├── teachers/                    # teacher dashboard
+├── students/                    # student & grade views/forms (teacher + admin sides)
+├── attendances/                 # daily sheets + record browsers
+├── reports/                     # weekly report submit/review
+├── administration/              # admin dashboard, teachers/halaqat/users management
+├── templates/                   # base layouts, per-app pages, partials/icons
 ├── static/css/style.css
+├── docs/                        # user guide (Word document with screenshots)
 ├── manage.py
 └── requirements.txt
 ```
 
-All internal links use `{% url %}` reversal; route URLs end with a trailing slash.
+All internal links use `{% url %}` reversal; route URLs end with a trailing slash. Shared cross-app code lives in the project package (`adapter.py`, `access.py`, `templatetags/`) instead of a dedicated app.
+
+## User Guide
+
+A full Arabic user guide with annotated screenshots for both roles is included: [`docs/دليل استخدام نظام إدارة الحلقات القرآنية.docx`](docs/دليل%20استخدام%20نظام%20إدارة%20الحلقات%20القرآنية.docx)
 
 ## Getting Started (Local)
 
@@ -73,7 +80,7 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Visit `http://127.0.0.1:8000` — log in from the home page. Admins land on `/superuser/dashboard/`, teachers on `/teacher/dashboard/`.
+Visit `http://127.0.0.1:8000` — log in from the home page. Admins land on `/administration/dashboard/`, teachers on `/teacher/dashboard/`.
 
 > Teachers should normally be created from the admin UI (Teachers → Add), which provisions the login account in one step.
 
@@ -92,8 +99,10 @@ Visit `http://127.0.0.1:8000` — log in from the home page. Admins land on `/su
 1. Upload the project (or pull from git) into your home directory
 2. Create/update the virtualenv from `requirements.txt`
 3. Run `python manage.py migrate` and `collectstatic` if needed
-4. Point the web app at `halq_management_system/wsgi.py` and your venv
-5. Set env vars (`DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `DJANGO_ALLOWED_HOSTS=mortooo.pythonanywhere.com`) and **Reload**
+4. Point the web app at the WSGI file and your venv
+5. In the **WSGI configuration file** (Web tab), make sure the settings module line reads:
+   `os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')`
+6. Set env vars (`DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `DJANGO_ALLOWED_HOSTS=mortooo.pythonanywhere.com`) and **Reload**
 
 ## Notes
 

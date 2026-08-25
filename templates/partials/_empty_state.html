@@ -1,11 +1,11 @@
 <div class="flex flex-col items-center justify-center py-16 px-6 text-center">
-    <div class="rounded-full bg-slate-700/50 p-5 mb-5 flex items-center justify-center">
+    <div class="rounded-full bg-slate-100 p-5 mb-5 flex items-center justify-center">
         {% if icon %}
-            {% include icon with icon_class='h-10 w-10 text-slate-400' only %}
+            {% include icon with icon_class='h-10 w-10 text-slate-500' only %}
         {% else %}
-            {% include 'partials/icons/inbox.svg' with icon_class='h-10 w-10 text-slate-400' only %}
+            {% include 'partials/icons/inbox.svg' with icon_class='h-10 w-10 text-slate-500' only %}
         {% endif %}
     </div>
-    <h3 class="text-xl font-bold text-white mb-2">{{ title }}</h3>
-    {% if subtitle %}<p class="text-slate-400 max-w-sm">{{ subtitle }}</p>{% endif %}
+    <h3 class="text-xl font-bold mb-2">{{ title }}</h3>
+    {% if subtitle %}<p class="text-slate-500 max-w-sm">{{ subtitle }}</p>{% endif %}
 </div>

@@ -1,18 +1,18 @@
 <main class="p-6 md:p-10">
-    <div class="max-w-xl mx-auto mt-10 bg-slate-800 rounded-3xl shadow-2xl border border-slate-700 p-10 text-center">
-        <span class="inline-flex p-3 rounded-2xl bg-red-600/20 mb-4">
-            {% include 'partials/icons/trash.svg' with icon_class='h-9 w-9 text-red-400' only %}
+    <div class="max-w-xl mx-auto mt-10 card shadow-2xl border border-slate-200 p-10 text-center">
+        <span class="inline-flex p-3 rounded-2xl bg-red-50 mb-4">
+            {% include 'partials/icons/trash.svg' with icon_class='h-9 w-9 text-red-600' only %}
         </span>
         <h2 class="text-white text-2xl font-bold mb-4">{{ confirm_title }}</h2>
         <p class="mb-2 text-lg font-bold text-blue-300">{{ object_name }}</p>
-        <p class="mb-8 text-sm text-slate-400">{{ confirm_message }}</p>
+        <p class="mb-8 text-sm text-slate-500">{{ confirm_message }}</p>
 
         <form method="post" class="flex items-center justify-center gap-4">
             {% csrf_token %}
-            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition">
+            <button type="submit" class="btn btn-danger px-8 py-3">
                 حذف
             </button>
-            <a href="{{ cancel_url }}" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-8 py-3 rounded-lg font-bold transition">إلغاء</a>
+            <a href="{{ cancel_url }}" class="btn btn-ghost px-8 py-3">إلغاء</a>
         </form>
     </div>
 </main>

@@ -1,4 +1,4 @@
-﻿from halq_management_system.access import staff_required, superuser_required
+﻿from core.access import staff_required, superuser_required
 from django.urls import path
 from .views import StudentsList,StudentCreate,StudentDetails,StudentUpdate,StudentDelete,SUStudentList,SUStudentCreate,SUStudentUpdate,SUStudentDelete,SUGradeList,SUGradeCreate,SUGradeUpdate,SUGradeDelete
 

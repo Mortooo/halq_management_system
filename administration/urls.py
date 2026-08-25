@@ -1,4 +1,4 @@
-﻿from halq_management_system.access import superuser_required
+﻿from core.access import superuser_required
 from django.urls import path
 
 from .views import dashboard ,TeacherList,TeacherCreate,TeacherUpdate,TeacherDelete,UsersList,HalaqaList,HalaqaCreate,HalaqaUpdate,HalaqaDelete,toggle_user_active,UserDelete

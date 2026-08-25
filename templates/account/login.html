@@ -7,16 +7,16 @@
 {% block content %}
 <div dir="rtl" class="min-h-screen flex items-center justify-center py-10 px-6">
 
-  <div class="w-full max-w-md bg-slate-800 rounded-3xl shadow-2xl p-8 border border-slate-700">
+  <div class="w-full max-w-md card shadow-2xl p-8 border border-slate-200">
     <div class="flex flex-col items-center mb-8">
-      <span class="p-3 rounded-2xl bg-blue-600/20 mb-4 flex items-center">
-        {% include 'partials/icons/book-open.svg' with icon_class='h-9 w-9 text-blue-400' only %}
+      <span class="p-3 rounded-2xl bg-blue-50 mb-4 flex items-center">
+        {% include 'partials/icons/book-open.svg' with icon_class='h-9 w-9 text-emerald-700' only %}
       </span>
-      <h1 class="text-2xl font-bold text-white">تسجيل الدخول إلى النظام</h1>
+      <h1 class="text-2xl font-bold">تسجيل الدخول إلى النظام</h1>
     </div>
 
     {% if form.errors %}
-      <div role="alert" class="bg-red-900/50 border border-red-700 text-red-300 p-3 rounded-lg mb-5 text-sm text-right">
+      <div role="alert" class="form-error mb-5 text-sm text-right">
         تأكد من صحة اسم المستخدم وكلمة المرور
       </div>
     {% endif %}
@@ -25,25 +25,25 @@
       {% csrf_token %}
 
       <div>
-        <label class="block text-slate-300 mb-2" for="id_login">اسم المستخدم</label>
+        <label class="block text-slate-600 mb-2" for="id_login">اسم المستخدم</label>
         <input type="text" name="login" id="id_login"
                value="{{ form.login.value|default_if_none:'' }}"
-               class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+               class="input">
       </div>
 
       <div>
-        <label class="block text-slate-300 mb-2" for="id_password">كلمة المرور</label>
+        <label class="block text-slate-600 mb-2" for="id_password">كلمة المرور</label>
         <input type="password" name="password" id="id_password"
-               class="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+               class="input">
       </div>
 
       <div class="flex items-center gap-2">
-        <input type="checkbox" name="remember" id="id_remember" class="h-4 w-4 rounded bg-slate-700 border-slate-500 text-blue-600 focus:ring-blue-500">
-        <label for="id_remember" class="text-sm text-slate-300">تذكرني</label>
+        <input type="checkbox" name="remember" id="id_remember" class="h-4 w-4 accent-emerald-600">
+        <label for="id_remember" class="text-sm text-slate-600">تذكرني</label>
       </div>
 
       <button type="submit"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold shadow-lg transition duration-200">
+              class="btn btn-primary w-full py-3">
         دخول
       </button>
     </form>

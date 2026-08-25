@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -7,23 +7,24 @@
     {% include 'partials/_sidebar_js.html' %}
 </head>
 
-<body class="bg-slate-900 text-slate-300 flex flex-col min-h-screen">
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
 
     <main class="flex-grow">
         <div class="flex min-h-screen">
             <!-- ترويسة الجوال -->
-            <header class="bg-slate-800 border-b border-slate-700 md:hidden flex items-center justify-between p-4 shadow-lg fixed w-full z-50">
-                <h1 class="text-xl font-bold text-blue-400">لوحة تحكم | المشرفة</h1>
-                <button id="menu-btn" aria-label="فتح القائمة" aria-expanded="false" class="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700 transition">
+            <header class="bg-white border-b border-slate-200 md:hidden flex items-center justify-between p-4 fixed w-full z-50">
+                <h1 class="text-xl font-bold text-emerald-700">لوحة تحكم | المشرفة</h1>
+                <button id="menu-btn" aria-label="فتح القائمة" aria-expanded="false" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition">
                     {% include 'partials/icons/bars-3.svg' with icon_class='h-6 w-6' only %}
                 </button>
             </header>
 
             <!-- القائمة الجانبية -->
-            <aside id="sidebar" class="w-64 bg-slate-800 p-6 flex-shrink-0 hidden fixed md:block md:sticky md:top-0 h-full md:h-screen self-start overflow-y-auto z-40 shadow-2xl md:shadow-none">
+            <div id="sidebar-backdrop" class="fixed inset-0 bg-black/40 z-[60] hidden md:hidden transition-opacity duration-300 opacity-0"></div>
+            <aside id="sidebar" class="sidebar w-64 border-l border-black/10 p-6 flex-shrink-0 fixed md:block md:sticky md:top-0 h-full md:h-screen self-start overflow-y-auto z-[70] shadow-2xl md:shadow-none transition-transform duration-300 translate-x-full md:translate-x-0">
                 <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-2xl font-bold text-blue-400">لوحة التحكم</h2>
-                    <button id="sidebar-close" aria-label="إغلاق القائمة" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition md:hidden">
+                    <h2 class="text-2xl font-bold text-emerald-700">لوحة التحكم</h2>
+                    <button id="sidebar-close" aria-label="إغلاق القائمة" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition md:hidden">
                         {% include 'partials/icons/x-mark.svg' with icon_class='h-5 w-5' only %}
                     </button>
                 </div>
@@ -52,7 +53,7 @@
                     {% url 'reports:total_reports' as u_total_reports %}
                     {% include 'partials/_nav_item.html' with item_url=u_total_reports current=request.path label='مراجعة التقارير' icon='partials/icons/calendar-days.svg' %}
 
-                    <div class="pt-2 mt-2 border-t border-slate-700">
+                    <div class="pt-2 mt-2 border-t border-white/10">
                         {% url 'account_logout' as u_logout %}
                         {% include 'partials/_nav_item.html' with item_url=u_logout current=request.path label='تسجيل الخروج' icon='partials/icons/logout.svg' variant='danger' %}
                     </div>

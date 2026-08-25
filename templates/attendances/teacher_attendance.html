@@ -1,4 +1,4 @@
-﻿{% extends 'administration/s_base.html'%}
+{% extends 'administration/s_base.html'%}
 {% load static %}
 {% block title %} الحضور والغياب | نظام إدارة الحلقات {% endblock %}
 {% block content %}
@@ -6,8 +6,8 @@
             <main class="p-6 md:p-10">
                 <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-10">
                     <div>
-                        <h1 class="text-3xl md:text-4xl font-black text-white">تسجيل الحضور والغياب</h1>
-                        <p class="text-slate-400 mt-2">{{ today_date|date:"Y/m/d" }}</p>
+                        <h1 class="text-3xl md:text-4xl font-black">تسجيل الحضور والغياب</h1>
+                        <p class="text-slate-500 mt-2">{{ today_date|date:"Y/m/d" }}</p>
                     </div>
                 </header>
 
@@ -16,33 +16,36 @@
                     <form method='post'>
                         {% csrf_token %}
                         {% for teacher_at in teacher_att %}
-                        <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 sm:p-6 teacher-card">
+                        <div class="card p-4 sm:p-6 teacher-card">
                             <input type="hidden" name="teacher_id" value="{{ teacher_at.teacher.id }}">
                             <input type="hidden" class="status-input" name="status_{{ teacher_at.teacher.id }}" value="{{ teacher_at.status }}">
 
                             <div class="flex flex-col sm:flex-row justify-between items-center">
-                                <span class="text-xl font-semibold text-white mb-4 sm:mb-0">{{ teacher_at.teacher }}</span>
+                                <span class="text-xl font-semibold mb-4 sm:mb-0">{{ teacher_at.teacher }}</span>
                                 <div class="flex items-center gap-3">
 
-                                    <button type='button' class="status-btn present-btn px-6 py-2 rounded-md {% if teacher_at.status == True %}bg-blue-600{% else %}bg-slate-600{% endif %} text-white font-bold w-28 text-center">حاضر</button>
-                                    <button type='button' class="status-btn absent-btn px-6 py-2 rounded-md {% if teacher_at.status == False %}bg-red-600{% else %}bg-slate-600{% endif %}  text-slate-300 font-bold w-28 text-center transition-colors">غائب</button>
+                                    <button type='button' class="att-btn present-btn {% if teacher_at.status == True %}on-present{% endif %}">حاضر</button>
+                                    <button type='button' class="att-btn absent-btn {% if teacher_at.status == False %}on-absent{% endif %}">غائب</button>
                                 </div>
 
 
                             </div>
                             <div class="reason-container {% if teacher_at.status == True %}hidden{% endif %} mt-4">
-                                <input type="text" name="notes_{{ teacher_at.teacher.id }}" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500" placeholder="اكتب ملاحظة (مثال: بعذر)..." value="{{ teacher_at.notes }}">
+                                <input type="text" name="notes_{{ teacher_at.teacher.id }}" class="input" placeholder="اكتب ملاحظة (مثال: بعذر)..." value="{{ teacher_at.notes }}">
                             </div>
                         </div>
                         {% endfor %}
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <button type='submit' class="w-full sm:w-auto mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300 shadow-md">
+                        <div class="flex flex-col sm:flex-row gap-3 mt-4">
+                            <button type='submit' class="btn btn-primary px-6 py-3">
                             حفظ سجل الحضور
                             </button>
-                            <a href="{% url 'attendances:attendance_record' %}" class="w-full sm:w-auto mt-4 sm:mt-0 bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 transition duration-300 shadow-md">
+                            <button type='button' id="mark-all-present" class="btn btn-secondary px-6 py-3">
+                            تعليم الكل حاضرًا
+                            </button>
+                            <a href="{% url 'attendances:attendance_record' %}" class="btn btn-secondary px-6 py-3 text-center">
                             سجل حضور المعلمات
                             </a>
-                            <a href="{% url 'attendances:student_records' %}" class="w-full sm:w-auto mt-4 sm:mt-0 bg-slate-700 text-slate-200 px-6 py-3 rounded-lg font-bold hover:bg-slate-600 transition duration-300 shadow-md">
+                            <a href="{% url 'attendances:student_records' %}" class="btn btn-secondary px-6 py-3 text-center">
                             سجل حضور التلميذات
                             </a>
                         </div>
@@ -54,37 +57,29 @@
             </main>
 
     <script>
-        document.querySelectorAll('.teacher-card').forEach(card => {
+        function setStatus(card, status) {
             const presentBtn = card.querySelector('.present-btn');
             const absentBtn = card.querySelector('.absent-btn');
             const reasonContainer = card.querySelector('.reason-container');
             const statusInput = card.querySelector('.status-input');
 
-            presentBtn.addEventListener('click', () => {
-                statusInput.value = "True";
+            statusInput.value = status;
+            presentBtn.classList.toggle('on-present', status === 'True');
+            absentBtn.classList.toggle('on-absent', status === 'False');
+            reasonContainer.classList.toggle('hidden', status === 'True');
+        }
 
-                presentBtn.classList.add('bg-blue-600', 'text-white');
-                presentBtn.classList.remove('bg-slate-600', 'hover:bg-slate-500', 'text-slate-300');
-
-                absentBtn.classList.add('bg-slate-600', 'hover:bg-slate-500', 'text-slate-300');
-                absentBtn.classList.remove('bg-red-600', 'text-white');
-
-                reasonContainer.classList.add('hidden');
-            });
-
-            absentBtn.addEventListener('click', () => {
-
-                statusInput.value = "False";
-
-                absentBtn.classList.add('bg-red-600', 'text-white');
-                absentBtn.classList.remove('bg-slate-600', 'hover:bg-slate-500', 'text-slate-300');
-
-                presentBtn.classList.add('bg-slate-600', 'hover:bg-slate-500', 'text-slate-300');
-                presentBtn.classList.remove('bg-blue-600', 'text-white');
-
-                reasonContainer.classList.remove('hidden');
-            });
+        document.querySelectorAll('.teacher-card').forEach(card => {
+            card.querySelector('.present-btn').addEventListener('click', () => setStatus(card, 'True'));
+            card.querySelector('.absent-btn').addEventListener('click', () => setStatus(card, 'False'));
         });
+
+        const markAll = document.getElementById('mark-all-present');
+        if (markAll) {
+            markAll.addEventListener('click', () => {
+                document.querySelectorAll('.teacher-card').forEach(card => setStatus(card, 'True'));
+            });
+        }
     </script>
 
 {% endblock %}

@@ -1,10 +1,10 @@
-from django import forms
+﻿from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.db import transaction
 from .models import Teacher
 
-INPUT_CLASS = 'w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500'
+INPUT_CLASS = 'input'
 
 
 def validate_tel(value):

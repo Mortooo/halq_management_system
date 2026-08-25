@@ -1,7 +1,7 @@
-from django import forms
+﻿from django import forms
 from .models import Halaqa
 
-INPUT_CLASS = 'w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500'
+INPUT_CLASS = 'input'
 
 class HalaqaForm(forms.ModelForm):
 

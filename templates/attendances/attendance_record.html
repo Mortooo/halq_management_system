@@ -1,4 +1,4 @@
-﻿{% extends 'administration/s_base.html' %}
+{% extends 'administration/s_base.html' %}
 {% load static %}
 
 {% block title %}سجل حضور المعلمات{% endblock %}
@@ -7,20 +7,20 @@
 {% block content %}
 <main class="p-6 md:p-10">
     <header class="hidden md:block mb-10">
-        <h1 class="text-3xl md:text-4xl font-black text-white">مراجعة سجل الحضور</h1>
-        <p class="text-slate-400 mt-2">عرض وتصفية سجل الحضور والغياب للمعلمات.</p>
+        <h1 class="text-3xl md:text-4xl font-black">مراجعة سجل الحضور</h1>
+        <p class="text-slate-500 mt-2">عرض وتصفية سجل الحضور والغياب للمعلمات.</p>
     </header>
 
-    <div class="mb-8 flex flex-wrap gap-3">
-        <span class="px-5 py-2 rounded-lg bg-blue-600 text-white font-bold">حضور المعلمات</span>
-        <a href="{% url 'attendances:student_records' %}" class="px-5 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 transition font-bold">حضور التلميذات</a>
+    <div class="mb-8 tabbar">
+        <span class="tab active">حضور المعلمات</span>
+        <a href="{% url 'attendances:student_records' %}" class="tab">حضور التلميذات</a>
     </div>
 
     <form method="get">
-        <div class="mb-8 p-6 bg-slate-800 rounded-xl border border-slate-700 flex flex-col md:flex-row gap-4">
+        <div class="mb-8 card p-6 flex flex-col md:flex-row gap-4">
             <div class="flex-1">
-                <label for="filter_teacher" class="block text-sm font-medium text-blue-400 mb-1">تصفية حسب المعلمة:</label>
-                <select id="filter_teacher" name="teacher" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500">
+                <label for="filter_teacher" class="block text-sm font-medium text-emerald-700 mb-1">تصفية حسب المعلمة:</label>
+                <select id="filter_teacher" name="teacher" class="input">
                     <option value="">-- كل المعلمات --</option>
                     {% for teacher in teachers %}
                     <option value="{{ teacher.id }}" {% if request.GET.teacher == teacher.id|stringformat:"s" %}selected{% endif %}>{{ teacher.name }}</option>
@@ -28,16 +28,16 @@
                 </select>
             </div>
             <div class="flex-1">
-                <label for="start_date" class="block text-sm font-medium text-blue-400 mb-1">تاريخ البداية :</label>
-                <input type="date" id="start_date" name="start_date" value="{{ request.GET.start_date }}" class="w-full bg-slate-900 text-slate-200 border border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+                <label for="start_date" class="block text-sm font-medium text-emerald-700 mb-1">تاريخ البداية :</label>
+                <input type="date" id="start_date" name="start_date" value="{{ request.GET.start_date }}" class="input">
             </div>
             <div class="flex-1">
-                <label for="end_date" class="block text-sm font-medium text-blue-400 mb-1">تاريخ النهاية :</label>
-                <input type="date" id="end_date" name="end_date" value="{{ request.GET.end_date }}" class="w-full bg-slate-900 text-slate-200 border border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+                <label for="end_date" class="block text-sm font-medium text-emerald-700 mb-1">تاريخ النهاية :</label>
+                <input type="date" id="end_date" name="end_date" value="{{ request.GET.end_date }}" class="input">
             </div>
 
             <div class="flex items-end">
-                <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-700 transition h-full">
+                <button type="submit" class="btn btn-primary px-5 py-2 h-full">
                     تصفية
                 </button>
             </div>
@@ -45,27 +45,27 @@
     </form>
 
 
-    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto hidden md:block">
-        <table class="w-full text-right">
-            <thead class="border-b border-slate-700">
+    <div class="table-wrap overflow-x-auto hidden md:block">
+        <table class="table">
+            <thead>
                 <tr>
-                    <th class="p-4 text-blue-400 font-semibold">المعلمة</th>
-                    <th class="p-4 text-blue-400 font-semibold">التاريخ</th>
-                    <th class="p-4 text-blue-400 font-semibold">الحالة</th>
-                    <th class="p-4 text-blue-400 font-semibold">ملاحظات</th>
+                    <th>المعلمة</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                    <th>ملاحظات</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-700">
+            <tbody class="divide-y divide-slate-200">
 
                 {% for teacher_at in teacher_att %}
                 <tr>
-                    <td class="p-4 text-white font-semibold">{{ teacher_at.teacher }}</td>
+                    <td class="p-4 font-semibold">{{ teacher_at.teacher }}</td>
                     <td class="p-4">{{ teacher_at.day|date:"Y/m/d" }}</td>
                     <td class="p-4">
                         {% if teacher_at.status == False %}
-                            <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">غائب</span>
+                            <span class="badge badge-red">غائب</span>
                         {% else %}
-                            <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">حاضر</span>
+                            <span class="badge badge-green">حاضر</span>
                         {% endif %}
                     </td>
                     <td class="p-4">{{ teacher_at.notes|default:"-" }}</td>
@@ -87,17 +87,17 @@
     <div class="grid grid-cols-1 gap-4 md:hidden">
 
         {% for teacher_at in teacher_att %}
-        <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 space-y-3">
+        <div class="card p-4 space-y-3">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white">{{ teacher_at.teacher }}</h3>
+                <h3 class="text-lg font-bold">{{ teacher_at.teacher }}</h3>
                 {% if teacher_at.status == False %}
-                <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">غائب</span>
+                <span class="badge badge-red">غائب</span>
                 {% else %}
-                <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">حاضر</span>
+                <span class="badge badge-green">حاضر</span>
                 {% endif %}
             </div>
-            <p class="text-sm text-slate-400"><strong>التاريخ:</strong> {{ teacher_at.day|date:"Y/m/d" }}</p>
-            <p class="text-sm text-slate-400"><strong>ملاحظات:</strong> {{ teacher_at.notes|default:"-" }}</p>
+            <p class="text-sm text-slate-500"><strong>التاريخ:</strong> {{ teacher_at.day|date:"Y/m/d" }}</p>
+            <p class="text-sm text-slate-500"><strong>ملاحظات:</strong> {{ teacher_at.notes|default:"-" }}</p>
         </div>
         {% empty %}
         <div class="md:hidden">

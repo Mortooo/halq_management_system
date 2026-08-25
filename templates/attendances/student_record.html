@@ -1,4 +1,4 @@
-﻿{% extends 'administration/s_base.html' %}
+{% extends 'administration/s_base.html' %}
 {% load static %}
 
 {% block title %}سجل حضور التلميذات{% endblock %}
@@ -7,20 +7,20 @@
 {% block content %}
 <main class="p-6 md:p-10">
     <header class="hidden md:block mb-10">
-        <h1 class="text-3xl md:text-4xl font-black text-white">مراجعة سجل الحضور</h1>
-        <p class="text-slate-400 mt-2">عرض وتصفية سجل الحضور والغياب للتلميذات.</p>
+        <h1 class="text-3xl md:text-4xl font-black">مراجعة سجل الحضور</h1>
+        <p class="text-slate-500 mt-2">عرض وتصفية سجل الحضور والغياب للتلميذات.</p>
     </header>
 
-    <div class="mb-8 flex flex-wrap gap-3">
-        <a href="{% url 'attendances:attendance_record' %}" class="px-5 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 transition font-bold">حضور المعلمات</a>
-        <span class="px-5 py-2 rounded-lg bg-blue-600 text-white font-bold">حضور التلميذات</span>
+    <div class="mb-8 tabbar">
+        <a href="{% url 'attendances:attendance_record' %}" class="tab">حضور المعلمات</a>
+        <span class="tab active">حضور التلميذات</span>
     </div>
 
     <form method="get">
-        <div class="mb-8 p-6 bg-slate-800 rounded-xl border border-slate-700 flex flex-col md:flex-row gap-4">
+        <div class="mb-8 card p-6 flex flex-col md:flex-row gap-4">
             <div class="flex-1">
-                <label for="filter_halaqa" class="block text-sm font-medium text-blue-400 mb-1">تصفية حسب الحلقة:</label>
-                <select id="filter_halaqa" name="halaqa" class="w-full p-2 bg-slate-900 border border-slate-600 rounded-lg text-slate-200 focus:ring-2 focus:ring-blue-500">
+                <label for="filter_halaqa" class="block text-sm font-medium text-emerald-700 mb-1">تصفية حسب الحلقة:</label>
+                <select id="filter_halaqa" name="halaqa" class="input">
                     <option value="">-- كل الحلقات --</option>
                     {% for halaqa in halaqats %}
                     <option value="{{ halaqa.id }}" {% if request.GET.halaqa == halaqa.id|stringformat:"s" %}selected{% endif %}>{{ halaqa.name }}</option>
@@ -28,16 +28,16 @@
                 </select>
             </div>
             <div class="flex-1">
-                <label for="start_date" class="block text-sm font-medium text-blue-400 mb-1">تاريخ البداية :</label>
-                <input type="date" id="start_date" name="start_date" value="{{ request.GET.start_date }}" class="w-full bg-slate-900 text-slate-200 border border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+                <label for="start_date" class="block text-sm font-medium text-emerald-700 mb-1">تاريخ البداية :</label>
+                <input type="date" id="start_date" name="start_date" value="{{ request.GET.start_date }}" class="input">
             </div>
             <div class="flex-1">
-                <label for="end_date" class="block text-sm font-medium text-blue-400 mb-1">تاريخ النهاية :</label>
-                <input type="date" id="end_date" name="end_date" value="{{ request.GET.end_date }}" class="w-full bg-slate-900 text-slate-200 border border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+                <label for="end_date" class="block text-sm font-medium text-emerald-700 mb-1">تاريخ النهاية :</label>
+                <input type="date" id="end_date" name="end_date" value="{{ request.GET.end_date }}" class="input">
             </div>
 
             <div class="flex items-end">
-                <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-700 transition h-full">
+                <button type="submit" class="btn btn-primary px-5 py-2 h-full">
                     تصفية
                 </button>
             </div>
@@ -45,29 +45,29 @@
     </form>
 
 
-    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto hidden md:block">
-        <table class="w-full text-right">
-            <thead class="border-b border-slate-700">
+    <div class="table-wrap overflow-x-auto hidden md:block">
+        <table class="table">
+            <thead>
                 <tr>
-                    <th class="p-4 text-blue-400 font-semibold">التلميذة</th>
-                    <th class="p-4 text-blue-400 font-semibold">الحلقة</th>
-                    <th class="p-4 text-blue-400 font-semibold">التاريخ</th>
-                    <th class="p-4 text-blue-400 font-semibold">الحالة</th>
-                    <th class="p-4 text-blue-400 font-semibold">ملاحظات</th>
+                    <th>التلميذة</th>
+                    <th>الحلقة</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                    <th>ملاحظات</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-700">
+            <tbody class="divide-y divide-slate-200">
 
                 {% for student_rec in students_records %}
                 <tr>
-                    <td class="p-4 text-white font-semibold">{{ student_rec.student }}</td>
+                    <td class="p-4 font-semibold">{{ student_rec.student }}</td>
                     <td class="p-4">{{ student_rec.student.halaqa|default:"-" }}</td>
                     <td class="p-4">{{ student_rec.day|date:"Y/m/d" }}</td>
                     <td class="p-4">
                         {% if student_rec.status == False %}
-                            <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">غائبة</span>
+                            <span class="badge badge-red">غائبة</span>
                         {% else %}
-                            <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">حاضرة</span>
+                            <span class="badge badge-green">حاضرة</span>
                         {% endif %}
                     </td>
                     <td class="p-4">{{ student_rec.notes|default:"-" }}</td>
@@ -89,18 +89,18 @@
     <div class="grid grid-cols-1 gap-4 md:hidden">
 
         {% for student_rec in students_records %}
-        <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 space-y-3">
+        <div class="card p-4 space-y-3">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white">{{ student_rec.student }}</h3>
+                <h3 class="text-lg font-bold">{{ student_rec.student }}</h3>
                 {% if student_rec.status == False %}
-                <span class="px-3 py-1 text-xs rounded-full bg-red-800 text-red-300">غائبة</span>
+                <span class="badge badge-red">غائبة</span>
                 {% else %}
-                <span class="px-3 py-1 text-xs rounded-full bg-green-800 text-green-300">حاضرة</span>
+                <span class="badge badge-green">حاضرة</span>
                 {% endif %}
             </div>
-            <p class="text-sm text-slate-400"><strong>الحلقة:</strong> {{ student_rec.student.halaqa|default:"-" }}</p>
-            <p class="text-sm text-slate-400"><strong>التاريخ:</strong> {{ student_rec.day|date:"Y/m/d" }}</p>
-            <p class="text-sm text-slate-400"><strong>ملاحظات:</strong> {{ student_rec.notes|default:"-" }}</p>
+            <p class="text-sm text-slate-500"><strong>الحلقة:</strong> {{ student_rec.student.halaqa|default:"-" }}</p>
+            <p class="text-sm text-slate-500"><strong>التاريخ:</strong> {{ student_rec.day|date:"Y/m/d" }}</p>
+            <p class="text-sm text-slate-500"><strong>ملاحظات:</strong> {{ student_rec.notes|default:"-" }}</p>
         </div>
         {% empty %}
         <div class="md:hidden">

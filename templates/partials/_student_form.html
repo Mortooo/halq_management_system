@@ -1,17 +1,17 @@
 <main class="p-6 md:p-10">
     <header class="mb-10">
-        <h1 class="text-3xl md:text-4xl font-black text-white">{{ page_title }}</h1>
-        <p class="text-slate-400 mt-2">{{ page_subtitle }}</p>
+        <h1 class="text-3xl md:text-4xl font-black">{{ page_title }}</h1>
+        <p class="text-slate-500 mt-2">{{ page_subtitle }}</p>
     </header>
 
-    <div class="max-w-3xl">
-        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 md:p-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="card p-6 md:p-8">
             <form method='post' class="space-y-6" novalidate>
                 {% csrf_token %}
 
                 <!-- Non-field errors -->
                 {% if form.non_field_errors %}
-                    <div role="alert" class="bg-red-900/30 border border-red-700 text-red-300 p-4 rounded-lg mb-4">
+                    <div role="alert" class="form-error mb-4">
                         <ul class="list-disc list-inside space-y-1">
                             {% for error in form.non_field_errors %}
                                 <li>{{ error }}</li>
@@ -21,81 +21,81 @@
                 {% endif %}
 
                 <div>
-                    <label class="block text-md font-semibold text-blue-400 mb-2">
-                        {{ form.name.label }}<span class="text-red-400">*</span>
+                    <label class="block text-md font-semibold text-emerald-700 mb-2">
+                        {{ form.name.label }}<span class="text-red-600">*</span>
                     </label>
                     {{ form.name }}
-                    {% if form.name.errors %}<p class="text-red-400 text-sm mt-1">{{ form.name.errors.0 }}</p>{% endif %}
+                    {% if form.name.errors %}<p class="text-red-600 text-sm mt-1">{{ form.name.errors.0 }}</p>{% endif %}
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-md font-semibold text-blue-400 mb-2">
-                            {{ form.address.label }}<span class="text-red-400">*</span>
+                        <label class="block text-md font-semibold text-emerald-700 mb-2">
+                            {{ form.address.label }}<span class="text-red-600">*</span>
                         </label>
                         {{ form.address }}
-                        {% if form.address.errors %}<p class="text-red-400 text-sm mt-1">{{ form.address.errors.0 }}</p>{% endif %}
+                        {% if form.address.errors %}<p class="text-red-600 text-sm mt-1">{{ form.address.errors.0 }}</p>{% endif %}
                     </div>
                     <div>
-                        <label class="block text-md font-semibold text-blue-400 mb-2">
-                            {{ form.tel.label }}<span class="text-red-400">*</span>
+                        <label class="block text-md font-semibold text-emerald-700 mb-2">
+                            {{ form.tel.label }}<span class="text-red-600">*</span>
                         </label>
                         {{ form.tel }}
-                        {% if form.tel.errors %}<p class="text-red-400 text-sm mt-1">{{ form.tel.errors.0 }}</p>{% endif %}
+                        {% if form.tel.errors %}<p class="text-red-600 text-sm mt-1">{{ form.tel.errors.0 }}</p>{% endif %}
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-md font-semibold text-blue-400 mb-2">
-                            {{ form.date_birth.label }}<span class="text-red-400">*</span>
+                        <label class="block text-md font-semibold text-emerald-700 mb-2">
+                            {{ form.date_birth.label }}<span class="text-red-600">*</span>
                         </label>
                         {{ form.date_birth }}
-                        {% if form.date_birth.errors %}<p class="text-red-400 text-sm mt-1">{{ form.date_birth.errors.0 }}</p>{% endif %}
+                        {% if form.date_birth.errors %}<p class="text-red-600 text-sm mt-1">{{ form.date_birth.errors.0 }}</p>{% endif %}
                     </div>
                     <div>
-                        <label class="block text-md font-semibold text-blue-400 mb-2">
-                            {{ form.grade.label }}<span class="text-red-400">*</span>
+                        <label class="block text-md font-semibold text-emerald-700 mb-2">
+                            {{ form.grade.label }}<span class="text-red-600">*</span>
                         </label>
                         {{ form.grade }}
-                        {% if form.grade.errors %}<p class="text-red-400 text-sm mt-1">{{ form.grade.errors.0 }}</p>{% endif %}
+                        {% if form.grade.errors %}<p class="text-red-600 text-sm mt-1">{{ form.grade.errors.0 }}</p>{% endif %}
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-md font-semibold text-blue-400 mb-2">
-                            {{ form.halaqa.label }}<span class="text-red-400">*</span>
+                        <label class="block text-md font-semibold text-emerald-700 mb-2">
+                            {{ form.halaqa.label }}<span class="text-red-600">*</span>
                         </label>
                         {{ form.halaqa }}
-                        {% if form.halaqa.errors %}<p class="text-red-400 text-sm mt-1">{{ form.halaqa.errors.0 }}</p>{% endif %}
+                        {% if form.halaqa.errors %}<p class="text-red-600 text-sm mt-1">{{ form.halaqa.errors.0 }}</p>{% endif %}
                     </div>
                     <div>
-                        <label class="block text-md font-semibold text-blue-400 mb-2">
+                        <label class="block text-md font-semibold text-emerald-700 mb-2">
                             {{ form.add_course.label }}
                         </label>
                         {{ form.add_course }}
-                        {% if form.add_course.errors %}<p class="text-red-400 text-sm mt-1">{{ form.add_course.errors.0 }}</p>{% endif %}
+                        {% if form.add_course.errors %}<p class="text-red-600 text-sm mt-1">{{ form.add_course.errors.0 }}</p>{% endif %}
                     </div>
                 </div>
 
                 <div class="flex items-center gap-3 pt-2">
                     {{ form.status }}
-                    <label class="text-md font-medium text-slate-200">
+                    <label class="text-md font-medium text-slate-700">
                         {{ form.status.label }}
                     </label>
                 </div>
 
                 <div class="pt-4 flex flex-wrap items-center gap-4">
-                    <button type="submit" class="w-full sm:w-auto bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">
+                    <button type="submit" class="btn btn-primary w-full sm:w-auto px-8 py-3">
                         حفظ
                     </button>
                     {% if student.id %}
-                    <a href="{% url delete_url_name student.id %}" class="w-full sm:w-auto text-center bg-red-600/20 text-red-300 px-8 py-3 rounded-lg font-bold hover:bg-red-600/40 transition">
+                    <a href="{% url delete_url_name student.id %}" class="btn btn-danger w-full sm:w-auto px-8 py-3 text-center">
                         حذف
                     </a>
                     {% endif %}
-                    <a href="{{ cancel_url }}" class="w-full sm:w-auto text-center bg-slate-700 text-slate-300 px-8 py-3 rounded-lg font-bold hover:bg-slate-600 transition">
+                    <a href="{{ cancel_url }}" class="w-full sm:btn btn-secondary px-8 py-3">
                         إلغاء
                     </a>
                 </div>

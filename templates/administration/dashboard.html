@@ -1,68 +1,68 @@
-﻿
+
 {% extends 'administration/s_base.html'%}
 {% load static %}
 {% block content %}
 
             <main class="p-6 md:p-10">
                 <header class="mb-10">
-                    <h1 class="text-3xl md:text-4xl font-black text-white">مرحباً بكِ، مشرفة 
-                        <span class="text-1xl md:text-4xl font-black text-green-300">{{ user }}</span>
+                    <h1 class="text-3xl md:text-4xl font-black">مرحباً بكِ، مشرفة 
+                        <span class="text-1xl md:text-4xl font-black text-slate-800">{{ user }}</span>
                      </h1>
-                    <p class="text-slate-400 mt-2">نظرة شاملة على أداء الحلقات اليوم. {{today_date}}</p>
+                    <p class="text-slate-500 mt-2">نظرة شاملة على أداء الحلقات اليوم. {{today_date}}</p>
                 </header>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">إجمالي الحلقات</h3>
-                        <p class="text-5xl font-extrabold text-white mt-4">{{total_halaqats}}</p>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-emerald-700">إجمالي الحلقات</h3>
+                        <p class="text-5xl font-extrabold mt-4">{{total_halaqats}}</p>
                     </div>
-                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">إجمالي التلاميذ</h3>
-                        <p class="text-5xl font-extrabold text-white mt-4">{{total_students}}</p>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-emerald-700">إجمالي التلاميذ</h3>
+                        <p class="text-5xl font-extrabold mt-4">{{total_students}}</p>
                     </div>
-                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">حضور المعلمات اليوم</h3>
-                        <p class="text-5xl font-extrabold text-white mt-4">{{teachers_present_today}} <span class="text-2xl text-slate-400">/
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-emerald-700">حضور المعلمات اليوم</h3>
+                        <p class="text-5xl font-extrabold mt-4">{{teachers_present_today}} <span class="text-2xl text-slate-500">/
                                 {{total_teachers}}</span></p>
                     </div>
-                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 class="text-lg font-bold text-blue-400">متوسط الحضور</h3>
-                        <p class="text-5xl font-extrabold text-white mt-4">{{avg_attendance}}%</p>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-emerald-700">متوسط الحضور</h3>
+                        <p class="text-5xl font-extrabold mt-4">{{avg_attendance}}%</p>
                     </div>
                 </div>
 
-                <div class="mt-12 bg-slate-800 rounded-xl border border-slate-700 overflow-x-auto">
+                <div class="mt-12 table-wrap overflow-x-auto">
                     <div class="p-6 flex justify-between items-center">
-                        <h2 class="text-2xl font-bold text-white">نظرة سريعة على الحلقات</h2>
+                        <h2 class="text-2xl font-bold">نظرة سريعة على الحلقات</h2>
                     </div>
-                    <table class="w-full text-right">
-                        <thead class="border-b border-slate-700">
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <th class="p-4 text-blue-400 font-semibold">اسم الحلقة</th>
-                                <th class="p-4 text-blue-400 font-semibold">المعلمة</th>
-                                <th class="p-4 text-blue-400 font-semibold">عدد التلاميذ</th>
-                                <th class="p-4 text-blue-400 font-semibold">حالة الخطة</th>
+                                <th>اسم الحلقة</th>
+                                <th>المعلمة</th>
+                                <th>عدد التلاميذ</th>
+                                <th>حالة الخطة</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for halaqa in halaqats %}
-                            <tr class="border-b border-slate-700 hover:bg-slate-700/60">
-                                <td class="p-4 text-white">حلقة {{ halaqa.name }}</td>
+                            <tr class="border-b border-slate-200 hover:bg-slate-50">
+                                <td class="p-4">حلقة {{ halaqa.name }}</td>
                                 <td class="p-4">{{ halaqa.res_teacher }}</td>
-                                <td class="p-4">{{ halaqa.total_students }} <span class="text-sm text-slate-400">(غياب اليوم: {{ halaqa.total_absent_students }})</span></td>
+                                <td class="p-4">{{ halaqa.total_students }} <span class="text-sm text-slate-500">(غياب اليوم: {{ halaqa.total_absent_students }})</span></td>
                                 <td class="p-4">
                                     {% if halaqa.plan_status == 'on_track'%}
                                          <span
-                                        class="px-3 py-1 text-sm rounded-full bg-green-800 text-green-300">متوافق</span> 
+                                        class="badge badge-green">متوافق</span> 
                                     {% elif halaqa.plan_status == 'delayed' %}
                                         <span
-                                        class="px-3 py-1 text-sm rounded-full bg-yellow-800 text-yellow-300">متأخر</span>
+                                        class="badge badge-gray">متأخر</span>
                                     {% elif halaqa.plan_status == 'advanced' %}
                                         <span
-                                        class="px-3 py-1 text-sm rounded-full bg-blue-800 text-blue-300">متقدم</span>
+                                        class="badge badge-blue">متقدم</span>
                                     {% else %}
                                         <span
-                                        class="px-3 py-1 text-sm rounded-full bg-slate-700 text-slate-300">فارغ</span>
+                                        class="badge badge-gray">فارغ</span>
                                     {% endif %}
                                     
                                 </td>

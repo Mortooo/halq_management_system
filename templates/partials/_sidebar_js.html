@@ -3,21 +3,33 @@
         const menuBtn = document.getElementById('menu-btn');
         const closeBtn = document.getElementById('sidebar-close');
         const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
         if (!menuBtn || !sidebar) return;
         const navLinks = sidebar.querySelectorAll('nav a');
 
         const openSidebar = () => {
-            sidebar.classList.remove('hidden');
+            sidebar.classList.remove('translate-x-full');
             menuBtn.setAttribute('aria-expanded', 'true');
+            if (backdrop) {
+                backdrop.classList.remove('hidden');
+                requestAnimationFrame(() => backdrop.classList.remove('opacity-0'));
+            }
         };
+
         const closeSidebar = () => {
-            sidebar.classList.add('hidden');
+            sidebar.classList.add('translate-x-full');
             menuBtn.setAttribute('aria-expanded', 'false');
+            if (backdrop) {
+                backdrop.classList.add('opacity-0');
+                setTimeout(() => { if (sidebar.classList.contains('translate-x-full')) backdrop.classList.add('hidden'); }, 300);
+            }
         };
+
+        const isOpen = () => !sidebar.classList.contains('translate-x-full');
 
         menuBtn.addEventListener('click', (event) => {
             event.stopPropagation();
-            if (sidebar.classList.contains('hidden')) { openSidebar(); } else { closeSidebar(); }
+            isOpen() ? closeSidebar() : openSidebar();
         });
 
         if (closeBtn) {
@@ -27,25 +39,20 @@
             });
         }
 
+        if (backdrop) {
+            backdrop.addEventListener('click', closeSidebar);
+        }
+
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
-                if (window.innerWidth < 768) { closeSidebar(); }
+                if (window.innerWidth < 768 && isOpen()) { closeSidebar(); }
             });
         });
 
         document.addEventListener('click', (event) => {
+            if (!isOpen() || window.innerWidth >= 768) return;
             const isClickInside = sidebar.contains(event.target) || menuBtn.contains(event.target);
-            if (!isClickInside && window.innerWidth < 768) { closeSidebar(); }
-        });
-
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 768) {
-                sidebar.classList.remove('hidden');
-                menuBtn.setAttribute('aria-expanded', 'true');
-            } else {
-                sidebar.classList.add('hidden');
-                menuBtn.setAttribute('aria-expanded', 'false');
-            }
+            if (!isClickInside) { closeSidebar(); }
         });
     });
 </script>

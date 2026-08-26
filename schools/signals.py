@@ -1,11 +1,3 @@
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.contrib.auth.models import User
-from .models import UserProfile
+# Signal removed: user profiles should be explicitly created for superusers with their actual school.
+# Hardcoding school_id=1 caused IntegrityError (FOREIGN KEY constraint failed) when school 1 does not exist.
 
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created and not hasattr(instance, 'profile'):
-        if not instance.is_superuser:
-            UserProfile.objects.create(user=instance, school_id=1)

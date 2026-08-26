@@ -144,6 +144,43 @@ class FormValidationTests(BaseTestCase):
         form = StudentForm(data=form_data, school=self.school_a)
         self.assertTrue(form.is_valid(), form.errors)
 
+    def test_register_school_duplicate_name_rejected(self):
+        """RegisterSchoolForm rejects school name if it already exists."""
+        from schools.views import RegisterSchoolForm
+        form_data = {
+            'school_name': 'مدرسة النور',  # already exists in setUp
+            'school_address': 'الرياض',
+            'school_tel': '0501111111',
+            'username': 'new_unique_admin',
+            'email': 'unique_email@test.com',
+            'password1': 'Password123!',
+            'password2': 'Password123!',
+        }
+        form = RegisterSchoolForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('school_name', form.errors)
+
+    def test_teacher_create_view_with_non_default_school_id(self):
+        """Ensure TeacherCreate view succeeds when creating teacher in school B without FK error."""
+        self.client.login(username="admin_b", password="Password123!")
+        url = reverse("administration:add_teacher")
+        post_data = {
+            'name': 'مريم عبد الله',
+            'tel': '0598765432',
+            'email': 'maryam@test.com',
+            'address': 'جدة',
+            'username': 'maryam_teacher',
+            'password': 'Password123!',
+        }
+        response = self.client.post(url, data=post_data)
+        self.assertEqual(response.status_code, 302)
+        teacher = Teacher.objects.filter(name='مريم عبد الله').first()
+        self.assertIsNotNone(teacher)
+        self.assertEqual(teacher.school, self.school_b)
+        self.assertEqual(teacher.user_name.username, 'maryam_teacher')
+
+
+
 
 class MultiTenancyAndSecurityTests(BaseTestCase):
     """Audit role-based permissions and multi-tenant isolation."""

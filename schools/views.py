@@ -59,6 +59,12 @@ class RegisterSchoolForm(forms.Form):
         widget=forms.PasswordInput(attrs={'class': 'input', 'placeholder': 'أعد إدخال كلمة المرور'}),
     )
 
+    def clean_school_name(self):
+        school_name = self.cleaned_data.get('school_name', '').strip()
+        if School.objects.filter(name=school_name).exists():
+            raise forms.ValidationError('اسم المدرسة مستخدم بالفعل. يرجى اختيار اسم آخر.')
+        return school_name
+
     def clean_username(self):
         username = self.cleaned_data['username']
         if User.objects.filter(username=username).exists():

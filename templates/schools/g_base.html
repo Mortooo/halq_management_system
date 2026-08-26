@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    {% include 'partials/_head_assets.html' %}
+    <title>{% block title %}إدارة المدارس | نظام إدارة الحلقات{% endblock %}</title>
+    {% include 'partials/_sidebar_js.html' %}
+</head>
+
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <main class="flex-grow flex flex-col">
+        <div class="flex flex-1">
+            <!-- ترويسة الجوال -->
+            <header class="bg-white border-b border-slate-200 md:hidden flex items-center justify-between p-4 fixed w-full z-50">
+                <h1 class="text-xl font-bold text-emerald-700">لوحة تحكم | مدير النظام</h1>
+                <button id="menu-btn" aria-label="فتح القائمة" aria-expanded="false" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition md:hidden">
+                    {% include 'partials/icons/bars-3.svg' with icon_class='h-6 w-6' only %}
+                </button>
+            </header>
+
+            <!-- القائمة الجانبية -->
+            <div id="sidebar-backdrop" class="fixed inset-0 bg-black/40 z-[60] hidden md:hidden transition-opacity duration-300 opacity-0"></div>
+            <aside id="sidebar" class="sidebar w-64 border-l border-black/10 p-6 flex-shrink-0 fixed md:block md:sticky md:top-0 h-full md:h-screen self-start overflow-y-auto z-[70] shadow-2xl md:shadow-none transition-transform duration-300 translate-x-full md:translate-x-0">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl font-bold text-white">مدير النظام</h2>
+                    <button id="sidebar-close" aria-label="إغلاق القائمة" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition md:hidden">
+                        {% include 'partials/icons/x-mark.svg' with icon_class='h-5 w-5' only %}
+                    </button>
+                </div>
+                <nav dir="rtl" class="space-y-2">
+                    {% url 'schools:school_list' as u_schools %}
+                    {% include 'partials/_nav_item.html' with item_url=u_schools current=request.path label='إدارة المدارس' icon='partials/icons/academic-cap.svg' %}
+
+                    <div class="pt-2 mt-2 border-t border-white/10">
+                        {% url 'account_logout' as u_logout %}
+                        {% include 'partials/_nav_item.html' with item_url=u_logout current=request.path label='تسجيل الخروج' icon='partials/icons/logout.svg' variant='danger' %}
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- مساحة المحتوى -->
+            <div class="flex-1 min-w-0 pt-[61px] md:pt-0">
+                {% block content %}
+                {% endblock %}
+            </div>
+
+        </div>
+    </main>
+
+    {% include 'partials/_messages.html' %}
+
+    <!-- Alpine.js for transitions -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+</body>
+</html>

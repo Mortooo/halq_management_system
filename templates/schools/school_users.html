@@ -1,0 +1,71 @@
+{% extends 'schools/g_base.html' %}
+{% load static %}
+
+{% block title %}مستخدمي {{ school.name }}{% endblock %}
+
+{% block content %}
+<main class="p-6 md:p-10">
+    <header class="hidden md:block mb-10">
+        <h1 class="text-3xl md:text-4xl font-black">مستخدمي {{ school.name }}</h1>
+        <p class="text-slate-500 mt-2">تعيين وإزالة المديراء من هذه المدرسة.</p>
+    </header>
+
+    <div class="max-w-3xl mx-auto space-y-8">
+        <!-- المستخدمون الحاليون -->
+        <div class="card p-6">
+            <h2 class="text-xl font-bold mb-4">المديراء المعينون</h2>
+            <div class="divide-y divide-slate-200">
+                {% for user in users %}
+                <div class="flex items-center justify-between py-3">
+                    <div>
+                        <p class="font-semibold">{{ user.get_full_name|default:user.username }}</p>
+                        <p class="text-sm text-slate-500">{{ user.username }}</p>
+                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <input type="hidden" name="action" value="remove">
+                        <button type="submit" class="text-red-600 hover:text-red-700 text-sm font-semibold transition">
+                            إزالة
+                        </button>
+                    </form>
+                </div>
+                {% empty %}
+                <p class="text-slate-500 py-3">لم يتم تعيين أي مدير بعد.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- إضافة مدير جديد -->
+        {% if available_users %}
+        <div class="card p-6">
+            <h2 class="text-xl font-bold mb-4">إضافة مدير</h2>
+            <div class="divide-y divide-slate-200">
+                {% for user in available_users %}
+                <div class="flex items-center justify-between py-3">
+                    <div>
+                        <p class="font-semibold">{{ user.get_full_name|default:user.username }}</p>
+                        <p class="text-sm text-slate-500">{{ user.username }}</p>
+                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <input type="hidden" name="action" value="add">
+                        <button type="submit" class="text-emerald-600 hover:text-emerald-700 text-sm font-semibold transition">
+                            تعيين
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="pt-4">
+            <a href="{% url 'schools:school_list' %}" class="btn btn-ghost px-6 py-2">
+                العودة إلى قائمة المدارس
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}

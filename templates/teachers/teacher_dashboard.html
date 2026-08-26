@@ -40,14 +40,9 @@
                             <p class="text-4xl font-extrabold mt-1">{{ absent }}</p>
                         </div>
                     </div>
-                    <div class="card p-6 flex items-center gap-4">
-                        <span class="flex-shrink-0 p-3 rounded-xl bg-amber-50 flex items-center">
-                            {% include 'partials/icons/calendar-days.svg' with icon_class='h-7 w-7 text-yellow-400' only %}
-                        </span>
-                        <div>
-                            <h3 class="text-sm font-semibold text-slate-500">لم يسجل اليوم</h3>
-                            <p class="text-4xl font-extrabold mt-1">{{ not_recorded }}</p>
-                        </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-bold text-emerald-700">نسبة الحضور</h3>
+                        <p class="text-5xl font-extrabold mt-4">{{ att_percent }}%</p>
                     </div>
                 </div>
 

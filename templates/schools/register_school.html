@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}تسجيل مدرسة جديدة | نظام إدارة الحلقات{% endblock %}
+
+{% block content %}
+<div dir="rtl" class="min-h-screen flex items-center justify-center py-10 px-6">
+
+  <div class="w-full max-w-lg card shadow-2xl p-8 border border-slate-200">
+    <div class="flex flex-col items-center mb-8">
+      <span class="p-3 rounded-2xl bg-emerald-50 mb-4 flex items-center">
+        {% include 'partials/icons/academic-cap.svg' with icon_class='h-9 w-9 text-emerald-700' only %}
+      </span>
+      <h1 class="text-2xl font-bold">تسجيل مدرسة جديدة</h1>
+      <p class="text-slate-500 text-sm mt-2 text-center">أنشئ حسابك وأضف مدرستك للبدء في إدارة الحلقات</p>
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="form-error mb-5 text-sm text-right">
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'schools:register_school' %}" class="space-y-5 text-right">
+      {% csrf_token %}
+
+      <div class="border-b border-slate-200 pb-4 mb-2">
+        <h2 class="text-sm font-bold text-emerald-700 mb-4">بيانات المدرسة</h2>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-slate-600 mb-2" for="id_school_name">اسم المدرسة <span class="text-red-600">*</span></label>
+            <input type="text" name="school_name" id="id_school_name"
+                   value="{{ form.school_name.value|default_if_none:'' }}"
+                   class="input" required>
+            {% if form.school_name.errors %}
+              <p class="text-red-600 text-sm mt-1">{{ form.school_name.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-slate-600 mb-2" for="id_school_address">العنوان</label>
+              <input type="text" name="school_address" id="id_school_address"
+                     value="{{ form.school_address.value|default_if_none:'' }}"
+                     class="input">
+            </div>
+            <div>
+              <label class="block text-slate-600 mb-2" for="id_school_tel">هاتف المدرسة</label>
+              <input type="tel" name="school_tel" id="id_school_tel"
+                     value="{{ form.school_tel.value|default_if_none:'' }}"
+                     class="input" placeholder="05XXXXXXXX">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-sm font-bold text-emerald-700 mb-4">بيانات حساب المدير</h2>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-slate-600 mb-2" for="id_username">اسم المستخدم <span class="text-red-600">*</span></label>
+            <input type="text" name="username" id="id_username"
+                   value="{{ form.username.value|default_if_none:'' }}"
+                   class="input" required>
+            {% if form.username.errors %}
+              <p class="text-red-600 text-sm mt-1">{{ form.username.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-2" for="id_email">البريد الإلكتروني <span class="text-red-600">*</span></label>
+            <input type="email" name="email" id="id_email"
+                   value="{{ form.email.value|default_if_none:'' }}"
+                   class="input" required>
+            {% if form.email.errors %}
+              <p class="text-red-600 text-sm mt-1">{{ form.email.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-slate-600 mb-2" for="id_password1">كلمة المرور <span class="text-red-600">*</span></label>
+              <input type="password" name="password1" id="id_password1"
+                     class="input" required>
+              {% if form.password1.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.password1.errors.0 }}</p>
+              {% endif %}
+            </div>
+            <div>
+              <label class="block text-slate-600 mb-2" for="id_password2">تأكيد كلمة المرور <span class="text-red-600">*</span></label>
+              <input type="password" name="password2" id="id_password2"
+                     class="input" required>
+              {% if form.password2.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.password2.errors.0 }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit"
+              class="btn btn-primary w-full py-3 text-lg mt-2">
+        إنشاء المدرسة وحساب المدير
+      </button>
+    </form>
+
+    <div class="mt-6 text-center text-sm text-slate-500">
+      <p>لديك حساب بالفعل؟
+        <a href="{% url 'account_login' %}" class="text-emerald-700 hover:underline">تسجيل الدخول</a>
+      </p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

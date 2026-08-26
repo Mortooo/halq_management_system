@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'administration',
     'reports',
     'core',  # templatetags (query_compat)
+    'schools',
     'allauth',
     'allauth.account',
 
@@ -56,10 +57,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.middleware.SchoolMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-
 ]
 
 ROOT_URLCONF = 'core.urls'

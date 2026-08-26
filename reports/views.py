@@ -17,7 +17,6 @@ def _to_int(value):
 
 
 def _week_end_date():
-    """تاريخ نهاية الأسبوع الحالي (الخميس)."""
     today = date.today()
     days_until_thursday = 3 - today.weekday()
     if days_until_thursday < 0:
@@ -27,9 +26,10 @@ def _week_end_date():
 
 def show_weekly_report(request):
     end_of_week = _week_end_date()
+    school = request.school
 
-    teacher = Teacher.objects.filter(user_name=request.user).first() if request.user.is_authenticated else None
-    halaqats = Halaqa.objects.filter(res_teacher=teacher) if teacher else Halaqa.objects.none()
+    teacher = Teacher.objects.filter(user_name=request.user,school=school).first() if request.user.is_authenticated else None
+    halaqats = Halaqa.objects.filter(res_teacher=teacher,school=school) if teacher else Halaqa.objects.none()
 
     if request.method == 'GET':
         return render(request, 'reports/weekly_report.html',
@@ -45,7 +45,7 @@ def show_weekly_report(request):
         notes = request.POST.get('delay_reason', '').strip()
 
     if request.user.is_superuser:
-        selected_halaqa = Halaqa.objects.filter(id=_to_int(request.POST.get('halaqa'))).first()
+        selected_halaqa = Halaqa.objects.filter(id=_to_int(request.POST.get('halaqa')),school=school).first()
     else:
         selected_halaqa = halaqats.filter(id=_to_int(request.POST.get('halaqa'))).first()
 
@@ -72,7 +72,7 @@ class TotalReport(ListView):
     paginate_by = 30
 
     def get_queryset(self):
-        qs = super().get_queryset().select_related('halaqa__res_teacher').order_by('-end_w_date', 'halaqa__name')
+        qs = super().get_queryset().select_related('halaqa__res_teacher').filter(halaqa__school=self.request.school).order_by('-end_w_date', 'halaqa__name')
 
         teacher = _to_int(self.request.GET.get('teacher'))
         if teacher:
@@ -86,8 +86,8 @@ class TotalReport(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['halaqats_list'] = Halaqa.objects.order_by('name')
-        context['teachers'] = Teacher.objects.order_by('name')
+        context['halaqats_list'] = Halaqa.objects.filter(school=self.request.school).order_by('name')
+        context['teachers'] = Teacher.objects.filter(school=self.request.school).order_by('name')
         return context
 
 

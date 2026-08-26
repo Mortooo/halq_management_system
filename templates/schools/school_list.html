@@ -1,0 +1,112 @@
+{% extends 'schools/g_base.html' %}
+{% load static %}
+
+{% block title %}إدارة المدارس{% endblock %}
+
+{% block content %}
+<main class="p-6 md:p-10">
+    <header class="hidden md:block mb-10">
+        <h1 class="text-3xl md:text-4xl font-black">إدارة المدارس</h1>
+        <p class="text-slate-500 mt-2">إنشاء وتعديل وحذف المدارس وتعيين المستخدمين.</p>
+    </header>
+
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+        <a href="{% url 'schools:school_add' %}" class="btn btn-primary w-full md:w-auto px-6 py-3 text-center flex items-center justify-center gap-2">
+            {% include 'partials/icons/plus.svg' with icon_class='h-5 w-5' only %}
+            إضافة مدرسة جديدة
+        </a>
+    </div>
+
+    <div class="table-wrap overflow-x-auto hidden md:block">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>العنوان</th>
+                    <th>الهاتف</th>
+                    <th>المعلمات</th>
+                    <th>التلاميذ</th>
+                    <th>الحلقات</th>
+                    <th>الحالة</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+                {% for school in schools %}
+                <tr>
+                    <td class="p-4 font-semibold">{{ school.name }}</td>
+                    <td class="p-4 text-slate-600">{{ school.address|default:"-" }}</td>
+                    <td class="p-4 text-slate-600">{{ school.tel|default:"-" }}</td>
+                    <td class="p-4 text-center">{{ school.teacher_count }}</td>
+                    <td class="p-4 text-center">{{ school.student_count }}</td>
+                    <td class="p-4 text-center">{{ school.halaqa_count }}</td>
+                    <td class="p-4">
+                        {% if school.is_active %}
+                            <span class="badge-success">نشطة</span>
+                        {% else %}
+                            <span class="badge-danger">معطلة</span>
+                        {% endif %}
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <a href="{% url 'schools:school_edit' school.id %}" aria-label="تعديل" title="تعديل" class="p-2 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition">
+                                {% include 'partials/icons/pencil-square.svg' with icon_class='h-5 w-5' only %}
+                            </a>
+                            <a href="{% url 'schools:school_users' school.id %}" aria-label="المستخدمين" title="المستخدمين" class="p-2 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition">
+                                {% include 'partials/icons/user.svg' with icon_class='h-5 w-5' only %}
+                            </a>
+                            <a href="{% url 'schools:school_delete' school.id %}" aria-label="حذف" title="حذف" class="p-2 rounded-lg bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition">
+                                {% include 'partials/icons/trash.svg' with icon_class='h-5 w-5' only %}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="p-0">
+                        {% include 'partials/_empty_state.html' with title='لا توجد مدارس' subtitle='لم يتم إنشاء أي مدرسة حتى الآن.' icon='partials/icons/academic-cap.svg' %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 md:hidden">
+        {% for school in schools %}
+        <div class="card p-4 space-y-3">
+            <h3 class="text-lg font-bold">{{ school.name }}</h3>
+            <p class="text-sm text-slate-500"><strong>العنوان:</strong> {{ school.address|default:"-" }}</p>
+            <p class="text-sm text-slate-500"><strong>الهاتف:</strong> {{ school.tel|default:"-" }}</p>
+            <div class="flex items-center gap-4 text-sm text-slate-500">
+                <span><strong>معلمات:</strong> {{ school.teacher_count }}</span>
+                <span><strong>تلاميذ:</strong> {{ school.student_count }}</span>
+                <span><strong>حلقات:</strong> {{ school.halaqa_count }}</span>
+            </div>
+            <p class="text-sm">
+                {% if school.is_active %}
+                    <span class="badge-success">نشطة</span>
+                {% else %}
+                    <span class="badge-danger">معطلة</span>
+                {% endif %}
+            </p>
+            <div class="pt-2 flex items-center gap-3">
+                <a href="{% url 'schools:school_edit' school.id %}" class="btn btn-primary w-full text-center py-2">
+                    تعديل
+                </a>
+                <a href="{% url 'schools:school_users' school.id %}" class="w-full text-center bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 py-2 rounded-lg font-semibold transition">
+                    المستخدمين
+                </a>
+                <a href="{% url 'schools:school_delete' school.id %}" class="w-full text-center bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 py-2 rounded-lg font-semibold transition">
+                    حذف
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="md:hidden">
+            {% include 'partials/_empty_state.html' with title='لا توجد مدارس' subtitle='لم يتم إنشاء أي مدرسة حتى الآن.' icon='partials/icons/academic-cap.svg' %}
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

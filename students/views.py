@@ -18,7 +18,6 @@ class TeacherOwnedStudentMixin:
         return super().dispatch(request,*args,**kwargs)
 
     def get_object(self, queryset=None):
-        # cache so the object is fetched once per request (dispatch + CBV internals)
         if getattr(self, '_object_cache', None) is None:
             self._object_cache=super().get_object(queryset)
         return self._object_cache
@@ -27,6 +26,7 @@ class UserFormKwargsMixin:
     def get_form_kwargs(self):
         kwargs=super().get_form_kwargs()
         kwargs['user']=self.request.user
+        kwargs['school']=self.request.school
         return kwargs
 
 class StudentsList(ListView):
@@ -36,21 +36,16 @@ class StudentsList(ListView):
     paginate_by=15
 
     def get_queryset(self):
-
         pk=self.kwargs.get('pk')
         if self.request.user.is_superuser:
-            # superuser sees every student in the system
-            students=Student.objects.select_related('halaqa','grade').all()
+            students=Student.objects.filter(school=self.request.school).select_related('halaqa','grade')
         else:
             if self.request.user.id != pk:
                 raise Http404()
-            students=Student.objects.filter(halaqa__res_teacher__user_name_id=pk).select_related('halaqa','grade')
+            students=Student.objects.filter(halaqa__res_teacher__user_name_id=pk,school=self.request.school).select_related('halaqa','grade')
 
-        #######################################################################################
-        # if the user search for some student or halaqats
         if self.request.GET.get('q'):
             students=students.filter(Q(name__icontains=self.request.GET.get('q'))|Q(halaqa__name__icontains=self.request.GET.get('q')))
-
 
         return students.order_by('name')
 
@@ -60,11 +55,12 @@ class StudentCreate(UserFormKwargsMixin,CreateView):
     model=Student
     form_class=StudentForm
 
+    def form_valid(self, form):
+        form.instance.school = self.request.school
+        return super().form_valid(form)
 
     def get_success_url(self):
-
         return reverse('students:students_list', kwargs={'pk': self.request.user.id})
-
 
 
 class StudentUpdate(TeacherOwnedStudentMixin,UserFormKwargsMixin,UpdateView):
@@ -73,7 +69,6 @@ class StudentUpdate(TeacherOwnedStudentMixin,UserFormKwargsMixin,UpdateView):
     form_class=StudentForm
 
     def get_success_url(self):
-
         return reverse('students:students_list', kwargs={'pk': self.request.user.id})
 
 
@@ -81,28 +76,17 @@ class StudentDetails(TeacherOwnedStudentMixin,DetailView):
     template_name='students/student_detail.html'
     model=Student
 
-
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
         student_id=self.kwargs.get('pk')
-
         all_records=StudAttendance.objects.filter(student__id=student_id).order_by('-day')
         attendance_list=all_records[:10]
-
-        #calculate the attendance percantege
         total_days=all_records.count()
         attend_days=all_records.filter(status=True).count()
-
         attend_percantage=(attend_days/total_days*100) if total_days else 0
-
-
-
         context['attendance_list']=attendance_list
         context['attendance_count']=total_days
         context['attend_percantage']=round(attend_percantage,1)
-
-
-
         return context
 
 class StudentDelete(TeacherOwnedStudentMixin,DeleteView):
@@ -110,11 +94,8 @@ class StudentDelete(TeacherOwnedStudentMixin,DeleteView):
     model=Student
 
     def get_success_url(self):
-
         return reverse('students:students_list', kwargs={'pk': self.request.user.id})
 
-
-# ---------- Superuser-side management (all students) ----------
 
 class SUStudentList(ListView):
     template_name='administration/students_manage.html'
@@ -123,7 +104,7 @@ class SUStudentList(ListView):
     paginate_by=15
 
     def get_queryset(self):
-        students=Student.objects.select_related('halaqa','grade').all()
+        students=Student.objects.filter(school=self.request.school).select_related('halaqa','grade')
         q=self.request.GET.get('q')
         if q:
             students=students.filter(Q(name__icontains=q)|Q(halaqa__name__icontains=q))
@@ -134,6 +115,10 @@ class SUStudentCreate(UserFormKwargsMixin,CreateView):
     template_name='administration/student_edit.html'
     model=Student
     form_class=StudentForm
+
+    def form_valid(self, form):
+        form.instance.school = self.request.school
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('students:students_manage')
@@ -156,21 +141,28 @@ class SUStudentDelete(TeacherOwnedStudentMixin,DeleteView):
         return reverse('students:students_manage')
 
 
-# ---------- Superuser-side grade management ----------
-
 class SUGradeList(ListView):
     template_name='administration/grades_manage.html'
     model=Grade
     context_object_name='grades'
 
     def get_queryset(self):
-        return Grade.objects.all().order_by('id')
+        return Grade.objects.filter(school=self.request.school).order_by('id')
 
 
 class SUGradeCreate(CreateView):
     template_name='administration/grade_add.html'
     model=Grade
     form_class=GradeForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['school'] = self.request.school
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.school = self.request.school
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
@@ -187,6 +179,14 @@ class SUGradeUpdate(UpdateView):
     model=Grade
     form_class=GradeForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['school'] = self.request.school
+        return kwargs
+
+    def get_queryset(self):
+        return super().get_queryset().filter(school=self.request.school)
+
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
         context['page_title']='تعديل الصف الدراسي'
@@ -200,6 +200,9 @@ class SUGradeUpdate(UpdateView):
 class SUGradeDelete(DeleteView):
     template_name='administration/grade_delete.html'
     model=Grade
+
+    def get_queryset(self):
+        return super().get_queryset().filter(school=self.request.school)
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)

@@ -1,13 +1,15 @@
 ﻿from django.urls import reverse
 from allauth.account.adapter import DefaultAccountAdapter
 
+
 class MyAccountAdapter(DefaultAccountAdapter):
-    
-     def get_login_redirect_url(self, request):
+
+    def get_login_redirect_url(self, request):
         user = request.user
         if user.is_superuser:
-            return reverse('administration:dashboard')
+            if request.school:
+                return reverse('administration:dashboard')
+            return reverse('schools:school_list')
         elif user.is_staff:
             return reverse('teachers:teacher_dashboard')
         return reverse('home')
-

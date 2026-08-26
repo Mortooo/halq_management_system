@@ -18,7 +18,6 @@ def _to_int(value):
 
 
 def _parse_range(start_value, end_value):
-    # returns (start,end) dates only when BOTH parse, else None
     if not start_value or not end_value:
         return None
     try:
@@ -40,7 +39,7 @@ class StudentAttList(ListView):
     def get_queryset(self):
         today=date.today()
         user=self.request.user
-        queryset=Student.objects.filter(halaqa__res_teacher__user_name=user,status=True)
+        queryset=Student.objects.filter(halaqa__res_teacher__user_name=user,status=True,school=self.request.school)
 
         selected_halaqa=_to_int(self.request.GET.get("selected_halaqa"))
         if selected_halaqa:
@@ -63,26 +62,20 @@ class StudentAttList(ListView):
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
-
         user=self.request.user
-        halaqats=Halaqa.objects.filter(res_teacher__user_name=user).order_by('name')
-
-
-        ###### add to context ####
+        halaqats=Halaqa.objects.filter(res_teacher__user_name=user,school=self.request.school).order_by('name')
         context['halaqats']=halaqats
         context['today_date']=date.today()
-
         return context
 
 
     def post(self,request,*args, **kwargs):
         today=date.today()
-
         student_ids = request.POST.getlist('student_id')
         saved=0
 
         for student_id in student_ids:
-            student=Student.objects.filter(id=student_id,halaqa__res_teacher__user_name=request.user).first()
+            student=Student.objects.filter(id=student_id,halaqa__res_teacher__user_name=request.user,school=request.school).first()
             if student is None:
                 continue
             status=request.POST.get(f'status_{student_id}')=='True'
@@ -103,7 +96,6 @@ class StudentAttList(ListView):
         else:
             messages.warning(request, "لم يتم حفظ أي سجل !")
 
-
         return redirect(request.get_full_path())
 
 class TeacherAttList(ListView):
@@ -112,10 +104,9 @@ class TeacherAttList(ListView):
     context_object_name='teacher_att'
 
 
-
     def get_queryset(self):
         today=date.today()
-        queryset=Teacher.objects.all()
+        queryset=Teacher.objects.filter(school=self.request.school)
 
         att_today=Subquery(
             TeachAttendance.objects.filter(teacher=OuterRef('pk'),day=today).values('status')[:1]
@@ -138,12 +129,11 @@ class TeacherAttList(ListView):
 
     def post(self,request,*args, **kwargs):
         today=date.today()
-
         teacher_ids = request.POST.getlist('teacher_id')
         saved=0
 
         for teacher_id in teacher_ids:
-            teacher=Teacher.objects.filter(id=teacher_id).first()
+            teacher=Teacher.objects.filter(id=teacher_id,school=request.school).first()
             if teacher is None:
                 continue
             status=request.POST.get(f'status_{teacher_id}')=='True'
@@ -164,7 +154,6 @@ class TeacherAttList(ListView):
         else:
             messages.warning(request, "لم يتم حفظ أي سجل !")
 
-
         return redirect(request.get_full_path())
 
 
@@ -175,28 +164,22 @@ class AttendanceRecord(ListView):
     paginate_by=30
 
     def get_queryset(self):
-        queryset=super().get_queryset().select_related('teacher')
+        queryset=super().get_queryset().select_related('teacher').filter(teacher__school=self.request.school)
 
         teacher_id=_to_int(self.request.GET.get('teacher'))
         range_dates=_parse_range(self.request.GET.get('start_date'),self.request.GET.get('end_date'))
 
         if teacher_id:
             queryset=queryset.filter(teacher_id=teacher_id)
-
         if range_dates:
             queryset=queryset.filter(day__range=range_dates)
-
-
 
         return queryset.order_by('-day','teacher__name')
 
 
-
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
-
-        context['teachers']=Teacher.objects.all().order_by('name')
-
+        context['teachers']=Teacher.objects.filter(school=self.request.school).order_by('name')
         return context
 
 
@@ -207,14 +190,13 @@ class StudentRecord(ListView):
     paginate_by=30
 
     def get_queryset(self):
-        queryset=super().get_queryset().select_related('student','student__halaqa')
+        queryset=super().get_queryset().select_related('student','student__halaqa').filter(student__school=self.request.school)
 
         halaqa_id=_to_int(self.request.GET.get('halaqa'))
         range_dates=_parse_range(self.request.GET.get('start_date'),self.request.GET.get('end_date'))
 
         if halaqa_id:
             queryset=queryset.filter(student__halaqa_id=halaqa_id)
-
         if range_dates:
             queryset=queryset.filter(day__range=range_dates)
 
@@ -223,5 +205,5 @@ class StudentRecord(ListView):
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
-        context['halaqats']=Halaqa.objects.select_related('res_teacher').order_by('name')
+        context['halaqats']=Halaqa.objects.filter(school=self.request.school).select_related('res_teacher').order_by('name')
         return context

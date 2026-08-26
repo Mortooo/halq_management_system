@@ -55,6 +55,7 @@ class TeacherForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.school = kwargs.pop('school', None)
         super().__init__(*args, **kwargs)
         has_account = bool(self.instance.pk and self.instance.user_name_id)
         if has_account:
@@ -91,6 +92,8 @@ class TeacherForm(ModelForm):
         name = self.cleaned_data.get('name', '').strip()
         if name:
             qs = Teacher.objects.filter(name__icontains=name)
+            if self.school:
+                qs = qs.filter(school=self.school)
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():

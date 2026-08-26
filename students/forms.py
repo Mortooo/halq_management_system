@@ -48,10 +48,13 @@ class StudentForm(ModelForm):
         }
 
 
-    def __init__(self, *args, user=None, **kwargs):
+    def __init__(self, *args, user=None, school=None, **kwargs):
         super().__init__(*args, **kwargs)
-        # teachers may only place students in their own halaqat
-        if user is not None and not user.is_superuser:
+        self.school = school
+        if school:
+            self.fields['halaqa'].queryset = Halaqa.objects.filter(school=school)
+            self.fields['grade'].queryset = Grade.objects.filter(school=school)
+        elif user is not None and not user.is_superuser:
             self.fields['halaqa'].queryset = Halaqa.objects.filter(res_teacher__user_name=user)
 
 
@@ -63,6 +66,8 @@ class StudentForm(ModelForm):
         # two students cannot share the same name (case-insensitive, on create and update)
         if name:
             qs = Student.objects.filter(name__icontains=name)
+            if self.school:
+                qs = qs.filter(school=self.school)
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
@@ -88,10 +93,16 @@ class GradeForm(ModelForm):
         labels = {'name': 'اسم الصف الدراسي :'}
         widgets = {'name': forms.TextInput(attrs={'class': INPUT_CLASS})}
 
+    def __init__(self, *args, **kwargs):
+        self.school = kwargs.pop('school', None)
+        super().__init__(*args, **kwargs)
+
     def clean_name(self):
         name = self.cleaned_data.get('name', '').strip()
         if name:
             qs = Grade.objects.filter(name__icontains=name)
+            if self.school:
+                qs = qs.filter(school=self.school)
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():

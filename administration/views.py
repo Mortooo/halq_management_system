@@ -12,30 +12,31 @@ from django.views.generic import ListView,CreateView,UpdateView,DeleteView
 from teachers.forms import TeacherForm
 from halaqs.forms import HalaqaForm
 from teachers.models import Teacher
+from schools.models import UserProfile
 from django.contrib.auth.models import User
 from django.contrib import messages
 
 # Create your views here.
 
 def dashboard(request):
+    school=request.school
+    today_date=date.today()
+    user=request.user.first_name
 
-    today_date=date.today()# get today date
-    user=request.user.first_name # user is log in
-    total_halaqats=Halaqa.objects.all().count()
-    total_students=Student.objects.all().count()
-    halaqats=Halaqa.objects.select_related('res_teacher').order_by('name')
+    total_halaqats=Halaqa.objects.filter(school=school).count()
+    total_students=Student.objects.filter(school=school).count()
+    halaqats=Halaqa.objects.filter(school=school).select_related('res_teacher').order_by('name')
 
-    total_teachers=Teacher.objects.all().count()
-    teachers_present_today=TeachAttendance.objects.filter(day=today_date,status=True).count()
+    total_teachers=Teacher.objects.filter(school=school).count()
+    teachers_present_today=TeachAttendance.objects.filter(teacher__school=school,day=today_date,status=True).count()
 
-    students_recorded_today=StudAttendance.objects.filter(day=today_date).count()
-    students_present_today=StudAttendance.objects.filter(day=today_date,status=True).count()
+    students_recorded_today=StudAttendance.objects.filter(student__school=school,day=today_date).count()
+    students_present_today=StudAttendance.objects.filter(student__school=school,day=today_date,status=True).count()
     if students_recorded_today:
         avg_attendance=int(students_present_today*100/students_recorded_today)
     else:
         avg_attendance=0
 
-    #################### add to context #####################
     context ={
         'today_date':today_date,
         'user' :user,
@@ -47,8 +48,6 @@ def dashboard(request):
         'avg_attendance':avg_attendance,
     }
 
-
-
     return render(request,'administration/dashboard.html',context)
 
 
@@ -58,14 +57,11 @@ class TeacherList(ListView):
     context_object_name='teachers'
     
     def get_queryset(self):
-        query=super().get_queryset()
+        query=super().get_queryset().filter(school=self.request.school)
         
         if self.request.GET.get('q'):
             name=self.request.GET.get('q').rstrip()
             query=query.filter(name__icontains=name)
-        
-        
-        
         
         return query
 
@@ -74,17 +70,34 @@ class TeacherCreate(CreateView):
     model=Teacher
     form_class=TeacherForm
     success_url=reverse_lazy('administration:teacher_list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['school'] = self.request.school
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.school = self.request.school
+        return super().form_valid(form)
     
 class TeacherUpdate(UpdateView):
     template_name='administration/teacher_add.html'
     model=Teacher
     form_class=TeacherForm
     success_url=reverse_lazy('administration:teacher_list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['school'] = self.request.school
+        return kwargs
     
 class TeacherDelete(DeleteView):
     template_name='administration/teacher_delete.html'
     model=Teacher
     success_url=reverse_lazy('administration:teacher_list')
+
+    def get_queryset(self):
+        return super().get_queryset().filter(school=self.request.school)
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
@@ -95,7 +108,6 @@ class TeacherDelete(DeleteView):
         self.object=self.get_object()
         user=self.object.user_name
         response=super().post(request,*args,**kwargs)
-        # teacher gone -> her login goes too (never destroy a superuser account)
         if user is not None and not user.is_superuser:
             user.delete()
         elif user is not None:
@@ -111,7 +123,7 @@ class HalaqaList(ListView):
     context_object_name='halaqats'
 
     def get_queryset(self):
-        query=super().get_queryset()
+        query=super().get_queryset().filter(school=self.request.school)
         if self.request.GET.get('q'):
             name=self.request.GET.get('q').rstrip()
             query=query.filter(name__icontains=name)
@@ -125,6 +137,15 @@ class HalaqaCreate(CreateView):
     form_class=HalaqaForm
     success_url=reverse_lazy('administration:halaqa_list')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['school'] = self.request.school
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.school = self.request.school
+        return super().form_valid(form)
+
 
 class HalaqaUpdate(UpdateView):
     template_name='administration/halaqa_add.html'
@@ -132,14 +153,24 @@ class HalaqaUpdate(UpdateView):
     form_class=HalaqaForm
     success_url=reverse_lazy('administration:halaqa_list')
 
+    def get_queryset(self):
+        return super().get_queryset().filter(school=self.request.school)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['school'] = self.request.school
+        return kwargs
+
 class HalaqaDelete(DeleteView):
     template_name='administration/halaqa_delete.html'
     model=Halaqa
     context_object_name='halaqa'
 
+    def get_queryset(self):
+        return super().get_queryset().filter(school=self.request.school)
+
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
-        # weekly reports cascade-delete with the halaqa -> must be surfaced
         context['reports_count']=self.object.weekreport_set.count()
         context['students_count']=self.object.student_set.count()
         return context
@@ -162,7 +193,12 @@ class UsersList(ListView):
     context_object_name='users'
 
     def get_queryset(self):
-        query=super().get_queryset().prefetch_related('teacher').order_by('username')
+        school=self.request.school
+        teacher_user_ids=Teacher.objects.filter(school=school).values_list('user_name_id',flat=True)
+        school_profile_user_ids=UserProfile.objects.filter(school=school).values_list('user_id',flat=True)
+        query=super().get_queryset().filter(
+            Q(id__in=teacher_user_ids) | Q(id__in=school_profile_user_ids) | Q(is_superuser=True, profile__school=school)
+        ).order_by('username')
         if self.request.GET.get('q'):
             q=self.request.GET.get('q').rstrip()
             query=query.filter(Q(username__icontains=q)|Q(first_name__icontains=q))

@@ -9,6 +9,7 @@ class Halaqa(models.Model):
     res_teacher=models.ForeignKey('teachers.Teacher',on_delete=models.SET_NULL,null=True,blank=True)
     course=models.CharField(max_length=50,blank=False,null=False)
     notes=models.TextField(blank=True,null=True)
+    school=models.ForeignKey('schools.School',on_delete=models.CASCADE,null=True,blank=True)
 
     @property
     def total_students(self):

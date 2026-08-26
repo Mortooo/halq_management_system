@@ -1,8 +1,11 @@
+from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db import transaction
 from django import forms
 from .models import School, UserProfile
 from django.db.models import Count
@@ -89,18 +92,19 @@ class RegisterSchoolView(FormView):
 
     def form_valid(self, form):
         d = form.cleaned_data
-        school = School.objects.create(
-            name=d['school_name'],
-            address=d.get('school_address', ''),
-            tel=d.get('school_tel', ''),
-            is_active=True,
-        )
-        user = User.objects.create_superuser(
-            username=d['username'],
-            email=d['email'],
-            password=d['password1'],
-        )
-        UserProfile.objects.create(user=user, school=school)
+        with transaction.atomic():
+            school = School.objects.create(
+                name=d['school_name'],
+                address=d.get('school_address', ''),
+                tel=d.get('school_tel', ''),
+                is_active=True,
+            )
+            user = User.objects.create_superuser(
+                username=d['username'],
+                email=d['email'],
+                password=d['password1'],
+            )
+            UserProfile.objects.create(user=user, school=school)
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         messages.success(self.request, f'تم إنشاء مدرسة "{school.name}" وحساب المدير بنجاح.')
         return super().form_valid(form)
@@ -162,10 +166,6 @@ class SchoolDeleteView(GlobalSchoolRequiredMixin, DeleteView):
     def form_valid(self, form):
         messages.success(self.request, 'تم حذف المدرسة بنجاح.')
         return super().form_valid(form)
-
-
-from django.views import View
-from django.shortcuts import render, redirect, get_object_or_404
 
 
 class AssignSchoolUserView(GlobalSchoolRequiredMixin, View):

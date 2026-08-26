@@ -8,6 +8,7 @@ from students.models import Student
 from teachers.models import Teacher
 from .models import StudAttendance,TeachAttendance
 from django.contrib import messages
+from django.db import transaction
 
 
 def _to_int(value):
@@ -74,22 +75,23 @@ class StudentAttList(ListView):
         student_ids = request.POST.getlist('student_id')
         saved=0
 
-        for student_id in student_ids:
-            student=Student.objects.filter(id=student_id,halaqa__res_teacher__user_name=request.user,school=request.school).first()
-            if student is None:
-                continue
-            status=request.POST.get(f'status_{student_id}')=='True'
-            notes=request.POST.get(f'notes_{student_id}')
+        with transaction.atomic():
+            for student_id in student_ids:
+                student=Student.objects.filter(id=student_id,halaqa__res_teacher__user_name=request.user,school=request.school).first()
+                if student is None:
+                    continue
+                status=request.POST.get(f'status_{student_id}')=='True'
+                notes=request.POST.get(f'notes_{student_id}')
 
-            StudAttendance.objects.update_or_create(
-                student=student,
-                day=today,
-                defaults={
-                'status': status,
-                'notes': notes
-                }
-            )
-            saved+=1
+                StudAttendance.objects.update_or_create(
+                    student=student,
+                    day=today,
+                    defaults={
+                    'status': status,
+                    'notes': notes
+                    }
+                )
+                saved+=1
 
         if saved:
             messages.success(request, f"تم حفظ سجلات حضور {saved} تلميذ/ة بنجاح")
@@ -132,22 +134,23 @@ class TeacherAttList(ListView):
         teacher_ids = request.POST.getlist('teacher_id')
         saved=0
 
-        for teacher_id in teacher_ids:
-            teacher=Teacher.objects.filter(id=teacher_id,school=request.school).first()
-            if teacher is None:
-                continue
-            status=request.POST.get(f'status_{teacher_id}')=='True'
-            notes=request.POST.get(f'notes_{teacher_id}')
+        with transaction.atomic():
+            for teacher_id in teacher_ids:
+                teacher=Teacher.objects.filter(id=teacher_id,school=request.school).first()
+                if teacher is None:
+                    continue
+                status=request.POST.get(f'status_{teacher_id}')=='True'
+                notes=request.POST.get(f'notes_{teacher_id}')
 
-            TeachAttendance.objects.update_or_create(
-                teacher=teacher,
-                day=today,
-                defaults={
-                'status': status,
-                'notes': notes
-                }
-            )
-            saved+=1
+                TeachAttendance.objects.update_or_create(
+                    teacher=teacher,
+                    day=today,
+                    defaults={
+                    'status': status,
+                    'notes': notes
+                    }
+                )
+                saved+=1
 
         if saved:
             messages.success(request, f"تم حفظ سجلات حضور {saved} معلمة/ة بنجاح")

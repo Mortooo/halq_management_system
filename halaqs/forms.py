@@ -1,4 +1,4 @@
-﻿from django import forms
+from django import forms
 from .models import Halaqa
 from teachers.models import Teacher
 
@@ -33,7 +33,7 @@ class HalaqaForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '').strip()
         if name:
-            qs = Halaqa.objects.filter(name__icontains=name)
+            qs = Halaqa.objects.filter(name__iexact=name)
             if self.school:
                 qs = qs.filter(school=self.school)
             if self.instance.pk:

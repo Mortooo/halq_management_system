@@ -1,4 +1,4 @@
-﻿from django.shortcuts import redirect
+from django.shortcuts import redirect
 from django.views.generic import ListView,CreateView,UpdateView,DeleteView,DetailView
 from django.http import Http404
 from students.models import Student, Grade
@@ -10,16 +10,19 @@ from django.contrib import messages
 
 class TeacherOwnedStudentMixin:
     def dispatch(self, request, *args, **kwargs):
-        obj=self.get_object()
-        teacher=obj.halaqa.res_teacher if obj.halaqa else None
-        owner=teacher.user_name if teacher else None
-        if not request.user.is_superuser and owner!=request.user:
+        obj = self.get_object()
+        if not request.school or obj.school_id != request.school.id:
             raise Http404()
-        return super().dispatch(request,*args,**kwargs)
+        if not request.user.is_superuser:
+            teacher = obj.halaqa.res_teacher if obj.halaqa else None
+            owner = teacher.user_name if teacher else None
+            if owner != request.user:
+                raise Http404()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         if getattr(self, '_object_cache', None) is None:
-            self._object_cache=super().get_object(queryset)
+            self._object_cache = super().get_object(queryset)
         return self._object_cache
 
 class UserFormKwargsMixin:

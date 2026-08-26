@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 
 from halaqs.models import Halaqa
@@ -61,8 +61,7 @@ def show_weekly_report(request):
     )
     messages.success(request, 'تم إرسال التقرير الأسبوعي بنجاح.')
 
-    return render(request, 'reports/weekly_report.html',
-                  {'current_week_end_date': end_of_week, 'halaqats': halaqats})
+    return redirect('reports:weekly_report')
 
 
 class TotalReport(ListView):

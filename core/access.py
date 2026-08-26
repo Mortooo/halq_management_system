@@ -1,8 +1,10 @@
+from functools import wraps
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404
 
 
 def school_required(view_func):
+    @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             from django.contrib.auth.views import redirect_to_login
@@ -27,6 +29,7 @@ superuser_required = user_passes_test(_superuser_test, login_url='/')
 
 
 def staff_with_school(view_func):
+    @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if not _staff_test(request.user):
             from django.contrib.auth.views import redirect_to_login
@@ -38,6 +41,7 @@ def staff_with_school(view_func):
 
 
 def superuser_with_school(view_func):
+    @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if not _superuser_test(request.user):
             from django.contrib.auth.views import redirect_to_login

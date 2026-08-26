@@ -1,4 +1,4 @@
-﻿from django import forms
+from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -91,7 +91,7 @@ class TeacherForm(ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '').strip()
         if name:
-            qs = Teacher.objects.filter(name__icontains=name)
+            qs = Teacher.objects.filter(name__iexact=name)
             if self.school:
                 qs = qs.filter(school=self.school)
             if self.instance.pk:

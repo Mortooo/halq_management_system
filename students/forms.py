@@ -1,4 +1,4 @@
-﻿from datetime import date
+from datetime import date
 from django.forms import ModelForm
 from django import forms
 from .models import Student, Grade
@@ -63,9 +63,10 @@ class StudentForm(ModelForm):
         name=clean_data.get('name')
         d_birth=clean_data.get('date_birth')
 
-        # two students cannot share the same name (case-insensitive, on create and update)
+        # two students cannot share the same name (case-insensitive exact match, on create and update)
         if name:
-            qs = Student.objects.filter(name__icontains=name)
+            name = name.strip()
+            qs = Student.objects.filter(name__iexact=name)
             if self.school:
                 qs = qs.filter(school=self.school)
             if self.instance.pk:
@@ -100,7 +101,7 @@ class GradeForm(ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '').strip()
         if name:
-            qs = Grade.objects.filter(name__icontains=name)
+            qs = Grade.objects.filter(name__iexact=name)
             if self.school:
                 qs = qs.filter(school=self.school)
             if self.instance.pk:

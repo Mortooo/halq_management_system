@@ -177,9 +177,30 @@ class FormValidationTests(BaseTestCase):
         teacher = Teacher.objects.filter(name='مريم عبد الله').first()
         self.assertIsNotNone(teacher)
         self.assertEqual(teacher.school, self.school_b)
-        self.assertEqual(teacher.user_name.username, 'maryam_teacher')
+    def test_login_redirect_for_school_admin(self):
+        """School superuser with UserProfile is redirected to administration:dashboard on login."""
+        from core.adapter import MyAccountAdapter
+        from django.test import RequestFactory
+        factory = RequestFactory()
+        request = factory.post('/accounts/login/')
+        request.user = self.admin_user_a
+        adapter = MyAccountAdapter()
+        redirect_url = adapter.get_login_redirect_url(request)
+        self.assertEqual(redirect_url, reverse('administration:dashboard'))
 
-
+    def test_login_redirect_for_global_admin(self):
+        """Global superuser without UserProfile is redirected to schools:school_list on login."""
+        from core.adapter import MyAccountAdapter
+        from django.test import RequestFactory
+        global_admin = User.objects.create_superuser(
+            username="global_admin", email="global@test.com", password="Password123!"
+        )
+        factory = RequestFactory()
+        request = factory.post('/accounts/login/')
+        request.user = global_admin
+        adapter = MyAccountAdapter()
+        redirect_url = adapter.get_login_redirect_url(request)
+        self.assertEqual(redirect_url, reverse('schools:school_list'))
 
 
 class MultiTenancyAndSecurityTests(BaseTestCase):

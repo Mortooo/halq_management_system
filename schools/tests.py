@@ -323,3 +323,31 @@ class UserSettingsAndProfileTests(BaseTestCase):
         login_success = self.client.login(username="teacher_a", password="NewSecurePass2026!")
         self.assertTrue(login_success)
 
+
+class PWATests(BaseTestCase):
+    """Tests for PWA manifest, service worker, and metadata."""
+
+    def test_manifest_endpoint_and_content(self):
+        """Verify /manifest.json returns valid JSON and PWA properties."""
+        response = self.client.get("/manifest.json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/manifest+json")
+        self.assertContains(response, "نظام إدارة الحلقات القرآنية")
+        self.assertContains(response, "standalone")
+        self.assertContains(response, "icon-192.svg")
+
+    def test_service_worker_endpoint(self):
+        """Verify /sw.js is accessible as javascript with root scope."""
+        response = self.client.get("/sw.js")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/javascript")
+        self.assertContains(response, "CACHE_NAME")
+
+    def test_pwa_meta_tags_in_templates(self):
+        """Verify home page includes PWA manifest and theme meta tags."""
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'rel="manifest" href="/manifest.json"')
+        self.assertContains(response, 'name="theme-color"')
+
+

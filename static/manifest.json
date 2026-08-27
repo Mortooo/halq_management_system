@@ -1,10 +1,16 @@
 {
+  "id": "/?source=pwa",
   "name": "نظام إدارة الحلقات القرآنية",
   "short_name": "إدارة الحلقات",
   "description": "منظومة سحابية ذكية لإدارة حلقات تحفيظ القرآن الكريم ومتابعة الحضور والتقارير",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "window-controls-overlay",
+    "minimal-ui"
+  ],
   "orientation": "portrait",
   "background_color": "#064e3b",
   "theme_color": "#065f46",
@@ -14,24 +20,47 @@
     "education",
     "productivity"
   ],
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/static/icons/icon-192.svg",
+      "src": "/static/icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/icons/icon-512.svg",
+      "src": "/static/icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/icons/icon-512.svg",
+      "src": "/static/icons/icon-maskable.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/static/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/static/icons/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "لوحة إدارة الحلقات على أجهزة سطح المكتب"
+    },
+    {
+      "src": "/static/icons/screenshot-mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "واجهة تسجيل الحضور وإدارة الحلقات على الجوال"
     }
   ]
 }

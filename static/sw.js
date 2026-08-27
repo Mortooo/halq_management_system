@@ -1,10 +1,12 @@
-const CACHE_NAME = 'halaqa-pwa-v1';
+const CACHE_NAME = 'halaqa-pwa-v2';
 const PRECACHE_ASSETS = [
   '/',
   '/static/css/style.css',
   '/static/vendor/tailwind.js',
   '/static/manifest.json',
-  '/static/icons/icon-192.svg',
+  '/static/icons/icon-192.png',
+  '/static/icons/icon-512.png',
+  '/static/icons/icon-maskable.png',
   '/static/icons/icon-512.svg'
 ];
 

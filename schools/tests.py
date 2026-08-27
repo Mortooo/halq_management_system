@@ -334,7 +334,7 @@ class PWATests(BaseTestCase):
         self.assertEqual(response["Content-Type"], "application/manifest+json")
         self.assertContains(response, "نظام إدارة الحلقات القرآنية")
         self.assertContains(response, "standalone")
-        self.assertContains(response, "icon-192.svg")
+        self.assertContains(response, "icon-192.png")
 
     def test_service_worker_endpoint(self):
         """Verify /sw.js is accessible as javascript with root scope."""

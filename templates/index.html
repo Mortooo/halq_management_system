@@ -6,22 +6,25 @@
 {% block content %}
 
 <!-- شريط التنقل العلوي -->
-<nav class="bg-emerald-800/95 backdrop-blur-md border-b border-emerald-700/60 sticky top-0 z-50 shadow-md transition">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
+<nav class="bg-emerald-800/95 backdrop-blur-md border-b border-emerald-700/60 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-14 sm:h-20 gap-2 sm:gap-4">
             <!-- الشعار واسم المنصة -->
-            <a href="/" class="flex items-center gap-3 group shrink-0">
-                <span class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-emerald-200 group-hover:bg-white/20 transition shadow-inner">
-                    {% include 'partials/icons/book-open.svg' with icon_class='h-6 w-6 text-white' only %}
+            <a href="/" class="flex items-center gap-2 sm:gap-3 group min-w-0 flex-1">
+                <span class="w-8 h-8 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-emerald-200 group-hover:bg-white/20 transition shadow-inner shrink-0">
+                    {% include 'partials/icons/book-open.svg' with icon_class='h-4 w-4 sm:h-6 sm:w-6 text-white' only %}
                 </span>
-                <div class="flex flex-col">
-                    <span class="text-base sm:text-lg md:text-xl font-black text-white leading-tight">إدارة الحلقات القرآنية</span>
-                    <span class="text-[10px] sm:text-xs text-emerald-200/90 font-medium">المنصة الشاملة لإدارة التحفيظ</span>
+                <div class="flex flex-col min-w-0">
+                    <span class="text-sm sm:text-lg md:text-xl font-black text-white leading-tight truncate">
+                        <span class="hidden sm:inline">إدارة الحلقات القرآنية</span>
+                        <span class="sm:hidden">إدارة الحلقات</span>
+                    </span>
+                    <span class="hidden sm:inline-block text-[10px] sm:text-xs text-emerald-200/90 font-medium">المنصة الشاملة لإدارة التحفيظ</span>
                 </div>
             </a>
 
             <!-- روابط التنقل السريعة للشاشات الكبيرة -->
-            <div class="hidden lg:flex items-center gap-8 text-sm font-semibold text-emerald-100/90">
+            <div class="hidden lg:flex items-center gap-8 text-sm font-semibold text-emerald-100/90 shrink-0">
                 <a href="#features" class="hover:text-white transition py-1">المميزات</a>
                 <a href="#how-it-works" class="hover:text-white transition py-1">كيف يعمل؟</a>
                 <a href="#roles" class="hover:text-white transition py-1">أدوار المستخدمين</a>
@@ -29,28 +32,28 @@
             </div>
 
             <!-- أزرار الإجراءات -->
-            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
                 {% if user.is_authenticated %}
-                    <div class="flex items-center gap-2 bg-emerald-900/60 border border-emerald-600/40 rounded-xl px-3 py-1.5 text-white text-xs sm:text-sm">
+                    <div class="hidden sm:flex items-center gap-2 bg-emerald-900/60 border border-emerald-600/40 rounded-xl px-3 py-1.5 text-white text-xs sm:text-sm">
                         <span class="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">
                             {{ user.first_name|default:user.username|slice:":1"|upper }}
                         </span>
-                        <span class="hidden sm:inline-block font-medium truncate max-w-[120px]">
+                        <span class="font-medium truncate max-w-[100px]">
                             {{ user.first_name|default:user.username }}
                         </span>
                     </div>
                     <a href="{% if user.is_superuser %}{% if user.profile %}{% url 'administration:dashboard' %}{% else %}{% url 'schools:school_list' %}{% endif %}{% else %}{% url 'teachers:teacher_dashboard' %}{% endif %}" 
-                       class="btn bg-white text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm px-4 py-2 font-bold shadow-sm inline-flex items-center gap-1.5">
+                       class="btn bg-white text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 font-bold shadow-sm inline-flex items-center gap-1.5 whitespace-nowrap">
                         <span>لوحة التحكم</span>
-                        <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                         </svg>
                     </a>
                 {% else %}
-                    <a href="{% url 'account_login' %}" class="text-xs sm:text-sm font-bold text-white/90 hover:text-white transition px-2.5 sm:px-3 py-2">
-                        تسجيل الدخول
+                    <a href="{% url 'account_login' %}" class="text-xs sm:text-sm font-bold text-white/90 hover:text-white transition px-2 py-1.5 whitespace-nowrap">
+                        دخول
                     </a>
-                    <a href="{% url 'schools:register_school' %}" class="btn bg-white text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm px-3.5 sm:px-4 py-2 font-bold shadow-md inline-flex items-center gap-1.5 transition">
+                    <a href="{% url 'schools:register_school' %}" class="btn bg-white text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 font-bold shadow-md inline-flex items-center gap-1 transition whitespace-nowrap">
                         <span>تسجيل مدرسة</span>
                     </a>
                 {% endif %}
@@ -73,58 +76,58 @@
         </div>
 
         <!-- العنوان الرئيسي -->
-        <h1 class="text-3xl sm:text-5xl md:text-6xl font-black leading-tight max-w-4xl mx-auto tracking-tight mb-6">
+        <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight max-w-4xl mx-auto tracking-tight mb-4 sm:mb-6 px-1">
             المنظومة الحديثة لإدارة
-            <span class="block text-emerald-200 mt-2">حلقات تحفيظ القرآن الكريم</span>
+            <span class="block text-emerald-200 mt-1.5 sm:mt-2">حلقات تحفيظ القرآن الكريم</span>
         </h1>
 
         <!-- الوصف الترحيبي -->
-        <p class="text-base sm:text-lg md:text-xl text-emerald-100/90 max-w-2xl mx-auto mb-10 leading-relaxed font-normal px-2">
+        <p class="text-sm sm:text-base md:text-lg lg:text-xl text-emerald-100/90 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed font-normal px-2">
             منصة سحابية متكاملة تجمع المشرفات والمعلمات لإدارة شؤون الحلقات، تسجيل الحضور والغياب لحظياً، ومتابعة حفظ التلميذات مع تقارير وإحصائيات دقيقة.
         </p>
 
         <!-- أزرار الدعوة للإجراء (CTAs) -->
-        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-md sm:max-w-none mx-auto mb-16">
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto mb-10 sm:mb-16 w-full px-2">
             {% if user.is_authenticated %}
                 <a href="{% if user.is_superuser %}{% if user.profile %}{% url 'administration:dashboard' %}{% else %}{% url 'schools:school_list' %}{% endif %}{% else %}{% url 'teachers:teacher_dashboard' %}{% endif %}"
-                   class="btn bg-white text-emerald-800 hover:bg-emerald-50 w-full sm:w-auto px-8 py-4 text-base sm:text-lg font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2">
+                   class="btn bg-white text-emerald-800 hover:bg-emerald-50 w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2">
                     <span>الانتقال إلى لوحة التحكم</span>
-                    <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                     </svg>
                 </a>
             {% else %}
                 <a href="{% url 'schools:register_school' %}" 
-                   class="btn bg-white text-emerald-800 hover:bg-emerald-50 w-full sm:w-auto px-8 py-4 text-base sm:text-lg font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2 transition transform hover:-translate-y-0.5">
+                   class="btn bg-white text-emerald-800 hover:bg-emerald-50 w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2 transition transform hover:-translate-y-0.5">
                     <span>تسجيل مدرسة جديدة</span>
-                    <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                     </svg>
                 </a>
                 <a href="{% url 'account_login' %}" 
-                   class="btn bg-emerald-900/70 hover:bg-emerald-900 text-white border border-emerald-500/40 w-full sm:w-auto px-8 py-4 text-base sm:text-lg font-bold backdrop-blur-sm transition">
+                   class="btn bg-emerald-900/70 hover:bg-emerald-900 text-white border border-emerald-500/40 w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-bold backdrop-blur-sm transition">
                     تسجيل الدخول للنظام
                 </a>
             {% endif %}
         </div>
 
         <!-- بطاقات الميزات السريعة في الهيدر -->
-        <div id="stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto text-right">
-            <div class="p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                <div class="text-2xl sm:text-3xl font-black text-amber-300 mb-1">100%</div>
-                <div class="text-xs sm:text-sm text-emerald-100 font-semibold">حضور وتحضير إلكتروني</div>
+        <div id="stats" class="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 max-w-5xl mx-auto text-center sm:text-right px-1">
+            <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
+                <div class="text-xl sm:text-2xl md:text-3xl font-black text-amber-300 mb-0.5 sm:mb-1">100%</div>
+                <div class="text-[11px] sm:text-xs md:text-sm text-emerald-100 font-semibold leading-tight">حضور وتحضير إلكتروني</div>
             </div>
-            <div class="p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                <div class="text-2xl sm:text-3xl font-black text-amber-300 mb-1">آلية</div>
-                <div class="text-xs sm:text-sm text-emerald-100 font-semibold">تقارير أسبوعية وإجمالية</div>
+            <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
+                <div class="text-xl sm:text-2xl md:text-3xl font-black text-amber-300 mb-0.5 sm:mb-1">آلية</div>
+                <div class="text-[11px] sm:text-xs md:text-sm text-emerald-100 font-semibold leading-tight">تقارير أسبوعية وإجمالية</div>
             </div>
-            <div class="p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                <div class="text-2xl sm:text-3xl font-black text-amber-300 mb-1">متعددة</div>
-                <div class="text-xs sm:text-sm text-emerald-100 font-semibold">دعم المدارس المتعددة</div>
+            <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
+                <div class="text-xl sm:text-2xl md:text-3xl font-black text-amber-300 mb-0.5 sm:mb-1">متعددة</div>
+                <div class="text-[11px] sm:text-xs md:text-sm text-emerald-100 font-semibold leading-tight">دعم المدارس المتعددة</div>
             </div>
-            <div class="p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                <div class="text-2xl sm:text-3xl font-black text-amber-300 mb-1">دقيقة</div>
-                <div class="text-xs sm:text-sm text-emerald-100 font-semibold">متابعة إنجاز الحفظ</div>
+            <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
+                <div class="text-xl sm:text-2xl md:text-3xl font-black text-amber-300 mb-0.5 sm:mb-1">دقيقة</div>
+                <div class="text-[11px] sm:text-xs md:text-sm text-emerald-100 font-semibold leading-tight">متابعة إنجاز الحفظ</div>
             </div>
         </div>
     </div>
@@ -349,19 +352,19 @@
         <p class="text-base sm:text-lg text-emerald-100/90 max-w-2xl mx-auto mb-8">
             انضم إلى المنصة الآن وسجل مدرستك لتبدأ في الاستفادة من التحضير الإلكتروني ومتابعة الحفظ بدقة وسهولة.
         </p>
-        <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto w-full px-2">
             {% if user.is_authenticated %}
                 <a href="{% if user.is_superuser %}{% if user.profile %}{% url 'administration:dashboard' %}{% else %}{% url 'schools:school_list' %}{% endif %}{% else %}{% url 'teachers:teacher_dashboard' %}{% endif %}"
-                   class="btn bg-white text-emerald-800 hover:bg-emerald-50 px-8 py-3.5 text-base font-bold shadow-lg">
+                   class="btn bg-white text-emerald-800 hover:bg-emerald-50 w-full sm:w-auto px-8 py-3.5 text-base font-bold shadow-lg">
                     الذهاب إلى لوحة التحكم
                 </a>
             {% else %}
                 <a href="{% url 'schools:register_school' %}" 
-                   class="btn bg-white text-emerald-800 hover:bg-emerald-50 px-8 py-3.5 text-base font-bold shadow-lg transition">
+                   class="btn bg-white text-emerald-800 hover:bg-emerald-50 w-full sm:w-auto px-8 py-3.5 text-base font-bold shadow-lg transition">
                     تسجيل مدرسة جديدة
                 </a>
                 <a href="{% url 'account_login' %}" 
-                   class="btn bg-emerald-800/80 hover:bg-emerald-700 text-white border border-white/20 px-8 py-3.5 text-base font-bold transition">
+                   class="btn bg-emerald-800/80 hover:bg-emerald-700 text-white border border-white/20 w-full sm:w-auto px-8 py-3.5 text-base font-bold transition">
                     دخول الحساب
                 </a>
             {% endif %}

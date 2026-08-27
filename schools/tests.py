@@ -351,3 +351,101 @@ class PWATests(BaseTestCase):
         self.assertContains(response, 'name="theme-color"')
 
 
+class InactiveSchoolAccessTests(BaseTestCase):
+    """Tests for access restrictions when a school is deactivated by global admin."""
+
+    def test_inactive_school_admin_login_rejected(self):
+        """School admin belonging to a deactivated school cannot log in."""
+        self.school_a.is_active = False
+        self.school_a.save()
+
+        login_url = reverse("account_login")
+        response = self.client.post(login_url, data={
+            "login": "admin_a",
+            "password": "Password123!",
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "تم تعطيل حساب هذه المدرسة من قبل الإدارة العامة")
+        # Ensure user is not authenticated
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+    def test_inactive_school_teacher_login_rejected(self):
+        """Teacher belonging to a deactivated school cannot log in."""
+        self.school_a.is_active = False
+        self.school_a.save()
+
+        login_url = reverse("account_login")
+        response = self.client.post(login_url, data={
+            "login": "teacher_a",
+            "password": "Password123!",
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "تم تعطيل حساب هذه المدرسة من قبل الإدارة العامة")
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+    def test_inactive_school_active_session_terminated_by_middleware(self):
+        """Active session for school admin is terminated if school is deactivated."""
+        self.client.login(username="admin_a", password="Password123!")
+
+        # Deactivate school while session is active
+        self.school_a.is_active = False
+        self.school_a.save()
+
+        dashboard_url = reverse("administration:dashboard")
+        response = self.client.get(dashboard_url, follow=True)
+        # Should redirect to login page with message
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "تم تعطيل حساب هذه المدرسة من قبل الإدارة العامة")
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+    def test_inactive_school_teacher_session_terminated_by_middleware(self):
+        """Active session for teacher is terminated if school is deactivated."""
+        self.client.login(username="teacher_a", password="Password123!")
+
+        # Deactivate school while session is active
+        self.school_a.is_active = False
+        self.school_a.save()
+
+        teacher_url = reverse("teachers:teacher_dashboard")
+        response = self.client.get(teacher_url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "تم تعطيل حساب هذه المدرسة من قبل الإدارة العامة")
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+    def test_global_admin_can_access_when_schools_are_inactive(self):
+        """Global superuser can log in and manage schools even if all schools are inactive."""
+        self.school_a.is_active = False
+        self.school_a.save()
+        self.school_b.is_active = False
+        self.school_b.save()
+
+        global_admin = User.objects.create_superuser(
+            username="global_admin", email="global@test.com", password="Password123!"
+        )
+        self.client.login(username="global_admin", password="Password123!")
+
+        response = self.client.get(reverse("schools:school_list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "مدرسة النور")
+        self.assertContains(response, "مدرسة الفرقان")
+
+    def test_reactivated_school_restores_login_and_access(self):
+        """Re-activating a school restores access for its users."""
+        self.school_a.is_active = False
+        self.school_a.save()
+
+        # Re-activate school
+        self.school_a.is_active = True
+        self.school_a.save()
+
+        login_url = reverse("account_login")
+        response = self.client.post(login_url, data={
+            "login": "admin_a",
+            "password": "Password123!",
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+        self.assertContains(response, "لوحة التحكم")
+
+
+

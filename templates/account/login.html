@@ -16,8 +16,14 @@
     </div>
 
     {% if form.errors %}
-      <div role="alert" class="form-error mb-5 text-sm text-right">
-        تأكد من صحة اسم المستخدم وكلمة المرور
+      <div role="alert" class="form-error mb-5 text-sm text-right space-y-1">
+        {% if form.non_field_errors %}
+          {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+          {% endfor %}
+        {% else %}
+          <div>تأكد من صحة اسم المستخدم وكلمة المرور</div>
+        {% endif %}
       </div>
     {% endif %}
 

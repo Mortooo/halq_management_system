@@ -3,29 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-apple-disable-message-reformatting">
+    <title>مرحباً بك في نظام إدارة الحلقات</title>
+    <!--[if mso]>
+    <style>
+        .btn a { margin: 0 auto; }
+    </style>
+    <![endif]-->
+    <style>
+        /* Responsive: collapse to a single fluid column on small screens */
+        @media screen and (max-width: 620px) {
+            .shell { padding: 16px 8px !important; }
+            .card { width: 100% !important; max-width: 100% !important; }
+            .pad { padding: 24px 18px !important; }
+            .pad-sm { padding: 0 18px 18px !important; }
+            .h-title { font-size: 22px !important; }
+            .h-sub { font-size: 12px !important; }
+            .h-welcome { font-size: 19px !important; }
+            .text-body { font-size: 15px !important; }
+            .col { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+            .btn { display: block !important; width: 100% !important; box-sizing: border-box !important; text-align: center !important; padding: 14px 0 !important; }
+            .section-title { font-size: 15px !important; }
+            .feature { font-size: 13px !important; padding: 5px 0 !important; }
+            .foot-text { font-size: 11px !important; }
+        }
+    </style>
 </head>
-<body dir="rtl" style="direction:rtl;background-color:#f8fafc;font-family:'Cairo',Tahoma,Arial,sans-serif;">
-    <table width="100%" cellpadding="0" cellspacing="0" dir="rtl" style="direction:rtl;background-color:#f8fafc;padding:40px 20px;">
+<body dir="rtl" style="direction:rtl;margin:0;padding:0;background-color:#f8fafc;font-family:'Cairo',Tahoma,Arial,sans-serif;">
+    <!-- Hidden preheader (Gmail inbox summary) -->
+    <div style="display:none;font-size:1px;color:#f8fafc;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">
+        تم إنشاء مدرستك {{ school_name }} بنجاح. تفاصيل الدخول في انتظارك.
+    </div>
+
+    <table class="shell" width="100%" cellpadding="0" cellspacing="0" dir="rtl" style="direction:rtl;background-color:#f8fafc;padding:40px 20px;">
         <tr>
             <td align="center" dir="rtl" style="direction:rtl;">
-                <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                <table class="card" width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);width:600px;max-width:600px;">
 
                     <!-- Header -->
                     <tr>
                         <td style="background:linear-gradient(135deg,#047857,#064e3b);padding:40px 30px;text-align:center;">
-                            <h1 style="color:#ffffff;font-size:28px;margin:0 0 8px 0;font-weight:900;">إدارة الحلقات القرآنية</h1>
-                            <p style="color:#a7f3d0;font-size:14px;margin:0;">المنصة الشاملة لإدارة التحفيظ</p>
+                            <h1 class="h-title" style="color:#ffffff;font-size:28px;margin:0 0 8px 0;font-weight:900;">إدارة الحلقات القرآنية</h1>
+                            <p class="h-sub" style="color:#a7f3d0;font-size:14px;margin:0;">المنصة الشاملة لإدارة التحفيظ</p>
                         </td>
                     </tr>
 
                     <!-- Welcome Message -->
                     <tr>
-                        <td style="padding:40px 30px 20px;text-align:center;">
-                            <div style="width:64px;height:64px;border-radius:50%;background-color:#ecfdf5;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+                        <td class="pad" style="padding:40px 30px 20px;text-align:center;">
+                            <div style="width:64px;height:64px;border-radius:50%;background-color:#ecfdf5;margin:0 auto 20px;text-align:center;line-height:64px;">
                                 <span style="font-size:32px;">✅</span>
                             </div>
-                            <h2 style="color:#1e293b;font-size:22px;margin:0 0 12px 0;font-weight:800;">مرحباً {{ username }}!</h2>
-                            <p style="color:#64748b;font-size:16px;line-height:1.7;margin:0;">
+                            <h2 class="h-welcome" style="color:#1e293b;font-size:22px;margin:0 0 12px 0;font-weight:800;">مرحباً {{ username }}!</h2>
+                            <p class="text-body" style="color:#64748b;font-size:16px;line-height:1.7;margin:0;">
                                 تم إنشاء مدرسة <strong style="color:#047857;">{{ school_name }}</strong> وحساب المدير بنجاح.
                             </p>
                         </td>
@@ -33,19 +63,19 @@
 
                     <!-- Credentials Reminder -->
                     <tr>
-                        <td style="padding:0 30px 20px;">
+                        <td class="pad-sm" style="padding:0 30px 20px;">
                             <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;">
                                 <tr>
-                                    <td style="padding:20px;">
+                                    <td class="pad" style="padding:20px;">
                                         <p style="color:#166534;font-size:14px;font-weight:700;margin:0 0 12px 0;">بيانات الدخول</p>
                                         <table width="100%" cellpadding="0" cellspacing="0">
                                             <tr>
-                                                <td style="padding:4px 0;color:#475569;font-size:14px;width:120px;">اسم المستخدم:</td>
-                                                <td style="padding:4px 0;color:#047857;font-size:14px;font-weight:700;">{{ username }}</td>
+                                                <td class="col" style="padding:4px 0;color:#475569;font-size:14px;width:120px;">اسم المستخدم:</td>
+                                                <td class="col" style="padding:4px 0;color:#047857;font-size:14px;font-weight:700;">{{ username }}</td>
                                             </tr>
                                             <tr>
-                                                <td style="padding:4px 0;color:#475569;font-size:14px;">المدرسة:</td>
-                                                <td style="padding:4px 0;color:#047857;font-size:14px;font-weight:700;">{{ school_name }}</td>
+                                                <td class="col" style="padding:4px 0;color:#475569;font-size:14px;">المدرسة:</td>
+                                                <td class="col" style="padding:4px 0;color:#047857;font-size:14px;font-weight:700;">{{ school_name }}</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -56,36 +86,36 @@
 
                     <!-- Login Button -->
                     <tr>
-                        <td style="padding:0 30px 30px;text-align:center;">
-                            <a href="{{ login_url }}" style="display:inline-block;background-color:#047857;color:#ffffff;text-decoration:none;padding:14px 40px;border-radius:10px;font-size:16px;font-weight:700;">دخول النظام</a>
+                        <td class="pad-sm" style="padding:0 30px 30px;text-align:center;">
+                            <a class="btn" href="{{ login_url }}" style="display:inline-block;background-color:#047857;color:#ffffff;text-decoration:none;padding:14px 40px;border-radius:10px;font-size:16px;font-weight:700;">دخول النظام</a>
                         </td>
                     </tr>
 
                     <!-- Features -->
                     <tr>
-                        <td style="padding:0 30px 30px;">
+                        <td class="pad-sm" style="padding:0 30px 30px;">
                             <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
                                 <tr>
-                                    <td style="padding:20px;">
-                                        <h3 style="color:#1e293b;font-size:16px;margin:0 0 16px 0;font-weight:700;">مميزات النظام</h3>
+                                    <td class="pad" style="padding:20px;">
+                                        <h3 class="section-title" style="color:#1e293b;font-size:16px;margin:0 0 16px 0;font-weight:700;">مميزات النظام</h3>
                                         <table width="100%" cellpadding="0" cellspacing="0">
                                             <tr>
-                                                <td style="padding:6px 0;color:#475569;font-size:14px;">
+                                                <td class="feature" style="padding:6px 0;color:#475569;font-size:14px;">
                                                     <span style="color:#047857;font-weight:700;">✓</span> إدارة الحلقات والمعلمات والتلميذات
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="padding:6px 0;color:#475569;font-size:14px;">
+                                                <td class="feature" style="padding:6px 0;color:#475569;font-size:14px;">
                                                     <span style="color:#047857;font-weight:700;">✓</span> تسجيل الحضور والغياب يومياً
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="padding:6px 0;color:#475569;font-size:14px;">
+                                                <td class="feature" style="padding:6px 0;color:#475569;font-size:14px;">
                                                     <span style="color:#047857;font-weight:700;">✓</span> تقارير أسبوعية وإجمالية
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="padding:6px 0;color:#475569;font-size:14px;">
+                                                <td class="feature" style="padding:6px 0;color:#475569;font-size:14px;">
                                                     <span style="color:#047857;font-weight:700;">✓</span> 12 صف دراسي جاهز
                                                 </td>
                                             </tr>
@@ -99,7 +129,7 @@
                     <!-- Footer -->
                     <tr>
                         <td style="background-color:#f1f5f9;padding:20px 30px;text-align:center;border-top:1px solid #e2e8f0;">
-                            <p style="color:#94a3b8;font-size:12px;margin:0;">
+                            <p class="foot-text" style="color:#94a3b8;font-size:12px;margin:0;">
                                 نظام إدارة الحلقات القرآنية &copy; {{ year }}
                             </p>
                         </td>

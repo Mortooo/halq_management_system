@@ -6,9 +6,35 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
 from django import forms
 from .models import School, UserProfile
 from django.db.models import Count
+from datetime import date
+
+DEFAULT_GRADES = [
+    'الصف الأول الابتدائي',
+    'الصف الثاني الابتدائي',
+    'الصف الثالث الابتدائي',
+    'الصف الرابع الابتدائي',
+    'الصف الخامس الابتدائي',
+    'الصف السادس الابتدائي',
+    'الصف الأول المتوسط',
+    'الصف الثاني المتوسط',
+    'الصف الثالث المتوسط',
+    'الصف الأول الثانوي',
+    'الصف الثاني الثانوي',
+    'الصف الثالث الثانوي',
+]
+
+
+def create_default_grades(school):
+    from students.models import Grade
+    for name in DEFAULT_GRADES:
+        Grade.objects.get_or_create(name=name, school=school)
 
 
 class SchoolForm(forms.ModelForm):
@@ -111,6 +137,28 @@ class RegisterSchoolView(FormView):
                 password=d['password1'],
             )
             UserProfile.objects.create(user=user, school=school)
+            create_default_grades(school)
+
+        try:
+            login_url = self.request.build_absolute_uri(reverse_lazy('account_login'))
+            html_message = render_to_string('schools/welcome_email.html', {
+                'username': d['username'],
+                'school_name': d['school_name'],
+                'login_url': login_url,
+                'year': date.today().year,
+            })
+            plain_message = strip_tags(html_message)
+            send_mail(
+                subject=f'مرحباً بك في نظام إدارة الحلقات - {d["school_name"]}',
+                message=plain_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[d['email']],
+                html_message=html_message,
+                fail_silently=True,
+            )
+        except Exception:
+            pass
+
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         messages.success(self.request, f'تم إنشاء مدرسة "{school.name}" وحساب المدير بنجاح.')
         return super().form_valid(form)
@@ -149,6 +197,7 @@ class SchoolCreateView(GlobalSchoolRequiredMixin, CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        create_default_grades(self.object)
         messages.success(self.request, 'تم إنشاء المدرسة بنجاح.')
         return response
 

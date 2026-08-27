@@ -1,11 +1,12 @@
+{% load query_compat %}
 <a href="{{ item_url }}"
-    {% if item_url == current %}aria-current="page"{% endif %}
+    {% if current|is_active_url:item_url %}aria-current="page"{% endif %}
     class="nav-link
     {% if variant == 'danger' %}danger
-    {% elif item_url == current %}active
+    {% elif current|is_active_url:item_url %}active
     {% endif %}">
-    <span class="me-4 shrink-0 flex items-center">
-        {% include icon with icon_class='h-6 w-6' only %}
+    <span class="me-3 shrink-0 flex items-center">
+        {% include icon with icon_class='h-5 w-5' only %}
     </span>
-    <span>{{ label }}</span>
+    <span class="truncate">{{ label }}</span>
 </a>

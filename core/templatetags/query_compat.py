@@ -15,3 +15,13 @@ def querystring(context, **params):
             query[key] = value
     encoded = query.urlencode()
     return f'?{encoded}' if encoded else ''
+
+
+@register.filter
+def is_active_url(path, base):
+    """True إذا كانت الصفحة الحالية هي عنصر القائمة أو صفحة فرعية تابعة له."""
+    base = base or ''
+    path = path or ''
+    if path == base:
+        return True
+    return base.endswith('/') and path.startswith(base)

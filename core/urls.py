@@ -1,6 +1,6 @@
 import os
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.urls import path, include
 from django.views.generic import TemplateView
 from django.contrib import admin
@@ -18,11 +18,19 @@ def manifest_view(request):
         return HttpResponse(f.read(), content_type='application/manifest+json')
 
 
+def download_apk(request):
+    apk_path = os.path.join(settings.BASE_DIR, 'إدارة الحلقات.apk')
+    if os.path.exists(apk_path):
+        return FileResponse(open(apk_path, 'rb'), as_attachment=True, filename='adminstration.apk')
+    return HttpResponse('الملف غير موجود', status=404)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
     path('sw.js', service_worker, name='service_worker'),
     path('manifest.json', manifest_view, name='manifest'),
+    path('download-apk/', download_apk, name='download_apk'),
     path('accounts/', include('allauth.urls')),
     path('schools/', include('schools.urls')),
     path('administration/', include('administration.urls')),

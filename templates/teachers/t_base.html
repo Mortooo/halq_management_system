@@ -13,8 +13,16 @@
         <div class="flex flex-1">
             <!-- ترويسة الجوال -->
             <header class="bg-white border-b border-slate-200 md:hidden flex items-center justify-between p-4 fixed w-full z-50">
-                <h1 class="text-xl font-bold text-emerald-700">لوحة تحكم | المعلمة</h1>
-                <button id="menu-btn" aria-label="فتح القائمة" aria-expanded="false" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition md:hidden">
+                <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm shrink-0">
+                        {{ request.user.first_name|default:request.user.username|slice:":1"|upper }}
+                    </div>
+                    <div class="truncate">
+                        <h1 class="text-sm font-bold text-slate-900 truncate">{{ request.user.first_name|default:request.user.username }}</h1>
+                        <p class="text-xs text-slate-500 truncate">لوحة تحكم | المعلمة</p>
+                    </div>
+                </div>
+                <button id="menu-btn" aria-label="فتح القائمة" aria-expanded="false" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition md:hidden shrink-0">
                     {% include 'partials/icons/bars-3.svg' with icon_class='h-6 w-6' only %}
                 </button>
             </header>
@@ -22,12 +30,26 @@
             <!-- القائمة الجانبية -->
             <div id="sidebar-backdrop" class="fixed inset-0 bg-black/40 z-[60] hidden md:hidden transition-opacity duration-300 opacity-0"></div>
             <aside id="sidebar" class="sidebar w-64 border-l border-black/10 p-6 flex-shrink-0 fixed md:block md:sticky md:top-0 h-full md:h-screen self-start overflow-y-auto z-[70] shadow-2xl md:shadow-none transition-transform duration-300 translate-x-full md:translate-x-0">
-                <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-bold text-white">لوحة التحكم</h2>
-                    <button id="sidebar-close" aria-label="إغلاق القائمة" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition md:hidden">
+                    <button id="sidebar-close" aria-label="إغلاق القائمة" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition md:hidden">
                         {% include 'partials/icons/x-mark.svg' with icon_class='h-5 w-5' only %}
                     </button>
                 </div>
+
+                <!-- بطاقة المستخدم -->
+                <div class="flex items-center gap-3 p-3 mb-6 rounded-xl bg-white/10 text-white">
+                    <div class="w-10 h-10 rounded-full bg-emerald-600 border border-white/20 flex items-center justify-center font-bold text-base shrink-0">
+                        {{ request.user.first_name|default:request.user.username|slice:":1"|upper }}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-semibold truncate">{{ request.user.first_name|default:request.user.username }}</p>
+                        <p class="text-xs text-emerald-200/80 truncate">
+                            {% if request.school %}{{ request.school.name }}{% else %}معلمة{% endif %}
+                        </p>
+                    </div>
+                </div>
+
                 <nav dir="rtl" class="space-y-2">
                     {% url 'teachers:teacher_dashboard' as u_home %}
                     {% include 'partials/_nav_item.html' with item_url=u_home current=request.path label='الرئيسية' icon='partials/icons/home.svg' %}
@@ -41,7 +63,10 @@
                     {% url 'reports:weekly_report' as u_reports %}
                     {% include 'partials/_nav_item.html' with item_url=u_reports current=request.path label='التقارير الأسبوعية' icon='partials/icons/calendar-days.svg' %}
 
-                    <div class="pt-2 mt-2 border-t border-white/10">
+                    <div class="pt-2 mt-2 border-t border-white/10 space-y-2">
+                        {% url 'account_change_password' as u_settings %}
+                        {% include 'partials/_nav_item.html' with item_url=u_settings current=request.path label='إعدادات الحساب' icon='partials/icons/cog-6-tooth.svg' %}
+
                         {% url 'account_logout' as u_logout %}
                         {% include 'partials/_nav_item.html' with item_url=u_logout current=request.path label='تسجيل الخروج' icon='partials/icons/logout.svg' variant='danger'  %}
                     </div>

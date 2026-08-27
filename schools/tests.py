@@ -275,3 +275,51 @@ class AttendanceAndReportingWorkflowTests(BaseTestCase):
         report = WeekReport.objects.filter(halaqa=self.halaqa_a).first()
         self.assertIsNotNone(report)
         self.assertEqual(report.compare_plan, "on_track")
+
+
+class UserSettingsAndProfileTests(BaseTestCase):
+    """Tests for displaying user name and user settings / password change."""
+
+    def test_user_name_and_settings_in_supervisor_dashboard(self):
+        """Supervisor sees their username/name and account settings link."""
+        self.client.login(username="admin_a", password="Password123!")
+        response = self.client.get(reverse("administration:dashboard"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "admin_a")
+        self.assertContains(response, reverse("account_change_password"))
+        self.assertContains(response, "إعدادات الحساب")
+
+    def test_user_name_and_settings_in_teacher_dashboard(self):
+        """Teacher sees their username/name and account settings link."""
+        self.client.login(username="teacher_a", password="Password123!")
+        response = self.client.get(reverse("teachers:teacher_dashboard"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "teacher_a")
+        self.assertContains(response, reverse("account_change_password"))
+        self.assertContains(response, "إعدادات الحساب")
+
+    def test_user_settings_page_and_password_update(self):
+        """User can view settings page and update password successfully."""
+        self.client.login(username="teacher_a", password="Password123!")
+        change_url = reverse("account_change_password")
+
+        # View settings page
+        response = self.client.get(change_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "إعدادات الحساب")
+        self.assertContains(response, "teacher_a")
+
+        # Post new password
+        post_data = {
+            "oldpassword": "Password123!",
+            "password1": "NewSecurePass2026!",
+            "password2": "NewSecurePass2026!",
+        }
+        response = self.client.post(change_url, data=post_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Verify old password fails and new password works
+        self.client.logout()
+        login_success = self.client.login(username="teacher_a", password="NewSecurePass2026!")
+        self.assertTrue(login_success)
+

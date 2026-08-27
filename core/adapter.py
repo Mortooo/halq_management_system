@@ -16,3 +16,7 @@ class MyAccountAdapter(DefaultAccountAdapter):
             return reverse('teachers:teacher_dashboard')
         return reverse('home')
 
+    def get_password_change_redirect_url(self, request):
+        return self.get_login_redirect_url(request)
+
+
